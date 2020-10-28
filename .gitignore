@@ -1,0 +1,5 @@
+.idea/
+node_modules/
+/**/static/**/stubs/
+!cartridges/rvw_dev_console/**/static/**/js
+!cartridges/rvw_dev_console/**/static/**/css

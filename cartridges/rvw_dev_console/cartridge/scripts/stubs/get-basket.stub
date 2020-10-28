@@ -1,0 +1,5 @@
+const BasketMgr = require('dw/order/BasketMgr');
+
+const basket = BasketMgr.getCurrentBasket();
+
+return basket;
