@@ -1,0 +1,10 @@
+[
+    {
+        "id": "Content-Security-Policy",
+        "value": "frame-ancestors 'self'"
+    },
+    {
+        "id": "X-Content-Type-Options",
+        "value": "nosniff"
+    }
+]

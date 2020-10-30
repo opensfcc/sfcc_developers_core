@@ -7,11 +7,10 @@ import Axios from 'axios';
 import VueAxios from 'vue-axios';
 import TreeView from 'vue-json-tree-view';
 
-Vue.use(Axios);
 Vue.use(VueAxios, Axios);
 Vue.use(TreeView);
 
-Vue.config.devtools = true;
+Vue.config.devtools = false;
 Vue.config.productionTip = false;
 
 new Vue({

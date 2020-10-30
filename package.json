@@ -1,5 +1,5 @@
 {
-    "name": "rvw_developers_core",
+    "name": "rvw_dev_console",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
@@ -37,7 +37,7 @@
         "vue-loader": "^15.9.4",
         "vue-style-loader": "^4.1.2",
         "vue-template-compiler": "^2.6.12",
-        "webpack": "^5.3.0",
+        "webpack": "^5.3.2",
         "webpack-cli": "^4.1.0"
     }
 }

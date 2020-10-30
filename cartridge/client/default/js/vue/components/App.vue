@@ -1,7 +1,14 @@
 <template>
-    <div id="app" class="d-flex flex-column">
+    <div id="app" :class="getTheme">
         <header class="d-flex align-items-center">
-            <a href="/"><i class="fa fa-code"/> Developer Console</a>
+            <a href="javascript:void(0);"><img :src="getLogo" alt="logo" class="logo">SFCC Dev Console</a>
+
+            <div class="theme-selector">
+                Theme:
+                <select v-model="theme">
+                    <option v-for="option in themeOptions" :key="option" :value="option">{{option}}</option>
+                </select>
+            </div>
         </header>
 
         <template v-if="showStubs">
@@ -55,9 +62,10 @@
                     id="editor"
                     class="flex-grow-1"
                     v-model="code"
-                    :options="editorOptions"
-                    theme="vs"
+                    :options="codeEditor.options"
+                    :theme="theme"
                     language="javascript"
+                    ref="editor"
                     @editorDidMount="editorDidMount"
                     @keydown.native="check"
                 />
@@ -106,39 +114,70 @@ export default {
             maxDepth: 3,
             stubs: [],
             showStubs: false,
-            editorOptions: {
-                selectOnLineNumbers: true,
-                automaticLayout: true,
-                minimap: {
-                    enabled: false
-                }
-            },
+            theme: 'vs',
+            themeOptions: ['vs', 'vs-dark', 'hc-black']
         };
     },
     mounted() {
         const showFunctions = localStorage.getItem('showFunctions');
-        this.showFunctions = showFunctions === 'true';
-
         const maxDepth = localStorage.getItem('maxDepth');
+        const plainJSON = localStorage.getItem('plainJSON');
+        const theme = localStorage.getItem('theme');
+
+        this.plainJSON = plainJSON === 'true';
+        this.showFunctions = showFunctions === 'true';
 
         if (maxDepth) {
             this.maxDepth = parseInt(maxDepth);
         }
 
-        const plainJSON = localStorage.getItem('plainJSON');
-        this.plainJSON = plainJSON === 'true';
+        if (theme) {
+            this.theme = theme;
+        }
 
         this.fetchStubs();
     },
-
+    computed: {
+        codeEditor() {
+            return {
+                options: {
+                    theme: this.theme,
+                    selectOnLineNumbers: true,
+                    automaticLayout: true,
+                    scrollBeyondLastLine: true,
+                    smoothScrolling: true,
+                    fontLigatures: true,
+                    minimap: {
+                        enabled: false
+                    }
+                }
+            };
+        },
+        getTheme() {
+            return `d-flex flex-column ${this.theme}`
+        },
+        getLogo() {
+            return `${window.staticPath}/img/logo.png`
+        }
+    },
     methods: {
         editorDidMount(editor) {
             this.editor = editor;
 
+            // fix bug with setTheme
+            if (typeof this.editor.setTheme === 'undefined') {
+                this.editor.setTheme = function(){};
+            }
+
             const lastRun = localStorage.getItem('lastRun');
+            const theme = localStorage.getItem('theme');
 
             if (lastRun) {
                 this.code = lastRun;
+            }
+
+            if (theme) {
+                this.theme = theme;
             }
 
             this.editor.onKeyDown(this.check);
@@ -153,7 +192,6 @@ export default {
         },
 
         check(e) {
-            // alt + x
             if (e.keyCode === 88 && e.altKey) {
                 this.runCode();
             }
@@ -172,6 +210,7 @@ export default {
                 localStorage.setItem('showFunctions', this.showFunctions);
                 localStorage.setItem('maxDepth', this.maxDepth);
                 localStorage.setItem('plainJSON', this.plainJSON);
+                localStorage.setItem('theme', this.theme);
 
                 try {
                     const response = await this.axios.post(`${window.urlPath}/Console-Run`, data);
@@ -213,6 +252,14 @@ export default {
         onResize() {
             this.editor.layout();
         }
-    }
+    },
+    watch: {
+        theme: {
+            immediate: true,
+            handler() {
+                localStorage.setItem('theme', this.theme);
+            }
+        }
+    },
 };
 </script>

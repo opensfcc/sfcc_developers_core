@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<!--
+
+      ––––––––––––––––––––––––––––.
+     /````/````/   |``| |``| |``|  \
+    /____/____/    |__| |__| |__|   |
+   /––––––––––======================|
+   | \     /                        |
+  ( ) \   / ( )   _            _    |
+   |   \ /       / \          / \   |
+  =C========C==_| ) |––––––––| ) |_/_]––=o{{ HELLO }}
+    \_\_/      \_\_/  \_\_/ \_\_/
+
+    GREETINGS, FROM RED VAN WORKSHOP
+
+  If you're looking at this, maybe you should be working with us ;)
+
+  https://redvanworkshop.com/careers
+
+-->
+<html>
+    <head>
+        <!-- Required Meta Tags -->
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="x-dns-prefetch-control" content="on">
+
+        <!-- Mobile Specific Meta Tags -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-title" content="Dev Console">
+        <meta name="application-name" content="Dev Console">
+
+        <title>Dev Console</title>
+
+        <meta name="description" content="A Salesforce Commerce Cloud (Demandware) Cartridge for Developers.">
+        <meta name="cache-control" content="public">
+        <meta name="company" content="Dev Console">
+        <meta name="googlebot" content="index,follow">
+        <meta name="robots" content="noodp,noydir">
+        <meta name="robots" content="index,follow">
+
+        <!-- Twitter META Info -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:site" content="@redvanworkshop">
+        <meta property="twitter:title" content="Dev Console">
+        <meta property="twitter:description" content="A Salesforce Commerce Cloud (Demandware) Cartridge for Developers.">
+        <meta property="twitter:creator" content="@redvanworkshop">
+        <meta property="twitter:image" content="https://d14qmhpz0yq7x9.cloudfront.net/images/cards/rvw.jpg">
+        <meta property="twitter:image:alt" content="Dev Console">
+        <meta property="twitter:domain" content="${URLUtils.staticURL('/')}">
+
+        <!-- Open Graph protocol -->
+        <meta property="og:locale" content="en_US">
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Dev Console">
+        <meta property="og:url" content="${URLUtils.staticURL('/')}">
+        <meta property="og:image" content="https://d14qmhpz0yq7x9.cloudfront.net/images/cards/rvw.jpg">
+        <meta property="og:site_name" content="Dev Console">
+        <meta property="og:description" content="A Salesforce Commerce Cloud (Demandware) Cartridge for Developers.">
+
+        <!-- Icons -->
+        <link href="${URLUtils.staticURL('/img/favicon.ico')}" rel="shortcut icon">
+        <link rel="apple-touch-icon-precomposed" href="https://d14qmhpz0yq7x9.cloudfront.net/images/apple/icon-57x57.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://d14qmhpz0yq7x9.cloudfront.net/images/apple/icon-72x72.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://d14qmhpz0yq7x9.cloudfront.net/images/apple/icon-114x114.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://d14qmhpz0yq7x9.cloudfront.net/images/apple/icon-144x144.png" />
+
+        <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="${URLUtils.staticURL('/css/dev_console.css')}" rel="stylesheet">
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script>
+        window.staticPath = '${pdict.staticPath}';
+        window.urlPath = '${pdict.urlPath}';
+        </script>
+
+        <script src="${URLUtils.staticURL('/js/dev_console.js')}"></script>
+
+        <script>
+        // Invite Developers to Work at Red Van Workshop
+        function detectIE(){var n=window.navigator.userAgent,e=n.indexOf("MSIE ");if(e>0)return parseInt(n.substring(e+5,n.indexOf(".",e)),10);if(n.indexOf("Trident/")>0){var o=n.indexOf("rv:");return parseInt(n.substring(o+3,n.indexOf(".",o)),10)}var r=n.indexOf("Edge/");return r>0&&parseInt(n.substring(r+5,n.indexOf(".",r)),10)}!function(){if("undefined"!=typeof console){var n="GREETINGS, FROM RED VAN WORKSHOP",e="\n    ----------------------------.\n   /````/````/   |``| |``| |``|  \\\n  /____/____/    |__| |__| |__|   |\n /----------======================|\n | \\     /                        |\n( ) \\   / ( )   _            _    |\n |   \\ /       / \\          / \\   |\n=C========C==_| ) |--------| ) |_/_]--=o{{ HELLO }}\n  \\_\\_/      \\_\\_/  \\_\\_/ \\_\\_/\n\n",o="If you're looking at this, maybe you should be working with us ;)\n\nhttps://redvanworkshop.com/careers";detectIE()?console.log(e+"  "+n+"\n\n"+o+"\n "):console.log("%c"+e+"  "+n+"\n\n%c"+o+"\n ","font-family: monospace; color: #ed1c24",null)}}();
+        </script>
+    </body>
+</html>
