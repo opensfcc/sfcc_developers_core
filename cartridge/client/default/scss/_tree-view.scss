@@ -1,0 +1,45 @@
+.tree-view-wrapper {
+    height: 100%;
+}
+
+.tree-view-item-key {
+    color: #000000;
+}
+.tree-view-item-hint {
+    color: #888;
+}
+
+.tree-view-item, .tree-view-item *, pre {
+    font-family: Menlo, Monaco, "Courier New", monospace !important;
+    font-weight: normal !important;
+    font-size: 12px !important;
+    line-height: 20px !important;
+}
+
+.tree-view-item-key-with-chevron.opened::before, .tree-view-item-key-with-chevron::before {
+    top: 0 !important;
+}
+
+.tree-view-item-value {
+    &.tree-view-item-value-string, &.tree-view-item-value-string a {
+        color: #a31515;
+        white-space: pre-wrap;
+    }
+    &.tree-view-item-value-boolean {
+        color: #0000ff;
+    }
+    &.tree-view-item-value-number {
+        color: #098658;
+    }
+    &.tree-view-item-value-null {
+        color: #0000ff;
+    }
+
+    &.tree-view-item-value-string a {
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

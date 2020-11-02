@@ -4,6 +4,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
 const CopyPlugin = require('copy-webpack-plugin');
 
+const fs = require('fs')
+const packageJson = fs.readFileSync('./package.json')
+const version = JSON.parse(packageJson).version || 0
+
 function getPlugins() {
     return [
         new webpack.ProgressPlugin(),
@@ -12,8 +16,8 @@ function getPlugins() {
         new CopyPlugin({
             patterns: [
                 {
-                    from: __dirname + '/cartridges/rvw_dev_console/cartridge/scripts/stubs',
-                    to  :  __dirname + '/cartridges/rvw_dev_console/cartridge/static/default/stubs'
+                    from: __dirname + '/cartridge/client/default/img',
+                    to  :  __dirname + '/cartridge/static/default/img'
                 }
             ]
         }, {
@@ -21,21 +25,29 @@ function getPlugins() {
         }),
         new MiniCssExtractPlugin({
             filename: 'css/[name].css'
+        }),
+        new webpack.DefinePlugin({
+            'process.env': {
+                PACKAGE_VERSION: '"' + version + '"'
+            }
         })
     ];
 }
 
 module.exports = (mode, argv) => {
     const config = {
+        performance: {
+            hints: false
+        },
         entry: {
             dev_console: [
-                __dirname + '/cartridges/rvw_dev_console/cartridge/client/default/js/dev_console.js',
-                __dirname + '/cartridges/rvw_dev_console/cartridge/client/default/scss/dev_console.scss',
+                __dirname + '/cartridge/client/default/js/dev_console.js',
+                __dirname + '/cartridge/client/default/scss/dev_console.scss',
             ],
         },
         output: {
             filename: 'js/[name].js',
-            path: __dirname + '/cartridges/rvw_dev_console/cartridge/static/default'
+            path: __dirname + '/cartridge/static/default'
         },
         module: {
             rules: [
@@ -74,7 +86,7 @@ module.exports = (mode, argv) => {
                 'vue$': 'vue/dist/vue.esm.js' // 'vue/dist/vue.common.js' for webpack 1
             }
         },
-        plugins: getPlugins()
+        plugins: getPlugins(),
     };
 
     if (argv.mode === 'development') {

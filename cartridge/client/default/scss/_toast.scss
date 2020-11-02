@@ -1,0 +1,151 @@
+.fadeOut {
+    animation-name: fadeOut
+}
+
+.fadeInDown {
+    animation-name: fadeInDown
+}
+
+.fadeInUp {
+    animation-name: fadeInUp
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 150ms ease-out
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0
+}
+
+.v-notices {
+    position: fixed;
+    display: flex;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2em;
+    overflow: hidden;
+    z-index: 9999;
+    pointer-events: none
+}
+
+.v-notices .v-toast {
+    display: inline-flex;
+    align-items: center;
+    animation-duration: 150ms;
+    margin: .5em 0;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+    border-radius: .25em;
+    pointer-events: auto;
+    opacity: .92;
+    color: #fff;
+    min-height: 3em;
+    cursor: pointer;
+}
+
+.v-notices .v-toast .v-toast-text {
+    margin: 0;
+    padding: .5em 1em;
+    word-break: break-word;
+
+    i.fa {
+        position: relative;
+        top: -2px;
+    }
+}
+
+.v-notices .v-toast .v-toast-icon {
+    display: none;
+}
+
+.v-notices .v-toast-success {
+    background-color: #28a745;
+}
+
+.v-notices .v-toast-info {
+    background-color: #00a1e0;
+}
+
+.v-notices .v-toast-warning {
+    background-color: #ffc107;
+}
+
+.v-notices .v-toast-error {
+    background-color: #dc3545;
+}
+
+.v-notices .v-toast-default {
+    background-color: #343a40;
+}
+
+.v-notices .v-toast.is-top,
+.v-notices .v-toast.is-bottom {
+    align-self: center;
+}
+
+.v-notices .v-toast.is-top-right,
+.v-notices .v-toast.is-bottom-right {
+    align-self: flex-end;
+}
+
+.v-notices .v-toast.is-top-left,
+.v-notices .v-toast.is-bottom-left {
+    align-self: flex-start;
+}
+
+.v-notices.is-top {
+    flex-direction: column;
+}
+
+.v-notices.is-bottom {
+    flex-direction: column-reverse;
+}
+
+.v-notices.is-custom-parent {
+    position: absolute;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -100%, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 100%, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .v-notices {
+        padding: 0;
+        position: fixed !important;
+    }
+}

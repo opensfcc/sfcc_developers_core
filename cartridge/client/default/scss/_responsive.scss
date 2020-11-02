@@ -1,0 +1,48 @@
+@media only screen and (max-width: 1024px) {
+    header {
+        height: 34px;
+
+        a {
+            font-size: 1rem;
+
+            img {
+                height: 32px;
+                padding-right: 6px;
+            }
+        }
+    }
+
+    select {
+        padding: 2px;
+    }
+
+    .actions {
+        min-height: 40px;
+
+        .btn {
+            padding: .25rem 1rem;
+            margin: 0 .20rem;
+        }
+
+        .settings {
+            a.settings-btn {
+                padding: .4rem 0;
+            }
+        }
+    }
+
+    .current-file span {
+        display: none;
+    }
+
+    .splitter-paneR {
+        .actions {
+            padding: 7px 0 0 7px;
+        }
+    }
+
+    .theme-selector {
+        right: 4px;
+        top: 6px;
+    }
+}
