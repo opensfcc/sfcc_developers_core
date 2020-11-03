@@ -4,6 +4,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
 const CopyPlugin = require('copy-webpack-plugin');
 
+const fs = require('fs')
+const packageJson = fs.readFileSync('./package.json')
+const version = JSON.parse(packageJson).version || 0
+
 function getPlugins() {
     return [
         new webpack.ProgressPlugin(),
@@ -11,10 +15,6 @@ function getPlugins() {
         new CleanWebpackPlugin({verbose: true}),
         new CopyPlugin({
             patterns: [
-                {
-                    from: __dirname + '/cartridge/scripts/stubs',
-                    to  :  __dirname + '/cartridge/static/default/stubs'
-                },
                 {
                     from: __dirname + '/cartridge/client/default/img',
                     to  :  __dirname + '/cartridge/static/default/img'
@@ -25,12 +25,20 @@ function getPlugins() {
         }),
         new MiniCssExtractPlugin({
             filename: 'css/[name].css'
+        }),
+        new webpack.DefinePlugin({
+            'process.env': {
+                PACKAGE_VERSION: '"' + version + '"'
+            }
         })
     ];
 }
 
 module.exports = (mode, argv) => {
     const config = {
+        performance: {
+            hints: false
+        },
         entry: {
             dev_console: [
                 __dirname + '/cartridge/client/default/js/dev_console.js',

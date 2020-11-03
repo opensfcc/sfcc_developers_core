@@ -7,12 +7,12 @@
     }
 
     .splitter-pane-resizer {
-        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==')!important;
-        background-color: #eee!important;
-        background-repeat: no-repeat!important;
-        background-position: 50%!important;
-        width: 9px!important;
-        opacity: 1!important;
         background-clip: unset!important;
+        background-color: #eee!important;
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==')!important;
+        background-position: 50%!important;
+        background-repeat: no-repeat!important;
+        opacity: 1!important;
+        width: 9px!important;
     }
 }

@@ -83,15 +83,20 @@ function serializeObject (object, maxDepth, depth, pojo) {
         }
 
         if (typeof k === 'function') {
+            pojo[prop] = '[function]';
             continue;
         }
 
         /**
          * For some reason SFCC applies the custom properties on certain object types that
-         * it really shouldnt, and when trying to process those custom fields, it blows up.
+         * it really shouldn't, and when trying to process those custom fields, it blows up.
          * This helps is to get around that by skipping them under certain scenarios.
          */
         if (object instanceof dw.order.PaymentProcessor && prop === 'custom') {
+            continue;
+        }
+
+        if (object instanceof dw.catalog.ProductActiveData && prop === 'custom') {
             continue;
         }
 
