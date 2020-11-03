@@ -5,7 +5,7 @@ SFCC Dev Console Cartridge
 
 > A Salesforce Commerce Cloud (Demandware) Cartridge for Developers.
 
-![Screenshot](https://red-van-workshop.s3.us-east-1.amazonaws.com/rvw-devtools-demo.gif "Screenshot")
+[![Demo Video](https://red-van-workshop.s3.us-east-1.amazonaws.com/video-still.png)](https://vimeo.com/474835586/007c173136 "Demo Video")
 
 ## Features
 
@@ -16,30 +16,19 @@ SFCC Dev Console Cartridge
 Installation
 ---
 
-[![Download Cartridge](https://img.shields.io/badge/Download_Cartridge-blue.svg?logo=github&style=for-the-badge)](https://github.com/redvanworkshop/rvw_dev_console/releases/latest)
+[![Download Cartridge](https://img.shields.io/badge/Download_Cartridge-blue.svg?logo=github&style=for-the-badge)](https://github.com/redvanworkshop/rvw_developers_core/releases/latest)
 
 1. Download Latest Release
-2. Unzip and Rename the folder to `rvw_dev_tools`
-3. Move `rvw_dev_tools` into the root of your SFCC Project
-4. Add `rvw_dev_tools` to project or global `.gitignore`
-5. Add `rvw_dev_tools` to Business Manager Storefront `Cartridges` Path
+2. Unzip and Rename the folder to `rvw_developers_core`
+3. Move `rvw_developers_core` into the root of your SFCC Project
+4. Add `rvw_developers_core` to project or global `.gitignore`
+5. Add `rvw_dev_console` to Business Manager Storefront `Cartridges` Path
 
 > If you are not using SFRA, or not using Site Genesis with Controllers Support you will additionally need to install the SFRA `modules` in the root of your project.  You may need to [request permission](https://quip.com/av0SAqpXEAaW) from Salesforce to access to the `SalesforceCommerceCloud` GitHub Organization.
 
 [![Download Modules](https://img.shields.io/badge/SFRA_Modules-EEEEEE.svg?logo=Salesforce&style=for-the-badge)](https://github.com/SalesforceCommerceCloud/storefront-reference-architecture/tree/master/cartridges/modules)
 
 **NOTE:** Make sure to add `modules` to project or global `.gitignore` if you needed to add it
-
-Stub Files
----
-
-> Have some code you run pretty regularly during development? You can create custom stub files that you can access any time.
-
-1. Create new file in `./rvw_dev_console/cartridge/scripts/stubs/` with a `.stub` extension
-2. Paste the code you want in that file
-3. Edit the `list.txt` to include the new file you just created
-4. Run `npm run build` in `./rvw_dev_console`
-5. Reload the Dev Console and click the Gear Icon in the Top Left Corner
 
 Contributing
 ---
@@ -49,8 +38,8 @@ Contributing
 #### Developer Setup:
 
 ```bash
-git clone https://github.com/redvanworkshop/rvw_dev_console.git
-cd rvw_dev_console
+git clone https://github.com/redvanworkshop/rvw_developers_core.git
+cd rvw_developers_core
 npm install
 npm run dev # one time build for development
 npm run watch # watch for changes and build for development
@@ -59,7 +48,7 @@ npm run build # one time build for production
 
 Once you have something you would like to share, check out our Contribution Guide.
 
-[![Download Modules](https://img.shields.io/badge/Contribution_Guide-EEEEEE.svg?logo=github&logoColor=black&style=for-the-badge)](https://github.com/SalesforceCommerceCloud/storefront-reference-architecture/tree/master/cartridges/modules)
+[![Contribution Guide](https://img.shields.io/badge/Contribution_Guide-EEEEEE.svg?logo=github&logoColor=black&style=for-the-badge)](https://github.com/redvanworkshop/rvw_developers_core/blob/develop/.github/CONTRIBUTING.md)
 
 Disclaimer
 ---
