@@ -1,6 +1,6 @@
 {
-    "name": "rvw_dev_console",
-    "version": "1.0.0",
+    "name": "rvw_developers_core",
+    "version": "0.9.0",
     "description": "",
     "main": "index.js",
     "scripts": {

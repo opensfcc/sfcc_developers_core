@@ -16,8 +16,8 @@ function getPlugins() {
         new CopyPlugin({
             patterns: [
                 {
-                    from: __dirname + '/cartridge/client/default/img',
-                    to  :  __dirname + '/cartridge/static/default/img'
+                    from: __dirname + '/cartridges/rvw_dev_console/cartridge/client/default/img',
+                    to  :  __dirname + '/cartridges/rvw_dev_console/cartridge/static/default/img'
                 }
             ]
         }, {
@@ -41,13 +41,13 @@ module.exports = (mode, argv) => {
         },
         entry: {
             dev_console: [
-                __dirname + '/cartridge/client/default/js/dev_console.js',
-                __dirname + '/cartridge/client/default/scss/dev_console.scss',
+                __dirname + '/cartridges/rvw_dev_console/cartridge/client/default/js/dev_console.js',
+                __dirname + '/cartridges/rvw_dev_console/cartridge/client/default/scss/dev_console.scss',
             ],
         },
         output: {
             filename: 'js/[name].js',
-            path: __dirname + '/cartridge/static/default'
+            path: __dirname + '/cartridges/rvw_dev_console/cartridge/static/default'
         },
         module: {
             rules: [
