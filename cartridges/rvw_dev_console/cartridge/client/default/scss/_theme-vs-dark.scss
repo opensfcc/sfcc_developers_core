@@ -3,6 +3,11 @@ html.vs-dark {
 
     select {
         color: #FFF;
+
+        option {
+            color: $vs-dark-panel-text;
+            background: $vs-dark-panel-bg;
+        }
     }
 
     header {
