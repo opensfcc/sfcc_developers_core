@@ -42,6 +42,18 @@ html.hc-black {
         }
     }
 
+    .layout-selector {
+        .layout-switch {
+            svg path {
+                fill: #444;
+            }
+            &:hover svg path,
+            &.active svg path {
+                fill: #DDD;
+            }
+        }
+    }
+
     .menu-btn {
         background-color: $hc-dark-panel-bg !important;
         color: $hc-dark-panel-text !important;

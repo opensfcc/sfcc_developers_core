@@ -284,6 +284,33 @@ select {
     width: 200px;
 }
 
+.layout-selector {
+    width: 120px;
+    position: absolute;
+    right: 220px;
+    text-align: center;
+
+    .layout-switch {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        margin: 0 2px;
+        background: transparent;
+        border: none;
+        appearance: none;
+        cursor: pointer;
+
+        svg path {
+            fill: #ccc;
+        }
+
+        &:hover svg path,
+        &.active svg path {
+            fill: #4f5051;
+        }
+    }
+}
+
 .overlay {
     background-color: rgba(0,0,0,0.5);
     height: 100%;

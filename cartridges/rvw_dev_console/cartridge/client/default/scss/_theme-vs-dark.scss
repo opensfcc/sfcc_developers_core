@@ -85,6 +85,18 @@ html.vs-dark {
         }
     }
 
+    .layout-selector {
+        .layout-switch {
+            svg path {
+                fill: #555;
+            }
+            &:hover svg path,
+            &.active svg path {
+                fill: #DDD;
+            }
+        }
+    }
+
     .tooltip {
         .tooltip-arrow {
             border-color: white !important;
