@@ -35,7 +35,7 @@
                     </a>
 
                     <!-- Load File Button -->
-                    <a href="#" class="load-file" @click.prevent="loadFile(file, true)" v-tooltip.bottom="{ content: 'Open File', delay: { show: 750 } }">
+                    <a href="#" class="load-file" @click.prevent="loadFile(file)" v-tooltip.bottom="{ content: 'Open File', delay: { show: 750 } }">
                         <span>{{ file.replace(/^file-/, '') }}.js</span>
                         <i aria-hidden="true" class="fa fa-arrow-circle-right"></i>
                     </a>
@@ -431,7 +431,7 @@ export default {
                 localStorage.setItem(newFileName, '');
 
                 // Load New File in Editor
-                this.loadFile(newFileName, false, true);
+                this.loadFile(newFileName, true);
             } else {
                 // File Already Exists
                 this.$toast.open({
@@ -548,7 +548,7 @@ export default {
 
             localStorage.setItem('lastUpdateCheck', new Date().getTime());
         },
-        loadFile(file, runNow, isNew) {
+        loadFile(file, isNew) {
             let savedFile = localStorage.getItem(file);
 
             if (savedFile && typeof savedFile === 'string') {
@@ -564,10 +564,6 @@ export default {
 
             if (this.editor) {
                 this.editor.setValue(savedFile);
-            }
-
-            if (this.code && runNow) {
-                this.runCode();
             }
 
             localStorage.setItem('lastRun', JSON.stringify(savedFile));
