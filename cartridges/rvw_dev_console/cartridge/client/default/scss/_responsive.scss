@@ -35,6 +35,16 @@
         display: none;
     }
 
+    .layout-selector {
+        width: 100px;
+        right: 180px;
+
+        .layout-switch {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
     .splitter-paneR {
         .actions {
             padding: 7px 0 0 7px;
@@ -44,5 +54,6 @@
     .theme-selector {
         right: 4px;
         top: 6px;
+        width: 175px;
     }
 }
