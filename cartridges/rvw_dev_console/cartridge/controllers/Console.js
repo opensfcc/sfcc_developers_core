@@ -44,7 +44,7 @@ server.post(
         }
 
         const code = req.form.code;
-        const maxDepth = req.form.maxDepth
+        const maxDepth = req.form.maxDepth;
 
         if (!code || !maxDepth) {
             return false;
