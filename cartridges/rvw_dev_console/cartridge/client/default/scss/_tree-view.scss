@@ -1,5 +1,6 @@
 .tree-view-wrapper {
     height: 100%;
+    overflow: unset !important; // Fixes Weird Scroll issue on Windows
 }
 
 .tree-view-item-key {
