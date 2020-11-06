@@ -92,6 +92,11 @@
                         <i class="fa fa-undo" aria-hidden="true"/>
                     </button>
 
+                    <!-- Save Button -->
+                    <button :disabled="!fileModified" class="btn" @click="saveFile" v-tooltip="{ content: 'Save File', delay: { show: 750 } }">
+                        <i class="fa fa-floppy-o" aria-hidden="true"/>
+                    </button>
+
                     <!-- Max Depth Selector -->
                     <label>
                         Max Depth
@@ -107,8 +112,10 @@
                     </label>
 
                     <!-- Current File -->
-                    <div class="current-file" v-if="currentFile">
-                        <i class="fa fa-code" v-tooltip="{ trigger: 'click', content: 'Current File: ' + currentFile.replace(/^file-/, '') + '.js' }"></i>
+                    <div class="current-file" :class="{ 'modified': fileModified }" v-if="currentFile">
+                        <button @click="clearCode" v-tooltip="{ content: 'Close File', delay: { show: 750 } }">
+                            <i class="fa fa-times"></i>
+                        </button>
                         <span>{{ currentFile.replace(/^file-/, '') }}.js</span>
                     </div>
                 </div>
@@ -123,7 +130,8 @@
                     language="javascript"
                     ref="editor"
                     @editorDidMount="editorDidMount"
-                    @keydown.native="check"
+                    @keydown.native="checkRun"
+                    @keyup.native="checkModified"
                 />
             </div>
 
@@ -223,11 +231,13 @@ export default {
     data() {
         return {
             code: 'return session;',
+            codeInit: 'return session;',
             copied: false,
             copyError: false,
             currentFile: null,
             editor: null,
             fileName: null,
+            fileModified: false,
             layout: 'split',
             maxDepth: 3,
             plainJSON: false,
@@ -343,24 +353,34 @@ export default {
             return `${window.staticPath}/img/logo.png`;
         },
         getTheme() {
-            return `d-flex flex-column ${this.theme}`;
+            return `d-flex flex-column ${this.theme} layout-${this.layout}`;
         }
     },
     methods: {
         cancelFile() {
             this.showModal = false;
         },
-        check(e) {
+        checkModified() {
+            this.fileModified = (JSON.stringify(this.codeInit) !== JSON.stringify(this.code));
+        },
+        checkRun(e) {
             if (e.keyCode === 88 && e.altKey) {
                 this.runCode();
                 e.preventDefault();
             }
         },
         clearCode() {
-            this.editor.setValue('');
-            this.code = '';
+            if(!this.fileModified || (this.fileModified && window.confirm('You have unsaved changes to this file. Continue?'))) {
+                this.editor.setValue('');
+                this.code = '';
+                this.codeInit = '';
+                this.currentFile = null;
+                this.fileModified = false;
+                this.result = null;
 
-            localStorage.setItem('lastRun', '');
+                localStorage.removeItem('lastRun');
+                localStorage.removeItem('currentFile');
+            }
         },
         clearResult() {
             this.result = null;
@@ -525,14 +545,14 @@ export default {
 
             if (lastRun && typeof lastRun === 'string') {
                 this.code = JSON.parse(lastRun);
+                this.codeInit = this.code;
+                this.fileModified = false;
             }
 
             if (theme) {
                 this.theme = theme;
                 document.documentElement.classList = theme;
             }
-
-            this.editor.onKeyDown(this.check);
         },
         fetchFiles() {
             var files = localStorage.getItem('files');
@@ -585,16 +605,19 @@ export default {
             localStorage.setItem('lastUpdateCheck', new Date().getTime());
         },
         loadFile(file, isNew) {
-            let savedFile = localStorage.getItem(file);
+            let rawSavedFile = localStorage.getItem(file);
+            let savedFile;
 
-            if (savedFile && typeof savedFile === 'string') {
-                savedFile = JSON.parse(savedFile);
+            if (rawSavedFile && typeof rawSavedFile === 'string') {
+                savedFile = JSON.parse(rawSavedFile);
             } else {
                 savedFile = '';
             }
 
             this.code = savedFile;
+            this.codeInit = rawSavedFile;
             this.currentFile = file;
+            this.fileModified = false;
             this.result = '';
             this.showFiles = false;
 
@@ -651,10 +674,6 @@ export default {
 
                 localStorage.setItem('lastRun', JSON.stringify(this.code));
 
-                if (this.currentFile) {
-                    localStorage.setItem(this.currentFile, JSON.stringify(this.code));
-                }
-
                 try {
                     const response = await this.axios.post(`${window.urlPath}/Console-Run`, data);
 
@@ -683,6 +702,14 @@ export default {
                 this.processing = false;
             }
         },
+        saveFile () {
+            if (this.currentFile) {
+                this.codeInit = this.code;
+                this.fileModified = false;
+
+                localStorage.setItem(this.currentFile, JSON.stringify(this.code));
+            }
+        },
         switchLayout (layout) {
             this.layout = layout;
 
@@ -699,6 +726,15 @@ export default {
         }
     },
     watch: {
+        fileModified: {
+            handler() {
+                var icon = (this.fileModified) ? 'modified' : 'favicon';
+
+                // Update Browser Icon to show Unsaved State
+                const favicon = document.getElementById('favicon');
+                favicon.href = `${window.staticPath}/img/${icon}.ico`;
+            }
+        },
         maxDepth: {
             handler() {
                 localStorage.setItem('maxDepth', this.maxDepth);

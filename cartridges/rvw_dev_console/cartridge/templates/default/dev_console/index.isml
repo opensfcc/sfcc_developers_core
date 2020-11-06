@@ -65,7 +65,7 @@
         <meta property="og:description" content="SFCC Developer Console for ${devSideId}">
 
         <!-- Icons -->
-        <link rel="shortcut icon" href="${URLUtils.staticURL('/img/favicon.ico')}" type="image/x-icon">
+        <link rel="shortcut icon" id="favicon" href="${URLUtils.staticURL('/img/favicon.ico')}" type="image/x-icon">
         <link rel="apple-touch-icon" sizes="192x192" href="${URLUtils.staticURL('/img/apple/icon.png')}">
 
         <!-- Splash Screens -->
