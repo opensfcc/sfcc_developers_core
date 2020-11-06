@@ -12,6 +12,11 @@ html.hc-black {
 
     select {
         color: #FFF;
+
+        option {
+            color: $hc-dark-panel-text;
+            background: $hc-dark-panel-bg;
+        }
     }
 
     #editor {
