@@ -83,7 +83,6 @@ function serializeObject (object, maxDepth, depth, pojo) {
         }
 
         if (typeof k === 'function') {
-            pojo[prop] = '[function]';
             continue;
         }
 
