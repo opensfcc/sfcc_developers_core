@@ -8,8 +8,8 @@
             <!-- Theme Switcher -->
             <div class="theme-selector">
                 Theme:
-                <select v-model="theme"  v-tooltip="{ content: 'Change Theme', delay: { show: 750 } }">
-                    <option v-for="option in themeOptions" :key="option.value" :value="option.value" :selected="option.label === theme">{{option.label}}</option>
+                <select v-model="theme" v-tooltip="{ content: 'Change Theme', delay: { show: 750 } }">
+                    <option v-for="option in themeOptions" :key="option.value" :value="option.value" :selected="option.label === theme">{{ option.label }}</option>
                 </select>
             </div>
         </header>
@@ -28,7 +28,7 @@
                 </button>
 
                 <!-- File -->
-                <div class="d-flex justify-content-between align-items-center file-list-item" v-for="file in files">
+                <div class="d-flex justify-content-between align-items-center file-list-item" :key="index" v-for="(file, index) in files">
                     <!-- Delete Button -->
                     <a href="#" class="delete-file" @click.prevent="deleteFile(file)" v-tooltip.bottom="{ content: 'Delete File', delay: { show: 750 } }">
                         <i aria-hidden="true" class="fa fa-trash"></i>
@@ -44,7 +44,7 @@
         </template>
 
         <!-- Split Pane -->
-        <split-pane :min-percent="30" :default-percent="resizer" v-on:resize="onResize" split="vertical" class="flex-grow-1">
+        <split-pane :min-percent="30" :default-percent="resizer" @resize="onResize" split="vertical" class="flex-grow-1">
             <!-- Left Panel -->
             <div slot="paneL" class="d-flex flex-column flex-grow-1">
                 <!-- Action Buttons -->
@@ -129,7 +129,7 @@
 
                 <!-- Output -->
                 <div class="flex-grow-1 px-3" v-if="result">
-                    <pre v-if="plainJSON" v-html="getJSON"></pre>
+                    <pre v-if="plainJSON">{{ getJSON }}</pre>
                     <tree-view v-else :data="result" :options="{
                         maxDepth: maxDepth,
                         rootObjectKey: 'result',
@@ -183,7 +183,7 @@
 </template>
 
 <script>
-import SplitPane from 'vue-splitpane'
+import SplitPane from 'vue-splitpane';
 import MonacoEditor from 'vue-monaco-cdn';
 
 export default {
@@ -249,7 +249,7 @@ export default {
         let files = localStorage.getItem('files');
         if (files) {
             files = JSON.parse(files);
-            files.sort((a, b) => a.localeCompare(b, navigator.languages[0] || navigator.language, {numeric: true, ignorePunctuation: true}))
+            files.sort((a, b) => a.localeCompare(b, navigator.languages[0] || navigator.language, {numeric: true, ignorePunctuation: true}));
             this.files = files;
         } else {
             this.createDefaultFiles();
@@ -301,13 +301,13 @@ export default {
             return 'fa fa-clipboard';
         },
         getJSON() {
-            return JSON.stringify(this.result, null, 2)
+            return JSON.stringify(this.result, null, 2);
         },
         getLogo() {
-            return `${window.staticPath}/img/logo.png`
+            return `${window.staticPath}/img/logo.png`;
         },
         getTheme() {
-            return `d-flex flex-column ${this.theme}`
+            return `d-flex flex-column ${this.theme}`;
         }
     },
     methods: {
@@ -324,7 +324,7 @@ export default {
             this.editor.setValue('');
             this.code = '';
 
-            const lastRun = localStorage.setItem('lastRun', '');
+            localStorage.setItem('lastRun', '');
         },
         clearResult() {
             this.result = null;
@@ -408,7 +408,7 @@ export default {
             }
 
             // Prefix filename incase it starts with a number as we are using it as a local storage key
-            const newFileName = `file-${this.fileName}`
+            const newFileName = `file-${this.fileName}`;
 
             // Check that New File does not aleady exist
             if (files.indexOf(newFileName) === -1) {
@@ -416,7 +416,7 @@ export default {
                 files.push(newFileName);
 
                 // Natural Sort List
-                files.sort((a, b) => a.localeCompare(b, navigator.languages[0] || navigator.language, { numeric: true, ignorePunctuation: true }))
+                files.sort((a, b) => a.localeCompare(b, navigator.languages[0] || navigator.language, { numeric: true, ignorePunctuation: true }));
 
                 // Update UI
                 this.showFiles = false;
@@ -502,7 +502,7 @@ export default {
             var files = localStorage.getItem('files');
             this.files = JSON.parse(files) || [];
         },
-        filterName (evt) {
+        filterName () {
             this.fileName = (this.fileName)
                 ? this.fileName.trim().replace(/\.js$/, '').toLowerCase().replace(/[^a-zA-Z0-9_-]+/g, '-')
                 : null;
@@ -514,16 +514,23 @@ export default {
             if (response && typeof response.data !== 'undefined') {
                 const latestVersion = response.data.tag_name;
                 const hasNewVersion = function (curVer, newVer) {
-                    const curParts = curVer.replace(/^v/, '').split('.')
-                    const newParts = newVer.replace(/^v/, '').split('.')
+                    const curParts = curVer.replace(/^v/, '').split('.');
+                    const newParts = newVer.replace(/^v/, '').split('.');
+
                     for (var i = 0; i < newParts.length; i++) {
                         const a = ~~newParts[i];
                         const b = ~~curParts[i];
-                        if (a > b) return true
-                        if (a < b) return false
+
+                        if (a > b) {
+                            return true;
+                        }
+                        if (a < b) {
+                            return false;
+                        }
                     }
-                    return false
-                }
+
+                    return false;
+                };
 
                 if (hasNewVersion(process.env.PACKAGE_VERSION, latestVersion)) {
                     this.$toast.open({

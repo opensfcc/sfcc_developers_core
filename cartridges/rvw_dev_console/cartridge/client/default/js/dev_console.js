@@ -6,7 +6,7 @@ import App from './vue/components/App';
 import Axios from 'axios';
 import VueAxios from 'vue-axios';
 import TreeView from 'vue-json-tree-view';
-import VueClipboard from 'vue-clipboard2'
+import VueClipboard from 'vue-clipboard2';
 import VTooltip from 'v-tooltip';
 import VueToast from 'vue-toast-notification';
 
