@@ -24,7 +24,7 @@ Installation
 4. Add `rvw_developers_core` to project or global `.gitignore`
 5. Add `rvw_dev_console` to Business Manager Storefront `Cartridges` Path
 
-Once installed, you can access the Dev Console on your sandbox at `/on/demandware.store/YOUR_SIDE_ID/default/Console-Show` ( change `YOUR_SIDE_ID` to your Site ID, e.g. `Sites-Site` ).
+Once installed, you can access the Dev Console on your sandbox at `/on/demandware.store/YOUR_SITE_ID/default/Console-Show` ( change `YOUR_SITE_ID` to your Site ID, e.g. `Sites-Site` ).
 
 > If you are not using SFRA, or not using Site Genesis with Controllers Support you will additionally need to install the SFRA `modules` in the root of your project.  You may need to [request permission](https://quip.com/av0SAqpXEAaW) from Salesforce to access to the `SalesforceCommerceCloud` GitHub Organization.
 
