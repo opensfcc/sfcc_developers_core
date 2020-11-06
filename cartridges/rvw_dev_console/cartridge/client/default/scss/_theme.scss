@@ -269,7 +269,7 @@ select {
 
     & > div:not(.actions) {
         height: 100%;
-        overflow: scroll;
+        overflow: auto;
         padding-bottom: 20px;
         padding-top: 10px;
         -webkit-overflow-scrolling: touch;
