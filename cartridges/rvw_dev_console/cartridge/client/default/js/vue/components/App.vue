@@ -270,8 +270,8 @@ export default {
         // Restore Results Preference
         this.plainJSON = plainJSON === 'true';
 
-        // Check for updates no more than once a day
-        if (!lastUpdateCheck || now - lastUpdateCheck > 86400000) {
+        // Check for updates no more than once a week
+        if (!lastUpdateCheck || now - lastUpdateCheck > 604800000) {
             this.getLatesVersion();
         }
 
@@ -544,7 +544,7 @@ export default {
                 : null;
         },
         async getLatesVersion () {
-            var url = 'https://api.github.com/repos/redvanworkshop/website/releases/latest';
+            var url = 'https://api.github.com/repos/redvanworkshop/rvw_developers_core/releases/latest';
             const response = await this.axios.get(url);
 
             if (response && typeof response.data !== 'undefined') {
@@ -619,8 +619,6 @@ export default {
             if (val) {
                 localStorage.setItem('resizer', val);
 
-                console.log(val, typeof val);
-
                 if (val !== 0 || val !== 100) {
                     this.layout = 'split';
                     localStorage.setItem('layout', 'split');
@@ -667,6 +665,11 @@ export default {
                     delete response.data.queryString;
 
                     this.result = response.data;
+
+                    // Switch back to split view if in code view and running code
+                    if (this.layout === 'left') {
+                        this.switchLayout('split');
+                    }
                 } catch (err) {
                     this.$toast.open({
                         type: 'error',
