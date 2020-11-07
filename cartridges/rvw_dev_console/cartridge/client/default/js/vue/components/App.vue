@@ -3,7 +3,10 @@
         <!-- Header -->
         <header class="d-flex align-items-center">
             <!-- Logo -->
-            <a href="#" @click.prevent="reload()"><img :src="getLogo" alt="logo" class="logo">SFCC Dev Console</a>
+            <a href="#" @click.prevent="reload()">
+                <img :src="getLogo" alt="logo" class="logo">
+                <span>SFCC Dev Console</span>
+            </a>
 
             <!-- Layout Selector -->
             <div class="layout-selector">
@@ -35,7 +38,7 @@
 
             <!-- Theme Selector -->
             <div class="theme-selector">
-                Theme:
+                <span>Theme:</span>
                 <select v-model="theme" v-tooltip="{ content: 'Change Theme', delay: { show: 750 } }">
                     <option v-for="option in themeOptions" :key="option.value" :value="option.value" :selected="option.label === theme">{{ option.label }}</option>
                 </select>
@@ -605,34 +608,44 @@ export default {
             localStorage.setItem('lastUpdateCheck', new Date().getTime());
         },
         loadFile(file, isNew) {
-            let rawSavedFile = localStorage.getItem(file);
+            let rawSavedFile;
             let savedFile;
 
-            if (rawSavedFile && typeof rawSavedFile === 'string') {
-                savedFile = JSON.parse(rawSavedFile);
+            if (isNew && this.fileModified) {
+                this.codeInit = this.code;
+                this.currentFile = file;
+                this.fileModified = false;
+                this.showFiles = false;
+
+                localStorage.setItem(this.currentFile, JSON.stringify(this.code));
             } else {
-                savedFile = '';
+                rawSavedFile = localStorage.getItem(file);
+                savedFile;
+
+                if (rawSavedFile && typeof rawSavedFile === 'string') {
+                    savedFile = JSON.parse(rawSavedFile);
+                } else {
+                    savedFile = '';
+                }
+
+                this.code = savedFile;
+                this.codeInit = rawSavedFile;
+                this.currentFile = file;
+                this.fileModified = false;
+                this.result = '';
+                this.showFiles = false;
+
+                if (this.editor) {
+                    this.editor.setValue(savedFile);
+                }
             }
 
-            this.code = savedFile;
-            this.codeInit = rawSavedFile;
-            this.currentFile = file;
-            this.fileModified = false;
-            this.result = '';
-            this.showFiles = false;
-
-            if (this.editor) {
-                this.editor.setValue(savedFile);
-            }
-
-            localStorage.setItem('lastRun', JSON.stringify(savedFile));
+            localStorage.setItem('lastRun', JSON.stringify(this.code));
             localStorage.setItem('currentFile', file);
-
-            var message = isNew ? 'Created' : 'Loaded';
 
             this.$toast.open({
                 type: 'success',
-                message: `<i class="fa fa-check-square"></i>&nbsp; ${message} <strong>${file.replace(/^file-/, '')}.js</strong>`,
+                message: `<i class="fa fa-check-square"></i>&nbsp; ${isNew ? 'Created' : 'Loaded'} <strong>${file.replace(/^file-/, '')}.js</strong>`,
                 duration: 3000,
                 dismissible: true,
                 position: 'top-right'
@@ -708,6 +721,8 @@ export default {
                 this.fileModified = false;
 
                 localStorage.setItem(this.currentFile, JSON.stringify(this.code));
+            } else {
+                this.promptFile();
             }
         },
         switchLayout (layout) {

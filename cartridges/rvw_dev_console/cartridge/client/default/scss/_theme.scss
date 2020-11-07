@@ -13,6 +13,7 @@ body, html {
     height: 100%;
     overflow: hidden;
     width: 100%;
+    font-weight: 400;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
 }
@@ -95,25 +96,28 @@ select {
     }
 
     button {
-        position: relative;
-        left: -4px;
         appearance: none;
         background: transparent;
+        cursor: pointer;
+        padding: 6px;
     }
 }
 
 #app.layout-left {
     .current-file {
-        top: 0;
-        border: none;
-        border-radius: none;
+        right: unset;
+        left: 62px;
+    }
 
-        &.modified {
-            border: none;
-            color: #f38518;
+    header {
+        a {
+            span {
+                display: none;
+            }
         }
     }
 }
+
 
 .actions {
     min-height: 50px;
@@ -202,7 +206,7 @@ select {
 
         a {
             color: #000;
-            font-family: Menlo, Monaco, "Courier New", monospace;
+            font-family: "Droid Sans Mono", monospace, monospace, "Droid Sans Fallback";
             font-size: 14px;
             font-weight: normal;
             height: 60px;
@@ -363,7 +367,7 @@ select {
     }
 }
 
-/* Expose Delete Button for Touch Only Devices */
+/* Support Touch Only Devices */
 @media (hover: none) {
     .files {
         .file-list-item {
@@ -381,5 +385,10 @@ select {
                 }
             }
         }
+    }
+
+    // This library does not support touch, so hide resizer
+    .vue-splitter-container .splitter-pane-resizer {
+        background-image: none !important;
     }
 }
