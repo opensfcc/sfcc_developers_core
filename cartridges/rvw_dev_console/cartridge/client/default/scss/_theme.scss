@@ -86,7 +86,7 @@ select {
     background: white;
     height: 34px;
     line-height: 34px;
-    padding: 0 16px 0 20px;
+    padding: 0 16px 0 8px;
     border-radius: 4px 4px 0 0;
     border-top: 2px solid #4f5051;
 
@@ -102,22 +102,6 @@ select {
         padding: 6px;
     }
 }
-
-#app.layout-left {
-    .current-file {
-        right: unset;
-        left: 62px;
-    }
-
-    header {
-        a {
-            span {
-                display: none;
-            }
-        }
-    }
-}
-
 
 .actions {
     min-height: 50px;
@@ -364,6 +348,25 @@ select {
 
     &.position-fixed {
         backdrop-filter: blur(3px);
+    }
+}
+
+#app.has-tabs {
+    .current-file {
+        right: unset;
+        left: 62px;
+    }
+
+    header {
+        a {
+            span {
+                display: none;
+            }
+
+            img {
+                padding-right: none;
+            }
+        }
     }
 }
 

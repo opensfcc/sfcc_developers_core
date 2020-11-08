@@ -16,3 +16,9 @@
         width: 9px!important;
     }
 }
+
+#app.layout-left, #app.layout-right {
+    .splitter-pane-resizer.vertical {
+        display: none;
+    }
+}

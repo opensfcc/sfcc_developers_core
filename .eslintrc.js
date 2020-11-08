@@ -8,7 +8,8 @@ module.exports = {
         node: true,
     },
     globals: {
-        'process': true
+        'process': true,
+        'monaco': true,
     },
     // Ignore Lint Rules that are Overkill
     rules: {

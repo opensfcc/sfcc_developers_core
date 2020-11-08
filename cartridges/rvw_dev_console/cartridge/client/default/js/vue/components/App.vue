@@ -11,7 +11,7 @@
             <!-- Layout Selector -->
             <div class="layout-selector">
                 <!-- Left Panel Button -->
-                <button class="layout-switch left" :class="{ 'active': layout === 'left' }" @click="switchLayout('left')" v-tooltip="{ content: 'Left Column Only', delay: { show: 750 } }">
+                <button class="layout-switch left" :class="{ 'active': layout === 'left' }" @click="switchLayout('left')" v-tooltip="{ content: 'Left Column Only', delay: { show: tooltipDelay } }">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 46.15">
                         <path d="M23.71 27.73V15.28h-4.24v15.99h11.06v-3.54h-6.82z"/>
                         <path d="M48.59 3.14a4.65 4.65 0 00-3.4-1.42H4.81a4.65 4.65 0 00-3.4 1.42A4.62 4.62 0 000 6.53v36.54a4.66 4.66 0 001.41 3.4 4.64 4.64 0 003.4 1.41h40.38A4.81 4.81 0 0050 43.07V6.53a4.62 4.62 0 00-1.41-3.39zm-2.44 39.93a1 1 0 01-1 1H4.81a1 1 0 01-1-1V9.42h42.3z" transform="translate(0 -1.72)"/>
@@ -19,7 +19,7 @@
                 </button>
 
                 <!-- Split Panel Button -->
-                <button class="layout-switch split" :class="{ 'active': layout === 'split' }" @click="switchLayout('split')" v-tooltip="{ content: 'Split View', delay: { show: 750 } }">
+                <button class="layout-switch split" :class="{ 'active': layout === 'split' }" @click="switchLayout('split')" v-tooltip="{ content: 'Split View', delay: { show: tooltipDelay } }">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 46.15">
                         <path d="M48.59 3.14a4.65 4.65 0 00-3.4-1.42H4.81a4.65 4.65 0 00-3.4 1.42A4.62 4.62 0 000 6.53v36.54a4.66 4.66 0 001.41 3.4 4.64 4.64 0 003.4 1.41h40.38A4.81 4.81 0 0050 43.07V6.53a4.62 4.62 0 00-1.41-3.39zM23.08 44H4.81a1 1 0 01-1-1V9.42h19.27zm23.07-1a1 1 0 01-1 1H26.92V9.42h19.23z" transform="translate(0 -1.72)"/>
                         <path d="M13.09 26.15v-8.1h-2.75v10.4h7.19v-2.3h-4.44z"/>
@@ -28,7 +28,7 @@
                 </button>
 
                 <!-- Right Panel Button -->
-                <button class="layout-switch right" :class="{ 'active': layout === 'right' }" @click="switchLayout('right')" v-tooltip="{ content: 'Right Column Only', delay: { show: 750 } }">
+                <button class="layout-switch right" :class="{ 'active': layout === 'right' }" @click="switchLayout('right')" v-tooltip="{ content: 'Right Column Only', delay: { show: tooltipDelay } }">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 46.15">
                         <path d="M48.59 3.14a4.65 4.65 0 00-3.4-1.42H4.81a4.65 4.65 0 00-3.4 1.42A4.62 4.62 0 000 6.53v36.54a4.66 4.66 0 001.41 3.4 4.64 4.64 0 003.4 1.41h40.38A4.81 4.81 0 0050 43.07V6.53a4.62 4.62 0 00-1.41-3.39zm-2.44 39.93a1 1 0 01-1 1H4.81a1 1 0 01-1-1V9.42h42.3z" transform="translate(0 -1.72)"/>
                         <path d="M31.62 33l-3.49-6.23a4.87 4.87 0 002.6-4.6c0-4-2.95-5.17-6.39-5.17h-6v16h4.23v-5.37h1.53L26.9 33zm-9-12.65H24c1.67 0 2.56.44 2.56 1.82s-.89 2.12-2.56 2.12h-1.39z" transform="translate(0 -1.72)"/>
@@ -39,7 +39,7 @@
             <!-- Theme Selector -->
             <div class="theme-selector">
                 <span>Theme:</span>
-                <select v-model="theme" v-tooltip="{ content: 'Change Theme', delay: { show: 750 } }">
+                <select v-model="theme" v-tooltip="{ content: 'Change Theme', delay: { show: tooltipDelay } }">
                     <option v-for="option in themeOptions" :key="option.value" :value="option.value" :selected="option.label === theme">{{ option.label }}</option>
                 </select>
             </div>
@@ -53,7 +53,7 @@
             <!-- Drawer -->
             <div class="files position-fixed">
                 <!-- New File -->
-                <button @click.prevent="promptFile()" class="create-file" v-tooltip.bottom="{ content: 'Create File', delay: { show: 750 }, class: 'invert' }">
+                <button @click.prevent="promptFile()" class="create-file" v-tooltip.bottom="{ content: 'Create File', delay: { show: tooltipDelay }, class: 'invert' }">
                     <i aria-hidden="true" class="fa fa-plus-square"></i>
                     <span>Create New File</span>
                 </button>
@@ -61,12 +61,12 @@
                 <!-- File -->
                 <div class="d-flex justify-content-between align-items-center file-list-item" :key="index" v-for="(file, index) in files">
                     <!-- Delete Button -->
-                    <a href="#" class="delete-file" @click.prevent="deleteFile(file)" v-tooltip.bottom="{ content: 'Delete File', delay: { show: 750 } }">
+                    <a href="#" class="delete-file" @click.prevent="deleteFile(file)" v-tooltip.bottom="{ content: 'Delete File', delay: { show: tooltipDelay } }">
                         <i aria-hidden="true" class="fa fa-trash"></i>
                     </a>
 
                     <!-- Load File Button -->
-                    <a href="#" class="load-file" @click.prevent="loadFile(file)" v-tooltip.bottom="{ content: 'Open File', delay: { show: 750 } }">
+                    <a href="#" class="load-file" @click.prevent="loadFile(file)" v-tooltip.bottom="{ content: 'Open File', delay: { show: tooltipDelay } }">
                         <span>{{ file.replace(/^file-/, '') }}.js</span>
                         <i aria-hidden="true" class="fa fa-arrow-circle-right"></i>
                     </a>
@@ -82,28 +82,28 @@
                 <div class="actions d-flex align-items-center">
                     <!-- Menu Button -->
                     <div class="menu">
-                        <a class="menu-btn" href="#" @click.prevent="showFiles = !showFiles" v-tooltip="{ content: 'Open File Menu', delay: { show: 750 } }"><i class="fa fa-bars"/></a>
+                        <a class="menu-btn" href="#" @click.prevent="showFiles = !showFiles" v-tooltip="{ content: 'Open File Menu', delay: { show: tooltipDelay } }"><i class="fa fa-bars"/></a>
                     </div>
 
                     <!-- Run Code Button -->
-                    <button :disabled="!code || processing" class="btn" @click="runCode" v-tooltip="{ content: 'Run Code ( alt+x )', delay: { show: 750 } }">
+                    <button :disabled="!code || processing" class="btn" @click="runCode" v-tooltip="{ content: 'Run Code ( alt+x )', delay: { show: tooltipDelay } }">
                         <i :class="[processing ? 'fa fa-spinner spin' : 'fa fa-play']" aria-hidden="true"/>
                     </button>
 
                     <!-- Reset Button -->
-                    <button class="btn" @click="clearCode" v-tooltip="{ content: 'Reset Editor', delay: { show: 750 } }">
+                    <button class="btn" @click="clearCode" v-tooltip="{ content: 'Reset Editor', delay: { show: tooltipDelay } }">
                         <i class="fa fa-undo" aria-hidden="true"/>
                     </button>
 
                     <!-- Save Button -->
-                    <button :disabled="!fileModified" class="btn" @click="saveFile" v-tooltip="{ content: 'Save File', delay: { show: 750 } }">
+                    <button :disabled="!fileModified" class="btn" @click="saveFile" v-tooltip="{ content: 'Save File', delay: { show: tooltipDelay } }">
                         <i class="fa fa-floppy-o" aria-hidden="true"/>
                     </button>
 
                     <!-- Max Depth Selector -->
                     <label>
                         Max Depth
-                        <select v-model="maxDepth" v-tooltip="{ content: 'Change Max Depth', delay: { show: 750 } }">
+                        <select v-model="maxDepth" v-tooltip="{ content: 'Change Max Depth', delay: { show: tooltipDelay } }">
                             <option
                                 v-for="(n, i) in 10"
                                 :key="i"
@@ -116,7 +116,7 @@
 
                     <!-- Current File -->
                     <div class="current-file" :class="{ 'modified': fileModified }" v-if="currentFile">
-                        <button @click="clearCode" v-tooltip="{ content: 'Close File', delay: { show: 750 } }">
+                        <button @click="clearCode" v-tooltip="{ content: 'Close File', delay: { show: tooltipDelay } }">
                             <i class="fa fa-times"></i>
                         </button>
                         <span>{{ currentFile.replace(/^file-/, '') }}.js</span>
@@ -143,33 +143,33 @@
                 <!-- Action Buttons -->
                 <div class="actions d-flex align-items-center">
                     <!-- Toggle View Button -->
-                    <button class="btn"
+                    <button class="btn" :disabled="!result"
                         @click="plainJSON = !plainJSON"
-                        v-tooltip="{ content: plainJSON ? 'Switch to Tree View' : 'Switch to JSON View', delay: { show: 750 } }">
+                        v-tooltip="{ content: plainJSON ? 'Switch to Tree View' : 'Switch to JSON View', delay: { show: tooltipDelay } }">
                         <i :class="[plainJSON ? 'fa fa-code' : 'fa fa-list-ul']" aria-hidden="true"/>
                     </button>
 
                     <!-- Clipboard Button -->
-                    <button class="btn"
+                    <button class="btn" :disabled="!result"
                         v-clipboard:copy="getJSON"
                         v-clipboard:success="clipboardSuccessHandler"
                         v-clipboard:error="clipboardErrorHandler"
-                        v-tooltip="{ content: 'Copy to Clipboard', delay: { show: 750 } }">
+                        v-tooltip="{ content: 'Copy to Clipboard', delay: { show: tooltipDelay } }">
                         <i :class="getClipboard" aria-hidden="true"/>
                     </button>
 
                     <!-- Clear Button -->
-                    <button class="btn"
+                    <button class="btn" :disabled="!result"
                         @click="clearResult"
-                        v-tooltip="{ content: 'Clear Results', delay: { show: 750 } }">
+                        v-tooltip="{ content: 'Clear Results', delay: { show: tooltipDelay } }">
                         <i class="fa fa-trash" aria-hidden="true"/>
                     </button>
                 </div>
 
                 <!-- Output -->
                 <div class="flex-grow-1 px-3" v-if="result">
-                    <pre v-if="plainJSON">{{ getJSON }}</pre>
-                    <tree-view v-else :data="result" :options="{
+                    <pre v-if="plainJSON" ref="outputPlain">{{ getJSON }}</pre>
+                    <tree-view v-else :data="result" class="outputTree" :options="{
                         maxDepth: maxDepth,
                         rootObjectKey: 'result',
                         link: true
@@ -249,6 +249,7 @@ export default {
             result: null,
             showModal: false,
             showFiles: false,
+            tooltipDelay: 300,
             files: [],
             theme: 'vs',
             themeOptions: [
@@ -356,7 +357,7 @@ export default {
             return `${window.staticPath}/img/logo.png`;
         },
         getTheme() {
-            return `d-flex flex-column ${this.theme} layout-${this.layout}`;
+            return `d-flex flex-column ${this.theme} layout-${this.layout} ${this.currentFile ? 'has-tabs' : 'no-tabs'}`;
         }
     },
     methods: {
@@ -398,7 +399,7 @@ export default {
                 message: `<i class="fa fa-exclamation-triangle"></i>&nbsp; ${err.message}`,
                 duration: 5000,
                 dismissible: true,
-                position: 'top-right'
+                position: 'top'
             });
 
             setTimeout(function(){
@@ -415,7 +416,7 @@ export default {
                 message: '<i class="fa fa-check-square"></i>&nbsp; Copied to Clipboard',
                 duration: 3000,
                 dismissible: true,
-                position: 'top-right'
+                position: 'top'
             });
 
             setTimeout(function(){
@@ -452,7 +453,7 @@ export default {
                     message: `<i class="fa fa-bell"></i>&nbsp; Please Enter a File Name`,
                     duration: 5000,
                     dismissible: true,
-                    position: 'top-right'
+                    position: 'top'
                 });
 
                 return;
@@ -498,7 +499,7 @@ export default {
                     message: `<i class="fa fa-exclamation-triangle"></i>&nbsp; <strong>${this.fileName}</strong> already exists`,
                     duration: 5000,
                     dismissible: true,
-                    position: 'top-right'
+                    position: 'top'
                 });
             }
         },
@@ -522,7 +523,7 @@ export default {
                         message: `<i class="fa fa-check-square"></i>&nbsp; Deleted <strong>${fileName}</strong>`,
                         duration: 3000,
                         dismissible: true,
-                        position: 'top-right'
+                        position: 'top'
                     });
                 } else {
                     this.$toast.open({
@@ -530,18 +531,77 @@ export default {
                         message: `<i class="fa fa-exclamation-triangle"></i>&nbsp; Unable to Delete <strong>${fileName}</strong>`,
                         duration: 5000,
                         dismissible: true,
-                        position: 'top-right'
+                        position: 'top'
                     });
                 }
             }
         },
         editorDidMount(editor) {
+            var self = this;
             this.editor = editor;
 
             // Editor tries to call this on Theme Change, even though it's not needed in Vue
             if (typeof this.editor.setTheme === 'undefined') {
                 this.editor.setTheme = function(){};
             }
+
+            // Enable Key Bindings
+            this.editor.condition = {
+                canSave: editor.createContextKey('canSave', false),
+                canClear: editor.createContextKey('canClear', false),
+                canRun: editor.createContextKey('canRun', true),
+            };
+
+            // Add Save Command to Editor
+            editor.addAction({
+                id: 'dev-console-save',
+                label: 'Save',
+                keybindings: [
+                    monaco.KeyMod.chord(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S)
+                ],
+                precondition: 'canSave',
+                keybindingContext: 'canSave',
+                contextMenuGroupId: 'dev_console',
+                contextMenuOrder: 1,
+                run: function() {
+                    self.saveFile();
+                    return null;
+                }
+            });
+
+            // Add Run Code Command to Editor
+            editor.addAction({
+                id: 'dev-console-run',
+                label: 'Run Code',
+                keybindings: [
+                    monaco.KeyMod.chord(monaco.KeyMod.Alt | monaco.KeyCode.KEY_X)
+                ],
+                precondition: 'canRun',
+                keybindingContext: 'canRun',
+                contextMenuGroupId: 'dev_console',
+                contextMenuOrder: 2,
+                run: function() {
+                    self.runCode();
+                    return null;
+                }
+            });
+
+            // Add Clear Results Command to Editor
+            editor.addAction({
+                id: 'dev-console-clear',
+                label: 'Clear Results',
+                keybindings: [
+                    monaco.KeyMod.chord(monaco.KeyMod.Alt | monaco.KeyCode.KEY_R)
+                ],
+                precondition: 'canClear',
+                keybindingContext: 'canClear',
+                contextMenuGroupId: 'dev_console',
+                contextMenuOrder: 3,
+                run: function() {
+                    self.clearResult();
+                    return null;
+                }
+            });
 
             const lastRun = localStorage.getItem('lastRun');
             const theme = localStorage.getItem('theme');
@@ -629,7 +689,7 @@ export default {
                 }
 
                 this.code = savedFile;
-                this.codeInit = rawSavedFile;
+                this.codeInit = savedFile;
                 this.currentFile = file;
                 this.fileModified = false;
                 this.result = '';
@@ -642,14 +702,6 @@ export default {
 
             localStorage.setItem('lastRun', JSON.stringify(this.code));
             localStorage.setItem('currentFile', file);
-
-            this.$toast.open({
-                type: 'success',
-                message: `<i class="fa fa-check-square"></i>&nbsp; ${isNew ? 'Created' : 'Loaded'} <strong>${file.replace(/^file-/, '')}.js</strong>`,
-                duration: 3000,
-                dismissible: true,
-                position: 'top-right'
-            });
         },
         onResize(val) {
             if (val) {
@@ -708,7 +760,7 @@ export default {
                         message: `<i class="fa fa-exclamation-triangle"></i>&nbsp; ${err.message}`,
                         duration: 5000,
                         dismissible: true,
-                        position: 'top-right'
+                        position: 'top'
                     });
                 }
 
@@ -741,6 +793,11 @@ export default {
         }
     },
     watch: {
+        code: {
+            handler() {
+                this.editor.condition.canRun.set(this.code && this.code !== '');
+            }
+        },
         fileModified: {
             handler() {
                 var icon = (this.fileModified) ? 'modified' : 'favicon';
@@ -748,6 +805,10 @@ export default {
                 // Update Browser Icon to show Unsaved State
                 const favicon = document.getElementById('favicon');
                 favicon.href = `${window.staticPath}/img/${icon}.ico`;
+
+                if (this.editor) {
+                    this.editor.condition.canSave.set(this.fileModified);
+                }
             }
         },
         maxDepth: {
@@ -758,6 +819,28 @@ export default {
         plainJSON: {
             handler() {
                 localStorage.setItem('plainJSON', this.plainJSON);
+
+                // Reset Scroll Top
+                var self = this;
+
+                // Give some time for DOM to update before resetting scroll position
+                setTimeout(function(){
+                    var $outputTree = document.querySelector('.outputTree');
+
+                    if (self.plainJSON && self.$refs.outputPlain) {
+                        self.$refs.outputPlain.parentNode.scrollTop = 0;
+                    } else if (!self.plainJSON && $outputTree) {
+                        // Tree Vue Component does not work with $refs, so DOM query needed
+                        $outputTree.parentNode.scrollTop = 0;
+                    }
+                }, 10);
+            }
+        },
+        result: {
+            handler() {
+                if (this.editor) {
+                    this.editor.condition.canClear.set(this.result);
+                }
             }
         },
         theme: {

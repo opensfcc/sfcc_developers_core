@@ -4,6 +4,7 @@
 
         a {
             font-size: 1rem;
+            margin-left: 6px;
 
             img {
                 height: 32px;
@@ -70,12 +71,6 @@
 
 @media only screen and (max-width: 768px) {
     header {
-        a {
-            span {
-                display: none;
-            }
-        }
-
         .layout-selector {
             width: 100px;
             right: 100px;
@@ -99,11 +94,14 @@
             }
         }
     }
+}
 
-    #app.layout-split {
-        .current-file {
-            right: unset;
-            left: 62px;
+@media only screen and (max-width: 400px) {
+    header {
+        a {
+            span {
+                display: none;
+            }
         }
     }
 }
