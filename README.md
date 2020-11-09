@@ -1,11 +1,11 @@
 ![Logo](https://red-van-workshop.s3.us-east-1.amazonaws.com/logo.png "Logo")
 
-SFCC Dev Console Cartridge
+RVW Developers Core - SFCC Cartridge
 ===
 
 > A Salesforce Commerce Cloud (Demandware) Cartridge for Developers.
 
-[![Demo Video](https://red-van-workshop.s3.us-east-1.amazonaws.com/video-still.png)](https://vimeo.com/474835586/007c173136 "Demo Video")
+[![Play Demo Video](https://red-van-workshop.s3.us-east-1.amazonaws.com/dc-video-still.png)](https://vimeo.com/476962367/5c830f9227 "Play Demo Video")
 
 ## Features
 

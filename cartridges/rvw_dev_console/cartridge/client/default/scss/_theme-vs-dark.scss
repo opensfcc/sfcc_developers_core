@@ -40,6 +40,19 @@ html.vs-dark {
         }
     }
 
+    .current-file {
+        background: $vs-dark-editor-bg;
+        border-top: 2px solid $vs-dark-button-bg;
+
+        &.modified {
+            border-top: 2px solid #f38518;
+        }
+
+        i {
+            color: $vs-dark-button-text;
+        }
+    }
+
     .files {
         button.create-file {
             background: white;
