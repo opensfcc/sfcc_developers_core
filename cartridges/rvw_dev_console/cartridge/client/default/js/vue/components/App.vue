@@ -795,7 +795,9 @@ export default {
     watch: {
         code: {
             handler() {
-                this.editor.condition.canRun.set(this.code && this.code !== '');
+                if (this.editor) {
+                    this.editor.condition.canRun.set(this.code && this.code !== '');
+                }
             }
         },
         fileModified: {
