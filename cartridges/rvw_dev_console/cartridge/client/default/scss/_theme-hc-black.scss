@@ -33,10 +33,23 @@ html.hc-black {
         border: 1px solid $hc-dark-editor-bg;
         color: $hc-dark-button-text;
 
+        &.modified {
+            border-top: 2px solid #f38518;
+        }
+
         &:hover {
             background-color: $hc-dark-editor-bg;
             border: 1px solid $hc-dark-button-bg;
             color: $hc-dark-editor-text;
+        }
+    }
+
+    .current-file {
+        background: $hc-dark-editor-bg;
+        border-top: 2px solid $hc-dark-button-bg;
+
+        i {
+            color: $hc-dark-button-text;
         }
     }
 
