@@ -28,9 +28,6 @@ export default {
         return {
             showModal: false
         };
-    },
-    methods: {
-        handleClose () {}
     }
 };
 </script>
