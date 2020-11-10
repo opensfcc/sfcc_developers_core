@@ -2,6 +2,7 @@
 
 const server = require('server');
 const URLUtils = require('dw/web/URLUtils');
+const CSRFProtection = require('dw/web/CSRFProtection');
 
 const serializer = require('../scripts/serializer');
 
@@ -34,8 +35,19 @@ server.post(
     'Run',
     server.middleware.https,
     function (req, res, next) {
+        if (!CSRFProtection.validateRequest()) {
+            res.setStatusCode(403);
+            res.json({
+                error: true,
+                message: 'Invalid CSRF Token'
+            });
+
+            return next();
+        }
+
         if (dw.system.System.instanceType === dw.system.System.PRODUCTION_SYSTEM) {
-            res.setStatusCode(403).json({
+            res.setStatusCode(403);
+            res.json({
                 error: true,
                 message: 'Only available in SIG environments'
             });

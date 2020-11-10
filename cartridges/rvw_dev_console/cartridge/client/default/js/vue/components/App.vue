@@ -179,45 +179,67 @@
         </split-pane>
 
         <!-- New File Modal -->
-        <transition name="modal">
-            <div id="modal" class="modal-mask" v-if="showModal" @click="cancelFile()" @keydown.esc="cancelFile()">
-                <div class="modal-wrapper">
-                    <div class="modal-container" @click.stop="$event.preventDefault()">
-                        <div class="modal-header">
-                            <i class="fa fa-code"></i> Enter File Name
-                        </div>
-
-                        <div class="modal-body">
-                            <!-- New File Input -->
-                            <div class="input-wrapper">
-                                <input type="text" name="new-file"
-                                    maxlength="20"
-                                    ref="fileName"
-                                    v-model="fileName"
-                                    @keypress="filterName($event)"
-                                    @keydown.enter="createFile()"
-                                >
-                                <span class="ext">.js</span>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <slot name="footer">
-                                <!-- Cancel File Button -->
-                                <button class="modal-cancel-button" @click="cancelFile()">
-                                    Cancel
-                                </button>
-
-                                <!-- Create File Button -->
-                                <button class="modal-default-button" @click="createFile()">
-                                    Create
-                                </button>
-                            </slot>
-                        </div>
-                    </div>
+        <modal v-if="showFileModal" @close="cancelFile()">
+            <div slot="header">
+                <i class="fa fa-code"></i> Enter File Name
+            </div>
+            <div slot="body">
+                <!-- New File Input -->
+                <div class="input-wrapper">
+                    <input type="text" name="new-file"
+                        maxlength="20"
+                        ref="fileName"
+                        v-model="fileName"
+                        @keypress="filterName($event)"
+                        @keydown.enter="createFile()"
+                    >
+                    <span class="ext">.js</span>
                 </div>
             </div>
-        </transition>
+            <div slot="footer">
+                <!-- Cancel File Button -->
+                <button class="modal-cancel-button" @click="cancelFile()">
+                    Cancel
+                </button>
+
+                <!-- Create File Button -->
+                <button class="modal-default-button" @click="createFile()">
+                    Create
+                </button>
+            </div>
+        </modal>
+
+        <!-- Login Modal -->
+        <modal v-if="showLoginModal" @close="cancelLogin()">
+            <div slot="header">
+                <i class="fa fa-user-circle"></i> Business Manager Login
+            </div>
+            <div slot="body">
+                <!-- Login Input -->
+                <div class="input-wrapper full-width">
+                    <input type="text" id="idToken1" name="callback_0" placeholder="User Name" required
+                        ref="username"
+                        v-model="auth.username"
+                        @keydown.enter="userLogin()"
+                    >
+                </div>
+
+                <!-- Password Input -->
+                <div class="input-wrapper full-width">
+                    <input type="password" id="idToken2" name="callback_1" placeholder="Password" required
+                        ref="password"
+                        v-model="auth.password"
+                        @keydown.enter="userLogin()"
+                    >
+                </div>
+            </div>
+            <div slot="footer">
+                <!-- Login Button -->
+                <button class="modal-default-button" @click="userLogin()">
+                    Login
+                </button>
+            </div>
+        </modal>
     </div>
 </template>
 
@@ -225,14 +247,22 @@
 import SplitPane from 'vue-splitpane';
 import MonacoEditor from 'vue-monaco-cdn';
 
+import Modal from './Modal';
+
 export default {
     name: 'DevConsole',
     components: {
+        Modal,
         MonacoEditor,
         SplitPane
     },
     data() {
         return {
+            auth: {
+                username: null,
+                password: null
+            },
+            authentication: null,
             code: 'return session;',
             codeInit: 'return session;',
             copied: false,
@@ -247,7 +277,8 @@ export default {
             processing: false,
             resizer: 50,
             result: null,
-            showModal: false,
+            showFileModal: false,
+            showLoginModal: false,
             showFiles: false,
             tooltipDelay: 300,
             files: [],
@@ -270,6 +301,7 @@ export default {
     },
     mounted() {
         // Fetch Settings
+        const authentication = localStorage.getItem('authentication');
         const currentFile = localStorage.getItem('currentFile');
         const lastUpdateCheck = localStorage.getItem('lastUpdateCheck');
         const layout = localStorage.getItem('layout');
@@ -297,6 +329,13 @@ export default {
             this.files = files;
         } else {
             this.createDefaultFiles();
+        }
+
+        // Fetch Authentication
+        if (authentication) {
+            this.authentication = authentication;
+        } else {
+            this.showLoginModal = true;
         }
 
         // Load the Last File if Loaded from Menu
@@ -337,6 +376,11 @@ export default {
                     selectOnLineNumbers: true,
                     showGlyphMargin: false,
                     smoothScrolling: true,
+                    lineDecorationsWidth: 20,
+                    padding: {
+                        top: 10,
+                        bottom: 10
+                    },
                     theme: this.theme
                 }
             };
@@ -362,7 +406,14 @@ export default {
     },
     methods: {
         cancelFile() {
-            this.showModal = false;
+            this.showFileModal = false;
+        },
+        cancelLogin() {
+            if (this.authentication) {
+                this.showLoginModal = false;
+            } else {
+                this.showMessage('warning', 'Authentication Required');
+            }
         },
         checkModified() {
             this.fileModified = (JSON.stringify(this.codeInit) !== JSON.stringify(this.code));
@@ -391,16 +442,10 @@ export default {
         },
         clipboardErrorHandler (err) {
             var self = this;
-            self.copied = false;
-            self.copyError = true;
 
-            this.$toast.open({
-                type: 'error',
-                message: `<i class="fa fa-exclamation-triangle"></i>&nbsp; ${err.message}`,
-                duration: 5000,
-                dismissible: true,
-                position: 'top'
-            });
+            this.copied = false;
+            this.copyError = true;
+            this.showMessage('error', err.message);
 
             setTimeout(function(){
                 self.copyError = false;
@@ -408,16 +453,10 @@ export default {
         },
         clipboardSuccessHandler () {
             var self = this;
-            self.copied = true;
-            self.copyError = false;
 
-            this.$toast.open({
-                type: 'success',
-                message: '<i class="fa fa-check-square"></i>&nbsp; Copied to Clipboard',
-                duration: 3000,
-                dismissible: true,
-                position: 'top'
-            });
+            this.copied = true;
+            this.copyError = false;
+            this.showMessage('success', 'Copied to Clipboard');
 
             setTimeout(function(){
                 self.copied = false;
@@ -448,13 +487,7 @@ export default {
         createFile () {
             // Check if File Name was left blank
             if (!this.fileName) {
-                this.$toast.open({
-                    type: 'info',
-                    message: `<i class="fa fa-bell"></i>&nbsp; Please Enter a File Name`,
-                    duration: 5000,
-                    dismissible: true,
-                    position: 'top'
-                });
+                this.showMessage('info', 'Please Enter a File Name');
 
                 return;
             }
@@ -480,7 +513,7 @@ export default {
 
                 // Update UI
                 this.showFiles = false;
-                this.showModal = false;
+                this.showFileModal = false;
                 this.currentFile = false;
                 this.files = files;
                 this.fileName = null;
@@ -494,13 +527,7 @@ export default {
                 this.loadFile(newFileName, true);
             } else {
                 // File Already Exists
-                this.$toast.open({
-                    type: 'error',
-                    message: `<i class="fa fa-exclamation-triangle"></i>&nbsp; <strong>${this.fileName}</strong> already exists`,
-                    duration: 5000,
-                    dismissible: true,
-                    position: 'top'
-                });
+                this.showMessage('error', `<strong>${this.fileName}</strong> already exists`);
             }
         },
         deleteFile(file) {
@@ -518,21 +545,9 @@ export default {
                     localStorage.removeItem(file);
                     localStorage.setItem('files', JSON.stringify(files));
 
-                    this.$toast.open({
-                        type: 'success',
-                        message: `<i class="fa fa-check-square"></i>&nbsp; Deleted <strong>${fileName}</strong>`,
-                        duration: 3000,
-                        dismissible: true,
-                        position: 'top'
-                    });
+                    this.showMessage('success', `Deleted <strong>${fileName}</strong>`);
                 } else {
-                    this.$toast.open({
-                        type: 'error',
-                        message: `<i class="fa fa-exclamation-triangle"></i>&nbsp; Unable to Delete <strong>${fileName}</strong>`,
-                        duration: 5000,
-                        dismissible: true,
-                        position: 'top'
-                    });
+                    this.showMessage('error', `Unable to Delete <strong>${fileName}</strong>`);
                 }
             }
         },
@@ -652,15 +667,8 @@ export default {
                 };
 
                 if (hasNewVersion(process.env.PACKAGE_VERSION, latestVersion)) {
-                    this.$toast.open({
-                        type: 'info',
-                        message: `<i class="fa fa-bell"></i>&nbsp; <strong>Dev Console</strong> Update Availabe ( <strong>${latestVersion}</strong> )`,
-                        duration: 5000,
-                        dismissible: true,
-                        position: 'top',
-                        onClick: function(){
-                            window.open(response.data.html_url);
-                        }
+                    this.showMessage('info', `<strong>RVW Developers Core</strong> Update Availabe ( <strong>${latestVersion}</strong> )`, function () {
+                        window.open(response.data.html_url);
                     });
                 }
             }
@@ -718,7 +726,7 @@ export default {
             }
         },
         promptFile() {
-            this.showModal = true;
+            this.showFileModal = true;
 
             setTimeout(() => {
                 this.$refs.fileName.focus();
@@ -739,29 +747,38 @@ export default {
 
                 localStorage.setItem('lastRun', JSON.stringify(this.code));
 
+                // Add CSRF Token Data
+                const tokenName = csrfToken.csrf_token_name;
+                const tokenvalue = csrfToken.csrf_token_value;
+
+                data.append(tokenName, tokenvalue);
+
                 try {
-                    const response = await this.axios.post(`${window.urlPath}/Console-Run`, data);
+                    var self = this;
+                    const response = await this.axios.post(`${window.urlPath}/Console-Run`, data).catch(function(error){
+                        if (error.response) {
+                            self.showMessage('error', `<strong>Error ${error.response.status}:</strong> ${error.response.data.message}`);
+                        } else {
+                            self.showMessage('error', 'Failed to Execute Code');
+                        }
+                    });
 
-                    // the following 3 properties come from the default
-                    // dw json response and we dont need them
-                    delete response.data.locale;
-                    delete response.data.action;
-                    delete response.data.queryString;
+                    if (response) {
+                        // the following 3 properties come from the default
+                        // dw json response and we dont need them
+                        delete response.data.locale;
+                        delete response.data.action;
+                        delete response.data.queryString;
 
-                    this.result = response.data;
+                        this.result = response.data;
 
-                    // Switch back to split view if in code view and running code
-                    if (this.layout === 'left') {
-                        this.switchLayout('split');
+                        // Switch back to split view if in code view and running code
+                        if (this.layout === 'left') {
+                            this.switchLayout('split');
+                        }
                     }
                 } catch (err) {
-                    this.$toast.open({
-                        type: 'error',
-                        message: `<i class="fa fa-exclamation-triangle"></i>&nbsp; ${err.message}`,
-                        duration: 5000,
-                        dismissible: true,
-                        position: 'top'
-                    });
+                    self.showMessage('error', `${err.message}`);
                 }
 
                 this.processing = false;
@@ -777,6 +794,26 @@ export default {
                 this.promptFile();
             }
         },
+        showMessage (type, message, callback) {
+            let icon = '';
+
+            if (type === 'error' || type === 'warning') {
+                icon = '<i class="fa fa-exclamation-triangle"></i>&nbsp; ';
+            } else if (type === 'success') {
+                icon = '<i class="fa fa-check-square"></i>&nbsp; ';
+            } else if (type === 'info') {
+                icon = '<i class="fa fa-bell"></i>&nbsp; ';
+            }
+
+            this.$toast.open({
+                type: type,
+                message: `${icon}${message}`,
+                duration: (typeof callback === 'function') ? 10000 : 5000,
+                dismissible: true,
+                position: 'top',
+                onClick: (typeof callback === 'function') ? callback : null
+            });
+        },
         switchLayout (layout) {
             this.layout = layout;
 
@@ -790,6 +827,34 @@ export default {
 
             localStorage.setItem('resizer', this.resizer);
             localStorage.setItem('layout', layout);
+        },
+        async userLogin () {
+            try {
+                var self = this;
+                const url = '/s/-/dw/debugger/v2_0/client';
+                const response = await this.axios.post(url, null, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-dw-client-id': 'rvw_developers_core'
+                    },
+                    auth: this.auth
+                }).catch(err => {
+                    if (err.response && typeof err.response.status !== 'undefined' && typeof err.response.data !== 'undefined' && err.response.status !== 401) {
+                        self.showMessage('error', `<strong>Error ${err.response.status}:</strong> ${err.response.data.fault.message}`);
+                    } else {
+                        self.showMessage('error', 'Invalid Username or Password.');
+                    }
+                });
+
+                if (response) {
+                    this.authentication = btoa(this.auth.username + ':' + this.auth.password);
+                    this.showLoginModal = false;
+
+                    localStorage.setItem('authentication', this.authentication);
+                }
+            } catch (err) {
+                this.showMessage('error', err.message);
+            }
         }
     },
     watch: {
@@ -802,7 +867,7 @@ export default {
         },
         fileModified: {
             handler() {
-                var icon = (this.fileModified) ? 'modified' : 'favicon';
+                const icon = (this.fileModified) ? 'modified' : 'favicon';
 
                 // Update Browser Icon to show Unsaved State
                 const favicon = document.getElementById('favicon');
@@ -851,6 +916,6 @@ export default {
                 document.documentElement.classList = this.theme;
             }
         }
-    },
+    }
 };
 </script>

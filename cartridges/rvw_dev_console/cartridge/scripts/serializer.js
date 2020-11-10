@@ -99,6 +99,11 @@ function serializeObject (object, maxDepth, depth, pojo) {
             continue;
         }
 
+        // Form Instances seem to create endless loops, so let's ignore them
+        if (object instanceof dw.web.Form) {
+            continue;
+        }
+
         pojo[prop] = serialize(k, maxDepth, depth + 1, {});
     }
 

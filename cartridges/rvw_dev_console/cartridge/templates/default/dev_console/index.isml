@@ -107,9 +107,21 @@
     <body>
         <div id="app"></div>
 
+        <!-- Setup CSRF Token -->
+        <isscript>
+            var CSRFProtection = require('dw/web/CSRFProtection');
+            var tokenName = CSRFProtection.getTokenName();
+            var tokenValue = CSRFProtection.generateToken();
+            var json = {
+                csrf_token_name: tokenName,
+                csrf_token_value: tokenValue
+            };
+        </isscript>
+
         <script>
         window.staticPath = '${pdict.staticPath}';
         window.urlPath = '${pdict.urlPath}';
+        window.csrfToken = <isprint value="${JSON.stringify(json)}" encoding="off"/>;
         </script>
 
         <script src="${URLUtils.staticURL('/js/dev_console.js')}"></script>
