@@ -81,18 +81,6 @@
             right: 0;
             font-weight: 600;
         }
-
-        &.full-width {
-            margin-bottom: 10px;
-
-            &:last-child {
-                margin-bottom: 0;
-            }
-
-            input {
-                width: 100%;
-            }
-        }
     }
 
     button {

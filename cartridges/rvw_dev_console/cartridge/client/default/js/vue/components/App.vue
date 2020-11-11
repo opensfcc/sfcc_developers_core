@@ -179,7 +179,7 @@
         </split-pane>
 
         <!-- New File Modal -->
-        <modal v-if="showFileModal" @close="cancelFile()">
+        <modal v-if="showModal" @close="cancelFile()">
             <div slot="header">
                 <i class="fa fa-code"></i> Enter File Name
             </div>
@@ -240,7 +240,7 @@ export default {
             processing: false,
             resizer: 50,
             result: null,
-            showFileModal: false,
+            showModal: false,
             showFiles: false,
             tooltipDelay: 300,
             files: [],
@@ -360,7 +360,7 @@ export default {
     },
     methods: {
         cancelFile() {
-            this.showFileModal = false;
+            this.showModal = false;
         },
         checkModified() {
             this.fileModified = (JSON.stringify(this.codeInit) !== JSON.stringify(this.code));
@@ -460,7 +460,7 @@ export default {
 
                 // Update UI
                 this.showFiles = false;
-                this.showFileModal = false;
+                this.showModal = false;
                 this.currentFile = false;
                 this.files = files;
                 this.fileName = null;
@@ -673,7 +673,7 @@ export default {
             }
         },
         promptFile() {
-            this.showFileModal = true;
+            this.showModal = true;
 
             setTimeout(() => {
                 this.$refs.fileName.focus();
