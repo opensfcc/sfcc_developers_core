@@ -208,38 +208,6 @@
                 </button>
             </div>
         </modal>
-
-        <!-- Login Modal -->
-        <modal v-if="showLoginModal" @close="cancelLogin()">
-            <div slot="header">
-                <i class="fa fa-user-circle"></i> Business Manager Login
-            </div>
-            <div slot="body">
-                <!-- Login Input -->
-                <div class="input-wrapper full-width">
-                    <input type="text" id="idToken1" name="callback_0" placeholder="User Name" required
-                        ref="username"
-                        v-model="auth.username"
-                        @keydown.enter="userLogin()"
-                    >
-                </div>
-
-                <!-- Password Input -->
-                <div class="input-wrapper full-width">
-                    <input type="password" id="idToken2" name="callback_1" placeholder="Password" required
-                        ref="password"
-                        v-model="auth.password"
-                        @keydown.enter="userLogin()"
-                    >
-                </div>
-            </div>
-            <div slot="footer">
-                <!-- Login Button -->
-                <button class="modal-default-button" @click="userLogin()">
-                    Login
-                </button>
-            </div>
-        </modal>
     </div>
 </template>
 
@@ -258,11 +226,6 @@ export default {
     },
     data() {
         return {
-            auth: {
-                username: null,
-                password: null
-            },
-            authentication: null,
             code: 'return session;',
             codeInit: 'return session;',
             copied: false,
@@ -278,7 +241,6 @@ export default {
             resizer: 50,
             result: null,
             showFileModal: false,
-            showLoginModal: false,
             showFiles: false,
             tooltipDelay: 300,
             files: [],
@@ -301,7 +263,6 @@ export default {
     },
     mounted() {
         // Fetch Settings
-        const authentication = localStorage.getItem('authentication');
         const currentFile = localStorage.getItem('currentFile');
         const lastUpdateCheck = localStorage.getItem('lastUpdateCheck');
         const layout = localStorage.getItem('layout');
@@ -329,13 +290,6 @@ export default {
             this.files = files;
         } else {
             this.createDefaultFiles();
-        }
-
-        // Fetch Authentication
-        if (authentication) {
-            this.authentication = authentication;
-        } else {
-            this.showLoginModal = true;
         }
 
         // Load the Last File if Loaded from Menu
@@ -407,13 +361,6 @@ export default {
     methods: {
         cancelFile() {
             this.showFileModal = false;
-        },
-        cancelLogin() {
-            if (this.authentication) {
-                this.showLoginModal = false;
-            } else {
-                this.showMessage('warning', 'Authentication Required');
-            }
         },
         checkModified() {
             this.fileModified = (JSON.stringify(this.codeInit) !== JSON.stringify(this.code));
@@ -747,12 +694,6 @@ export default {
 
                 localStorage.setItem('lastRun', JSON.stringify(this.code));
 
-                // Add CSRF Token Data
-                const tokenName = csrfToken.csrf_token_name;
-                const tokenvalue = csrfToken.csrf_token_value;
-
-                data.append(tokenName, tokenvalue);
-
                 try {
                     var self = this;
                     const response = await this.axios.post(`${window.urlPath}/Console-Run`, data).catch(function(error){
@@ -827,34 +768,6 @@ export default {
 
             localStorage.setItem('resizer', this.resizer);
             localStorage.setItem('layout', layout);
-        },
-        async userLogin () {
-            try {
-                var self = this;
-                const url = '/s/-/dw/debugger/v2_0/client';
-                const response = await this.axios.post(url, null, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-dw-client-id': 'rvw_developers_core'
-                    },
-                    auth: this.auth
-                }).catch(err => {
-                    if (err.response && typeof err.response.status !== 'undefined' && typeof err.response.data !== 'undefined' && err.response.status !== 401) {
-                        self.showMessage('error', `<strong>Error ${err.response.status}:</strong> ${err.response.data.fault.message}`);
-                    } else {
-                        self.showMessage('error', 'Invalid Username or Password.');
-                    }
-                });
-
-                if (response) {
-                    this.authentication = btoa(this.auth.username + ':' + this.auth.password);
-                    this.showLoginModal = false;
-
-                    localStorage.setItem('authentication', this.authentication);
-                }
-            } catch (err) {
-                this.showMessage('error', err.message);
-            }
         }
     },
     watch: {

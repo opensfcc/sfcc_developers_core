@@ -8,10 +8,8 @@ module.exports = {
         node: true,
     },
     globals: {
-        'btoa': true,
         'monaco': true,
-        'process': true,
-        'csrfToken': true
+        'process': true
     },
     // Ignore Lint Rules that are Overkill
     rules: {
