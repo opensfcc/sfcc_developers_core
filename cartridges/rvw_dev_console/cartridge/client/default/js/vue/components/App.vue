@@ -388,32 +388,28 @@ export default {
             this.result = null;
         },
         clipboardErrorHandler (err) {
-            var self = this;
-
             this.copied = false;
             this.copyError = true;
             this.showMessage('error', err.message);
 
-            setTimeout(function(){
-                self.copyError = false;
+            setTimeout(() => {
+                this.copyError = false;
             }, 3000);
         },
         clipboardSuccessHandler () {
-            var self = this;
-
             this.copied = true;
             this.copyError = false;
             this.showMessage('success', 'Copied to Clipboard');
 
-            setTimeout(function(){
-                self.copied = false;
+            setTimeout(() => {
+                this.copied = false;
             }, 3000);
         },
         createDefaultFiles() {
             // Some Handy Default Files
             const defaultFiles = {
                 'file-get-basket': "const BasketMgr = require('dw/order/BasketMgr');\nconst basket = BasketMgr.getCurrentBasket();\n\nreturn basket;",
-                'file-get-customer': "var CustomerMgr = require('dw/customer/CustomerMgr');\nvar customer = CustomerMgr.queryProfile(\n\t'firstName = {0} AND lastName = {1}',\n\t'Jane',\n\t'Doe'\n);\n\nreturn customer;",
+                'file-get-customer': "const CustomerMgr = require('dw/customer/CustomerMgr');\nconst customer = CustomerMgr.queryProfile(\n\t'firstName = {0} AND lastName = {1}',\n\t'Jane',\n\t'Doe'\n);\n\nreturn customer;",
                 'file-get-preferences': "const Site = require('dw/system/Site');\nconst preferences = Site.getCurrent().preferences;\n\nreturn preferences;",
                 'file-get-site': "const Site = require('dw/system/Site');\nconst currentSite = Site.getCurrent();\n\nreturn currentSite;",
                 'file-get-session': "return session;"
@@ -427,7 +423,7 @@ export default {
             localStorage.setItem('files', JSON.stringify(files));
 
             // Store each File to Local Storage
-            for (var i = 0; i < files.length; i++) {
+            for (let i = 0; i < files.length; i++) {
                 localStorage.setItem(files[i], JSON.stringify(defaultFiles[files[i]]));
             }
         },
@@ -480,10 +476,10 @@ export default {
         deleteFile(file) {
             const fileName = `${file.replace(/^file-/, '')}.js`;
             if(window.confirm(`Are you sure you want to delete ${fileName}? This cannot be undone.`)) {
-                var files = localStorage.getItem('files');
+                let files = localStorage.getItem('files');
                 files = JSON.parse(files) || [];
 
-                var index = files.indexOf(file);
+                const index = files.indexOf(file);
 
                 if (index > -1) {
                     files.splice(index, 1);
@@ -499,12 +495,11 @@ export default {
             }
         },
         editorDidMount(editor) {
-            var self = this;
             this.editor = editor;
 
             // Editor tries to call this on Theme Change, even though it's not needed in Vue
             if (typeof this.editor.setTheme === 'undefined') {
-                this.editor.setTheme = function(){};
+                this.editor.setTheme = () => {};
             }
 
             // Enable Key Bindings
@@ -525,8 +520,8 @@ export default {
                 keybindingContext: 'canSave',
                 contextMenuGroupId: 'dev_console',
                 contextMenuOrder: 1,
-                run: function() {
-                    self.saveFile();
+                run: () => {
+                    this.saveFile();
                     return null;
                 }
             });
@@ -542,8 +537,8 @@ export default {
                 keybindingContext: 'canRun',
                 contextMenuGroupId: 'dev_console',
                 contextMenuOrder: 2,
-                run: function() {
-                    self.runCode();
+                run: () => {
+                    this.runCode();
                     return null;
                 }
             });
@@ -559,8 +554,8 @@ export default {
                 keybindingContext: 'canClear',
                 contextMenuGroupId: 'dev_console',
                 contextMenuOrder: 3,
-                run: function() {
-                    self.clearResult();
+                run: () => {
+                    this.clearResult();
                     return null;
                 }
             });
@@ -580,7 +575,7 @@ export default {
             }
         },
         fetchFiles() {
-            var files = localStorage.getItem('files');
+            const files = localStorage.getItem('files');
             this.files = JSON.parse(files) || [];
         },
         filterName () {
@@ -589,16 +584,16 @@ export default {
                 : null;
         },
         async getLatesVersion () {
-            var url = 'https://api.github.com/repos/redvanworkshop/rvw_developers_core/releases/latest';
+            const url = 'https://api.github.com/repos/redvanworkshop/rvw_developers_core/releases/latest';
             const response = await this.axios.get(url);
 
             if (response && typeof response.data !== 'undefined') {
                 const latestVersion = response.data.tag_name;
-                const hasNewVersion = function (curVer, newVer) {
+                const hasNewVersion = (curVer, newVer) => {
                     const curParts = curVer.replace(/^v/, '').split('.');
                     const newParts = newVer.replace(/^v/, '').split('.');
 
-                    for (var i = 0; i < newParts.length; i++) {
+                    for (let i = 0; i < newParts.length; i++) {
                         const a = ~~newParts[i];
                         const b = ~~curParts[i];
 
@@ -614,7 +609,7 @@ export default {
                 };
 
                 if (hasNewVersion(process.env.PACKAGE_VERSION, latestVersion)) {
-                    this.showMessage('info', `<strong>RVW Developers Core</strong> Update Availabe ( <strong>${latestVersion}</strong> )`, function () {
+                    this.showMessage('info', `<strong>RVW Developers Core</strong> Update Availabe ( <strong>${latestVersion}</strong> )`, () => {
                         window.open(response.data.html_url);
                     });
                 }
@@ -695,12 +690,11 @@ export default {
                 localStorage.setItem('lastRun', JSON.stringify(this.code));
 
                 try {
-                    var self = this;
-                    const response = await this.axios.post(`${window.urlPath}/Console-Run`, data).catch(function(error){
+                    const response = await this.axios.post(`${window.urlPath}/Console-Run`, data).catch((error) => {
                         if (error.response) {
-                            self.showMessage('error', `<strong>Error ${error.response.status}:</strong> ${error.response.data.message}`);
+                            this.showMessage('error', `<strong>Error ${error.response.status}:</strong> ${error.response.data.message}`);
                         } else {
-                            self.showMessage('error', 'Failed to Execute Code');
+                            this.showMessage('error', 'Failed to Execute Code');
                         }
                     });
 
@@ -719,7 +713,7 @@ export default {
                         }
                     }
                 } catch (err) {
-                    self.showMessage('error', `${err.message}`);
+                    this.showMessage('error', `${err.message}`);
                 }
 
                 this.processing = false;
@@ -800,16 +794,13 @@ export default {
             handler() {
                 localStorage.setItem('plainJSON', this.plainJSON);
 
-                // Reset Scroll Top
-                var self = this;
+                // Reset Scroll Top ( Give some time for DOM to update before resetting scroll position )
+                setTimeout(() => {
+                    const $outputTree = document.querySelector('.outputTree');
 
-                // Give some time for DOM to update before resetting scroll position
-                setTimeout(function(){
-                    var $outputTree = document.querySelector('.outputTree');
-
-                    if (self.plainJSON && self.$refs.outputPlain) {
-                        self.$refs.outputPlain.parentNode.scrollTop = 0;
-                    } else if (!self.plainJSON && $outputTree) {
+                    if (this.plainJSON && this.$refs.outputPlain) {
+                        this.$refs.outputPlain.parentNode.scrollTop = 0;
+                    } else if (!this.plainJSON && $outputTree) {
                         // Tree Vue Component does not work with $refs, so DOM query needed
                         $outputTree.parentNode.scrollTop = 0;
                     }
