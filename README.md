@@ -34,6 +34,21 @@ Once installed, you can access the Dev Console on your sandbox at `/on/demandwar
 
 **TROUBLESHOOTING:** Getting an error loading the console? You may need to temporarily switch Code Versions, then switch back to trigger the update in Business Manager.
 
+Sandbox Security
+---
+
+> Our `rvw_dev_console` cartridge will allow anyone with access to your sandbox to be able to run code.
+
+If you wish to lock down your sandbox, SFCC already provides a solution to protect it.
+
+1. Head over to `Administration > Sites > Manage Sites`
+2. Select your Site Name under `Storefront Sites`
+3. Click the `Site Status` tab
+4. Set `Select the Site Status` to `Online (Protected)`
+5. Enter a `Password` and click `Apply`
+
+Once this is set up, anytime you login to your storefront from a new browser, you will need to enter the username `storefront` and the password you just created. Your login info will be saved as long as you do not clear your browser's cookies. The Chrome plugin [Demandware with Ease](https://chrome.google.com/webstore/detail/demandware-with-ease/ffhabonelknmejmdnekedmijlhebpcio) provides the ability to automatically login with a Storefront Password.
+
 Contributing
 ---
 

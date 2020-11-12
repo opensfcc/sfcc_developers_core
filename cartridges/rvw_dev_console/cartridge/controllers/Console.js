@@ -35,7 +35,8 @@ server.post(
     server.middleware.https,
     function (req, res, next) {
         if (dw.system.System.instanceType === dw.system.System.PRODUCTION_SYSTEM) {
-            res.setStatusCode(403).json({
+            res.setStatusCode(403);
+            res.json({
                 error: true,
                 message: 'Only available in SIG environments'
             });
