@@ -39,7 +39,7 @@ Sandbox Security
 
 > Our `rvw_dev_console` cartridge will allow anyone with access to your sandbox to be able to run code.
 
-I you wish to lock down your sandbox, SFCC already provides a solution to protect it.
+If you wish to lock down your sandbox, SFCC already provides a solution to protect it.
 
 1. Head over to `Administration > Sites > Manage Sites`
 2. Select your Site Name under `Storefront Sites`
