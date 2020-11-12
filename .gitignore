@@ -1,5 +1,6 @@
+dw.json
 .idea/
 node_modules/
-/**/static/**/stubs/
-!cartridges/rvw_dev_console/**/static/**/js
-!cartridges/rvw_dev_console/**/static/**/css
+cartridges/modules/
+!cartridges/rvw_dev_console/**/static/**/js/
+!cartridges/rvw_dev_console/**/static/**/css/

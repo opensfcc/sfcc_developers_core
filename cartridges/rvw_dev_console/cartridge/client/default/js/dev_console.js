@@ -16,7 +16,7 @@ Vue.use(TreeView);
 Vue.use(VTooltip);
 Vue.use(VueToast);
 
-Vue.config.devtools = false;
+Vue.config.devtools = !!process.env.IS_DEVELOPMENT;
 Vue.config.productionTip = false;
 
 new Vue({

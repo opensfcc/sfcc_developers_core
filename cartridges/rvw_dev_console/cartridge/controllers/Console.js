@@ -52,6 +52,7 @@ server.post(
         }
 
         let result = null;
+        const startTime = new Date();
 
         try {
             const myFunc = new Function('code', code);
@@ -60,12 +61,20 @@ server.post(
             result = e;
         }
 
+        const runtime = new Date().getTime() - startTime.getTime();
+
         result = serializer.serialize(result, maxDepth);
 
         if (typeof result === 'string' || typeof result === 'boolean' || typeof result === 'number') {
-            res.json([result]);
+            res.json({
+                executionTime: runtime,
+                result: [result]
+            });
         } else {
-            res.json(result || {});
+            res.json({
+                executionTime: runtime,
+                result: result || {}
+            });
         }
 
         next();
