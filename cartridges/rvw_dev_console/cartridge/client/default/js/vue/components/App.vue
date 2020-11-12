@@ -179,45 +179,35 @@
         </split-pane>
 
         <!-- New File Modal -->
-        <transition name="modal">
-            <div id="modal" class="modal-mask" v-if="showModal" @click="cancelFile()" @keydown.esc="cancelFile()">
-                <div class="modal-wrapper">
-                    <div class="modal-container" @click.stop="$event.preventDefault()">
-                        <div class="modal-header">
-                            <i class="fa fa-code"></i> Enter File Name
-                        </div>
-
-                        <div class="modal-body">
-                            <!-- New File Input -->
-                            <div class="input-wrapper">
-                                <input type="text" name="new-file"
-                                    maxlength="20"
-                                    ref="fileName"
-                                    v-model="fileName"
-                                    @keypress="filterName($event)"
-                                    @keydown.enter="createFile()"
-                                >
-                                <span class="ext">.js</span>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <slot name="footer">
-                                <!-- Cancel File Button -->
-                                <button class="modal-cancel-button" @click="cancelFile()">
-                                    Cancel
-                                </button>
-
-                                <!-- Create File Button -->
-                                <button class="modal-default-button" @click="createFile()">
-                                    Create
-                                </button>
-                            </slot>
-                        </div>
-                    </div>
+        <modal v-if="showModal" @close="cancelFile()">
+            <div slot="header">
+                <i class="fa fa-code"></i> Enter File Name
+            </div>
+            <div slot="body">
+                <!-- New File Input -->
+                <div class="input-wrapper">
+                    <input type="text" name="new-file"
+                        maxlength="20"
+                        ref="fileName"
+                        v-model="fileName"
+                        @keypress="filterName($event)"
+                        @keydown.enter="createFile()"
+                    >
+                    <span class="ext">.js</span>
                 </div>
             </div>
-        </transition>
+            <div slot="footer">
+                <!-- Cancel File Button -->
+                <button class="modal-cancel-button" @click="cancelFile()">
+                    Cancel
+                </button>
+
+                <!-- Create File Button -->
+                <button class="modal-default-button" @click="createFile()">
+                    Create
+                </button>
+            </div>
+        </modal>
     </div>
 </template>
 
@@ -225,9 +215,12 @@
 import SplitPane from 'vue-splitpane';
 import MonacoEditor from 'vue-monaco-cdn';
 
+import Modal from './Modal';
+
 export default {
     name: 'DevConsole',
     components: {
+        Modal,
         MonacoEditor,
         SplitPane
     },
@@ -337,6 +330,11 @@ export default {
                     selectOnLineNumbers: true,
                     showGlyphMargin: false,
                     smoothScrolling: true,
+                    lineDecorationsWidth: 20,
+                    padding: {
+                        top: 10,
+                        bottom: 10
+                    },
                     theme: this.theme
                 }
             };
@@ -390,44 +388,28 @@ export default {
             this.result = null;
         },
         clipboardErrorHandler (err) {
-            var self = this;
-            self.copied = false;
-            self.copyError = true;
+            this.copied = false;
+            this.copyError = true;
+            this.showMessage('error', err.message);
 
-            this.$toast.open({
-                type: 'error',
-                message: `<i class="fa fa-exclamation-triangle"></i>&nbsp; ${err.message}`,
-                duration: 5000,
-                dismissible: true,
-                position: 'top'
-            });
-
-            setTimeout(function(){
-                self.copyError = false;
+            setTimeout(() => {
+                this.copyError = false;
             }, 3000);
         },
         clipboardSuccessHandler () {
-            var self = this;
-            self.copied = true;
-            self.copyError = false;
+            this.copied = true;
+            this.copyError = false;
+            this.showMessage('success', 'Copied to Clipboard');
 
-            this.$toast.open({
-                type: 'success',
-                message: '<i class="fa fa-check-square"></i>&nbsp; Copied to Clipboard',
-                duration: 3000,
-                dismissible: true,
-                position: 'top'
-            });
-
-            setTimeout(function(){
-                self.copied = false;
+            setTimeout(() => {
+                this.copied = false;
             }, 3000);
         },
         createDefaultFiles() {
             // Some Handy Default Files
             const defaultFiles = {
                 'file-get-basket': "const BasketMgr = require('dw/order/BasketMgr');\nconst basket = BasketMgr.getCurrentBasket();\n\nreturn basket;",
-                'file-get-customer': "var CustomerMgr = require('dw/customer/CustomerMgr');\nvar customer = CustomerMgr.queryProfile(\n\t'firstName = {0} AND lastName = {1}',\n\t'Jane',\n\t'Doe'\n);\n\nreturn customer;",
+                'file-get-customer': "const CustomerMgr = require('dw/customer/CustomerMgr');\nconst customer = CustomerMgr.queryProfile(\n\t'firstName = {0} AND lastName = {1}',\n\t'Jane',\n\t'Doe'\n);\n\nreturn customer;",
                 'file-get-preferences': "const Site = require('dw/system/Site');\nconst preferences = Site.getCurrent().preferences;\n\nreturn preferences;",
                 'file-get-site': "const Site = require('dw/system/Site');\nconst currentSite = Site.getCurrent();\n\nreturn currentSite;",
                 'file-get-session': "return session;"
@@ -441,20 +423,14 @@ export default {
             localStorage.setItem('files', JSON.stringify(files));
 
             // Store each File to Local Storage
-            for (var i = 0; i < files.length; i++) {
+            for (let i = 0; i < files.length; i++) {
                 localStorage.setItem(files[i], JSON.stringify(defaultFiles[files[i]]));
             }
         },
         createFile () {
             // Check if File Name was left blank
             if (!this.fileName) {
-                this.$toast.open({
-                    type: 'info',
-                    message: `<i class="fa fa-bell"></i>&nbsp; Please Enter a File Name`,
-                    duration: 5000,
-                    dismissible: true,
-                    position: 'top'
-                });
+                this.showMessage('info', 'Please Enter a File Name');
 
                 return;
             }
@@ -494,22 +470,16 @@ export default {
                 this.loadFile(newFileName, true);
             } else {
                 // File Already Exists
-                this.$toast.open({
-                    type: 'error',
-                    message: `<i class="fa fa-exclamation-triangle"></i>&nbsp; <strong>${this.fileName}</strong> already exists`,
-                    duration: 5000,
-                    dismissible: true,
-                    position: 'top'
-                });
+                this.showMessage('error', `<strong>${this.fileName}</strong> already exists`);
             }
         },
         deleteFile(file) {
             const fileName = `${file.replace(/^file-/, '')}.js`;
             if(window.confirm(`Are you sure you want to delete ${fileName}? This cannot be undone.`)) {
-                var files = localStorage.getItem('files');
+                let files = localStorage.getItem('files');
                 files = JSON.parse(files) || [];
 
-                var index = files.indexOf(file);
+                const index = files.indexOf(file);
 
                 if (index > -1) {
                     files.splice(index, 1);
@@ -518,31 +488,18 @@ export default {
                     localStorage.removeItem(file);
                     localStorage.setItem('files', JSON.stringify(files));
 
-                    this.$toast.open({
-                        type: 'success',
-                        message: `<i class="fa fa-check-square"></i>&nbsp; Deleted <strong>${fileName}</strong>`,
-                        duration: 3000,
-                        dismissible: true,
-                        position: 'top'
-                    });
+                    this.showMessage('success', `Deleted <strong>${fileName}</strong>`);
                 } else {
-                    this.$toast.open({
-                        type: 'error',
-                        message: `<i class="fa fa-exclamation-triangle"></i>&nbsp; Unable to Delete <strong>${fileName}</strong>`,
-                        duration: 5000,
-                        dismissible: true,
-                        position: 'top'
-                    });
+                    this.showMessage('error', `Unable to Delete <strong>${fileName}</strong>`);
                 }
             }
         },
         editorDidMount(editor) {
-            var self = this;
             this.editor = editor;
 
             // Editor tries to call this on Theme Change, even though it's not needed in Vue
             if (typeof this.editor.setTheme === 'undefined') {
-                this.editor.setTheme = function(){};
+                this.editor.setTheme = () => {};
             }
 
             // Enable Key Bindings
@@ -563,8 +520,8 @@ export default {
                 keybindingContext: 'canSave',
                 contextMenuGroupId: 'dev_console',
                 contextMenuOrder: 1,
-                run: function() {
-                    self.saveFile();
+                run: () => {
+                    this.saveFile();
                     return null;
                 }
             });
@@ -580,8 +537,8 @@ export default {
                 keybindingContext: 'canRun',
                 contextMenuGroupId: 'dev_console',
                 contextMenuOrder: 2,
-                run: function() {
-                    self.runCode();
+                run: () => {
+                    this.runCode();
                     return null;
                 }
             });
@@ -597,8 +554,8 @@ export default {
                 keybindingContext: 'canClear',
                 contextMenuGroupId: 'dev_console',
                 contextMenuOrder: 3,
-                run: function() {
-                    self.clearResult();
+                run: () => {
+                    this.clearResult();
                     return null;
                 }
             });
@@ -618,7 +575,7 @@ export default {
             }
         },
         fetchFiles() {
-            var files = localStorage.getItem('files');
+            const files = localStorage.getItem('files');
             this.files = JSON.parse(files) || [];
         },
         filterName () {
@@ -627,16 +584,16 @@ export default {
                 : null;
         },
         async getLatesVersion () {
-            var url = 'https://api.github.com/repos/redvanworkshop/rvw_developers_core/releases/latest';
+            const url = 'https://api.github.com/repos/redvanworkshop/rvw_developers_core/releases/latest';
             const response = await this.axios.get(url);
 
             if (response && typeof response.data !== 'undefined') {
                 const latestVersion = response.data.tag_name;
-                const hasNewVersion = function (curVer, newVer) {
+                const hasNewVersion = (curVer, newVer) => {
                     const curParts = curVer.replace(/^v/, '').split('.');
                     const newParts = newVer.replace(/^v/, '').split('.');
 
-                    for (var i = 0; i < newParts.length; i++) {
+                    for (let i = 0; i < newParts.length; i++) {
                         const a = ~~newParts[i];
                         const b = ~~curParts[i];
 
@@ -652,15 +609,8 @@ export default {
                 };
 
                 if (hasNewVersion(process.env.PACKAGE_VERSION, latestVersion)) {
-                    this.$toast.open({
-                        type: 'info',
-                        message: `<i class="fa fa-bell"></i>&nbsp; <strong>Dev Console</strong> Update Availabe ( <strong>${latestVersion}</strong> )`,
-                        duration: 5000,
-                        dismissible: true,
-                        position: 'top',
-                        onClick: function(){
-                            window.open(response.data.html_url);
-                        }
+                    this.showMessage('info', `<strong>RVW Developers Core</strong> Update Availabe ( <strong>${latestVersion}</strong> )`, () => {
+                        window.open(response.data.html_url);
                     });
                 }
             }
@@ -740,28 +690,30 @@ export default {
                 localStorage.setItem('lastRun', JSON.stringify(this.code));
 
                 try {
-                    const response = await this.axios.post(`${window.urlPath}/Console-Run`, data);
+                    const response = await this.axios.post(`${window.urlPath}/Console-Run`, data).catch((error) => {
+                        if (error.response) {
+                            this.showMessage('error', `<strong>Error ${error.response.status}:</strong> ${error.response.data.message}`);
+                        } else {
+                            this.showMessage('error', 'Failed to Execute Code');
+                        }
+                    });
 
-                    // the following 3 properties come from the default
-                    // dw json response and we dont need them
-                    delete response.data.locale;
-                    delete response.data.action;
-                    delete response.data.queryString;
+                    if (response) {
+                        // the following 3 properties come from the default
+                        // dw json response and we dont need them
+                        delete response.data.locale;
+                        delete response.data.action;
+                        delete response.data.queryString;
 
-                    this.result = response.data;
+                        this.result = response.data;
 
-                    // Switch back to split view if in code view and running code
-                    if (this.layout === 'left') {
-                        this.switchLayout('split');
+                        // Switch back to split view if in code view and running code
+                        if (this.layout === 'left') {
+                            this.switchLayout('split');
+                        }
                     }
                 } catch (err) {
-                    this.$toast.open({
-                        type: 'error',
-                        message: `<i class="fa fa-exclamation-triangle"></i>&nbsp; ${err.message}`,
-                        duration: 5000,
-                        dismissible: true,
-                        position: 'top'
-                    });
+                    this.showMessage('error', `${err.message}`);
                 }
 
                 this.processing = false;
@@ -776,6 +728,26 @@ export default {
             } else {
                 this.promptFile();
             }
+        },
+        showMessage (type, message, callback) {
+            let icon = '';
+
+            if (type === 'error' || type === 'warning') {
+                icon = '<i class="fa fa-exclamation-triangle"></i>&nbsp; ';
+            } else if (type === 'success') {
+                icon = '<i class="fa fa-check-square"></i>&nbsp; ';
+            } else if (type === 'info') {
+                icon = '<i class="fa fa-bell"></i>&nbsp; ';
+            }
+
+            this.$toast.open({
+                type: type,
+                message: `${icon}${message}`,
+                duration: (typeof callback === 'function') ? 10000 : 5000,
+                dismissible: true,
+                position: 'top',
+                onClick: (typeof callback === 'function') ? callback : null
+            });
         },
         switchLayout (layout) {
             this.layout = layout;
@@ -802,7 +774,7 @@ export default {
         },
         fileModified: {
             handler() {
-                var icon = (this.fileModified) ? 'modified' : 'favicon';
+                const icon = (this.fileModified) ? 'modified' : 'favicon';
 
                 // Update Browser Icon to show Unsaved State
                 const favicon = document.getElementById('favicon');
@@ -822,16 +794,13 @@ export default {
             handler() {
                 localStorage.setItem('plainJSON', this.plainJSON);
 
-                // Reset Scroll Top
-                var self = this;
+                // Reset Scroll Top ( Give some time for DOM to update before resetting scroll position )
+                setTimeout(() => {
+                    const $outputTree = document.querySelector('.outputTree');
 
-                // Give some time for DOM to update before resetting scroll position
-                setTimeout(function(){
-                    var $outputTree = document.querySelector('.outputTree');
-
-                    if (self.plainJSON && self.$refs.outputPlain) {
-                        self.$refs.outputPlain.parentNode.scrollTop = 0;
-                    } else if (!self.plainJSON && $outputTree) {
+                    if (this.plainJSON && this.$refs.outputPlain) {
+                        this.$refs.outputPlain.parentNode.scrollTop = 0;
+                    } else if (!this.plainJSON && $outputTree) {
                         // Tree Vue Component does not work with $refs, so DOM query needed
                         $outputTree.parentNode.scrollTop = 0;
                     }
@@ -851,6 +820,6 @@ export default {
                 document.documentElement.classList = this.theme;
             }
         }
-    },
+    }
 };
 </script>

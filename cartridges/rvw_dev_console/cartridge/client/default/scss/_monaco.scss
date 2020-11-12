@@ -2,14 +2,6 @@
     display: none;
 }
 
-.lines-content.monaco-editor-background {
-    transform: translate3d(10px, 10px, 0px) !important;
-}
-
-.margin-view-overlays > div {
-    margin-top: 10px;
-}
-
 .monaco-editor.vs {
     .glyph-margin,
     .margin-view-overlays {
@@ -30,9 +22,4 @@
         max-width: 62px;
         overflow: hidden;
     }
-}
-
-.monaco-editor .line-numbers {
-    width: 62px !important;
-    text-align: center !important;
 }
