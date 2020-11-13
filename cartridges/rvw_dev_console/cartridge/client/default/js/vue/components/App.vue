@@ -144,26 +144,31 @@
                 <div class="actions d-flex align-items-center">
                     <!-- Toggle View Button -->
                     <button class="btn" :disabled="!result"
-                        @click="plainJSON = !plainJSON"
-                        v-tooltip="{ content: plainJSON ? 'Switch to Tree View' : 'Switch to JSON View', delay: { show: tooltipDelay } }">
+                            @click="plainJSON = !plainJSON"
+                            v-tooltip="{ content: plainJSON ? 'Switch to Tree View' : 'Switch to JSON View', delay: { show: tooltipDelay } }">
                         <i :class="[plainJSON ? 'fa fa-code' : 'fa fa-list-ul']" aria-hidden="true"/>
                     </button>
 
                     <!-- Clipboard Button -->
                     <button class="btn" :disabled="!result"
-                        v-clipboard:copy="getJSON"
-                        v-clipboard:success="clipboardSuccessHandler"
-                        v-clipboard:error="clipboardErrorHandler"
-                        v-tooltip="{ content: 'Copy to Clipboard', delay: { show: tooltipDelay } }">
+                            v-clipboard:copy="getJSON"
+                            v-clipboard:success="clipboardSuccessHandler"
+                            v-clipboard:error="clipboardErrorHandler"
+                            v-tooltip="{ content: 'Copy to Clipboard', delay: { show: tooltipDelay } }">
                         <i :class="getClipboard" aria-hidden="true"/>
                     </button>
 
                     <!-- Clear Button -->
                     <button class="btn" :disabled="!result"
-                        @click="clearResult"
-                        v-tooltip="{ content: 'Clear Results', delay: { show: tooltipDelay } }">
+                            @click="clearResult"
+                            v-tooltip="{ content: 'Clear Results', delay: { show: tooltipDelay } }">
                         <i class="fa fa-trash" aria-hidden="true"/>
                     </button>
+
+                    <!-- Run Time -->
+                    <div v-if="executionTime !== null" class="mx-2 font-weight-bold execution-time">
+                        <span>Run Time:</span> {{ executionTime.toLocaleString() }} ms
+                    </div>
                 </div>
 
                 <!-- Output -->
@@ -187,11 +192,11 @@
                 <!-- New File Input -->
                 <div class="input-wrapper">
                     <input type="text" name="new-file"
-                        maxlength="20"
-                        ref="fileName"
-                        v-model="fileName"
-                        @keypress="filterName($event)"
-                        @keydown.enter="createFile()"
+                           maxlength="20"
+                           ref="fileName"
+                           v-model="fileName"
+                           @keypress="filterName($event)"
+                           @keydown.enter="createFile()"
                     >
                     <span class="ext">.js</span>
                 </div>
@@ -234,6 +239,7 @@ export default {
             editor: null,
             fileName: null,
             fileModified: false,
+            executionTime: null,
             layout: 'split',
             maxDepth: 3,
             plainJSON: false,
@@ -325,7 +331,7 @@ export default {
                 options: {
                     automaticLayout: true,
                     fontLigatures: true,
-                    minimap: { enabled: false },
+                    minimap: {enabled: false},
                     scrollBeyondLastLine: false,
                     selectOnLineNumbers: true,
                     showGlyphMargin: false,
@@ -339,7 +345,7 @@ export default {
                 }
             };
         },
-        getClipboard () {
+        getClipboard() {
             if (this.copied) {
                 return 'fa fa-check';
             } else if (this.copyError) {
@@ -372,7 +378,7 @@ export default {
             }
         },
         clearCode() {
-            if(!this.fileModified || (this.fileModified && window.confirm('You have unsaved changes to this file. Continue?'))) {
+            if (!this.fileModified || (this.fileModified && window.confirm('You have unsaved changes to this file. Continue?'))) {
                 this.editor.setValue('');
                 this.code = '';
                 this.codeInit = '';
@@ -385,9 +391,10 @@ export default {
             }
         },
         clearResult() {
+            this.executionTime = null;
             this.result = null;
         },
-        clipboardErrorHandler (err) {
+        clipboardErrorHandler(err) {
             this.copied = false;
             this.copyError = true;
             this.showMessage('error', err.message);
@@ -396,7 +403,7 @@ export default {
                 this.copyError = false;
             }, 3000);
         },
-        clipboardSuccessHandler () {
+        clipboardSuccessHandler() {
             this.copied = true;
             this.copyError = false;
             this.showMessage('success', 'Copied to Clipboard');
@@ -427,7 +434,7 @@ export default {
                 localStorage.setItem(files[i], JSON.stringify(defaultFiles[files[i]]));
             }
         },
-        createFile () {
+        createFile() {
             // Check if File Name was left blank
             if (!this.fileName) {
                 this.showMessage('info', 'Please Enter a File Name');
@@ -452,7 +459,7 @@ export default {
                 files.push(newFileName);
 
                 // Natural Sort List
-                files.sort((a, b) => a.localeCompare(b, navigator.languages[0] || navigator.language, { numeric: true, ignorePunctuation: true }));
+                files.sort((a, b) => a.localeCompare(b, navigator.languages[0] || navigator.language, {numeric: true, ignorePunctuation: true}));
 
                 // Update UI
                 this.showFiles = false;
@@ -475,7 +482,7 @@ export default {
         },
         deleteFile(file) {
             const fileName = `${file.replace(/^file-/, '')}.js`;
-            if(window.confirm(`Are you sure you want to delete ${fileName}? This cannot be undone.`)) {
+            if (window.confirm(`Are you sure you want to delete ${fileName}? This cannot be undone.`)) {
                 let files = localStorage.getItem('files');
                 files = JSON.parse(files) || [];
 
@@ -499,7 +506,8 @@ export default {
 
             // Editor tries to call this on Theme Change, even though it's not needed in Vue
             if (typeof this.editor.setTheme === 'undefined') {
-                this.editor.setTheme = () => {};
+                this.editor.setTheme = () => {
+                };
             }
 
             // Enable Key Bindings
@@ -578,12 +586,12 @@ export default {
             const files = localStorage.getItem('files');
             this.files = JSON.parse(files) || [];
         },
-        filterName () {
+        filterName() {
             this.fileName = (this.fileName)
                 ? this.fileName.trim().replace(/\.js$/, '').toLowerCase().replace(/[^a-zA-Z0-9_-]+/g, '-')
                 : null;
         },
-        async getLatesVersion () {
+        async getLatesVersion() {
             const url = 'https://api.github.com/repos/redvanworkshop/rvw_developers_core/releases/latest';
             const response = await this.axios.get(url);
 
@@ -690,7 +698,7 @@ export default {
                 localStorage.setItem('lastRun', JSON.stringify(this.code));
 
                 try {
-                    const response = await this.axios.post(`${window.urlPath}/Console-Run`, data).catch((error) => {
+                    const {data: response} = await this.axios.post(`${window.urlPath}/Console-Run`, data).catch((error) => {
                         if (error.response) {
                             this.showMessage('error', `<strong>Error ${error.response.status}:</strong> ${error.response.data.message}`);
                         } else {
@@ -699,13 +707,8 @@ export default {
                     });
 
                     if (response) {
-                        // the following 3 properties come from the default
-                        // dw json response and we dont need them
-                        delete response.data.locale;
-                        delete response.data.action;
-                        delete response.data.queryString;
-
-                        this.result = response.data;
+                        this.result = response.result;
+                        this.executionTime = response.executionTime || 1;
 
                         // Switch back to split view if in code view and running code
                         if (this.layout === 'left') {
@@ -719,7 +722,7 @@ export default {
                 this.processing = false;
             }
         },
-        saveFile () {
+        saveFile() {
             if (this.currentFile) {
                 this.codeInit = this.code;
                 this.fileModified = false;
@@ -729,7 +732,7 @@ export default {
                 this.promptFile();
             }
         },
-        showMessage (type, message, callback) {
+        showMessage(type, message, callback) {
             let icon = '';
 
             if (type === 'error' || type === 'warning') {
@@ -749,7 +752,7 @@ export default {
                 onClick: (typeof callback === 'function') ? callback : null
             });
         },
-        switchLayout (layout) {
+        switchLayout(layout) {
             this.layout = layout;
 
             if (layout === 'left') {

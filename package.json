@@ -1,9 +1,9 @@
 {
   "name": "rvw_developers_core",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Red Van Workshop - Developers Core SFCC Cartridge",
   "scripts": {
-    "test": "eslint --ext .js,.vue cartridges/*/cartridge/client --fix && echo '\n【ツ】CODE PERFECTION !!!\n'",
+    "test": "eslint \"**/client/**/*.{js,vue}\" --fix",
     "watch": "webpack --mode development --watch",
     "dev": "webpack --mode development",
     "build": "webpack --mode production"
