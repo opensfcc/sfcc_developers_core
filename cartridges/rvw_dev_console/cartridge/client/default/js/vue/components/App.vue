@@ -165,8 +165,9 @@
                         <i class="fa fa-trash" aria-hidden="true"/>
                     </button>
 
-                    <div v-if="executionTime !== null" class="mx-2 font-weight-bold">
-                        Run Time: {{ executionTime }}ms
+                    <!-- Run Time -->
+                    <div v-if="executionTime !== null" class="mx-2 font-weight-bold execution-time">
+                        <span>Run Time:</span> {{ executionTime.toLocaleString() }} ms
                     </div>
                 </div>
 
