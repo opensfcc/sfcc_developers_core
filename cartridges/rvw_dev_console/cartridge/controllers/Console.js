@@ -17,11 +17,9 @@ function Show() {
         return;
     }
 
-    // We only allow on DEVELOPMENT_SYSTEM and disallow on STAGING_SYSTEM as well
-    // since that is just as sensitive as PROD (due to data replication)
-    if (System.getInstanceType() !== System.DEVELOPMENT_SYSTEM) {
-        response.setStatus(418);
-        response.getWriter().print("I'm a teapot!");
+    if (System.getInstanceType() === System.PRODUCTION_SYSTEM) {
+        response.setStatus(403);
+        response.getWriter().print("Not available on production instance!");
         return;
     }
 
@@ -49,15 +47,13 @@ function Run() {
         return;
     }
 
-    // We only allow on DEVELOPMENT_SYSTEM and disallow on STAGING_SYSTEM as well
-    // since that is just as sensitive as PROD (due to data replication)
-    if (System.getInstanceType() !== System.DEVELOPMENT_SYSTEM) {
+    if (System.getInstanceType() === System.PRODUCTION_SYSTEM) {
         response.setStatus(403);
         response.setContentType("application/json");
         response.getWriter().print(
             JSON.stringify({
                 error: true,
-                message: "Only available in SIG environments",
+                message: "Not available on production instance!",
             })
         );
         return;
