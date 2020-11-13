@@ -9,7 +9,11 @@ module.exports = {
     },
     globals: {
         'monaco': true,
-        'process': true
+        'process': true,
+        'dw': true,
+        'XML': true,
+        'request': true,
+        'response': true
     },
     // Ignore Lint Rules that are Overkill
     rules: {
