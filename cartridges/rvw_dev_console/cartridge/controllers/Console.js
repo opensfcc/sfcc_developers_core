@@ -1,30 +1,30 @@
-"use strict";
+'use strict';
 
 /**
  * Display development console template
  */
 function Show() {
-    var ISML = require("dw/template/ISML");
-    var Response = require("dw/system/Response");
-    var System = require("dw/system/System");
-    var URLUtils = require("dw/web/URLUtils");
+    const ISML = require('dw/template/ISML');
+    const Response = require('dw/system/Response');
+    const System = require('dw/system/System');
+    const URLUtils = require('dw/web/URLUtils');
 
-    response.setHttpHeader(Response.CONTENT_SECURITY_POLICY, "frame-ancestors 'self'");
-    response.setHttpHeader(Response.X_CONTENT_TYPE_OPTIONS, "nosniff");
+    response.setHttpHeader(Response.CONTENT_SECURITY_POLICY, 'frame-ancestors \'self\'');
+    response.setHttpHeader(Response.X_CONTENT_TYPE_OPTIONS, 'nosniff');
 
     if (!request.isHttpSecure()) {
-        response.redirect(URLUtils.https("Console-Show"));
+        response.redirect(URLUtils.https('Console-Show').toString());
         return;
     }
 
     if (System.getInstanceType() === System.PRODUCTION_SYSTEM) {
-        response.redirect(URLUtils.https("Home-Show"));
+        response.redirect(URLUtils.https('Home-Show').toString());
         return;
     }
 
-    ISML.renderTemplate("dev_console/index", {
-        urlPath: URLUtils.https("").toString() + "/default",
-        staticPath: URLUtils.staticURL("/").toString(),
+    ISML.renderTemplate('dev_console/index', {
+        urlPath: URLUtils.https('').toString() + '/default',
+        staticPath: URLUtils.staticURL('/').toString(),
     });
 }
 
@@ -35,67 +35,68 @@ module.exports.Show.public = true;
  * Run the script and return the response
  */
 function Run() {
-    var System = require("dw/system/System");
-    var URLUtils = require("dw/web/URLUtils");
-
-    response.setHttpHeader(Response.CONTENT_SECURITY_POLICY, "frame-ancestors 'self'");
-    response.setHttpHeader(Response.X_CONTENT_TYPE_OPTIONS, "nosniff");
-
-    if (!request.isHttpSecure()) {
-        response.redirect(URLUtils.https("Console-Show"));
-        return;
+    if (request.httpMethod !== 'POST') {
+        return sendJSON({
+            error: true,
+            message: 'Method Not Allowed'
+        }, 405);
     }
+
+    const System = require('dw/system/System');
+    const Response = require('dw/system/Response');
+
+    response.setHttpHeader(Response.CONTENT_SECURITY_POLICY, 'frame-ancestors \'self\'');
+    response.setHttpHeader(Response.X_CONTENT_TYPE_OPTIONS, 'nosniff');
 
     if (System.getInstanceType() === System.PRODUCTION_SYSTEM) {
-        response.setStatus(403);
-        response.setContentType("application/json");
-        response.getWriter().print(
-            JSON.stringify({
-                error: true,
-                message: "Not available on production instance!",
-            })
-        );
+        sendJSON({
+            error: true,
+            message: 'Not available on production instance!'
+        }, 403);
+
         return;
     }
 
-    var code = request.getHttpParameterMap().get("code").getStringValue("");
-    var maxDepth = request.getHttpParameterMap().get("maxDepth").getStringValue("");
+    const code = request.getHttpParameterMap().get('code').getStringValue('');
+    const maxDepth = request.getHttpParameterMap().get('maxDepth').getIntValue(3);
 
+    // if missing max depth or code return and do nothing, send no response
     if (!code || !maxDepth) {
-        response.setStatus(418);
-        response.setContentType("application/json");
-        response.getWriter().print(
-            JSON.stringify({
-                error: true,
-                message: "I'm a teapot!",
-            })
-        );
         return;
     }
-  
-    var result;
+
+    let result;
     const startTime = new Date();
 
     try {
-        var myFunc = new Function("code", code)();
+        const myFunc = new Function('code', code);
         result = myFunc();
     } catch (e) {
         result = e;
     }
-  
+
     const runtime = new Date().getTime() - startTime.getTime();
 
-    var serializer = require("../scripts/serializer");
+    const serializer = require('../scripts/serializer');
     result = serializer.serialize(result, maxDepth);
 
-    if (typeof result === "string" || typeof result === "boolean" || typeof result === "number") {
-        response.setContentType("application/json");
-        response.getWriter().print(JSON.stringify({ result: [result], executionTime: runtime));
-        return;
+    if (typeof result === 'string' || typeof result === 'boolean' || typeof result === 'number') {
+        return sendJSON({result: [result], executionTime: runtime});
     }
 
-    response.setContentType("application/json");
-    response.getWriter().print(JSON.stringify({result: result || {}, executionTime: runtime));
+    sendJSON({result: result || {}, executionTime: runtime});
+}
+
+/**
+ * Helper to send a json response
+ *
+ * @param content
+ * @param status
+ */
+function sendJSON(content, status) {
+    response.setStatus(status || 200);
+    response.setContentType('application/json');
+    response.getWriter().print(JSON.stringify(content));
 }
 
 module.exports.Run = Run;
