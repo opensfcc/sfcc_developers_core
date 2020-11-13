@@ -11,7 +11,7 @@ RVW Developers Core - SFCC Cartridge
 
 - [X] Execute Server Side JavaScript on your Sandbox in your favorite browser
 - [X] No Site Preferences or Misc Imports Required, just drop in and go
-- [X] Safety Measures to prevent running in Production and Staging Environments
+- [X] Safety Measures to prevent running in Production Environments
 
 Installation
 ---
