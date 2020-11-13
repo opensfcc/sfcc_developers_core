@@ -8,7 +8,7 @@ const fs = require('fs')
 const packageJson = fs.readFileSync('./package.json')
 const version = JSON.parse(packageJson).version || 0
 
-function getPlugins() {
+function getPlugins(mode, argv) {
     return [
         new webpack.ProgressPlugin(),
         new VueLoaderPlugin(),
@@ -17,7 +17,7 @@ function getPlugins() {
             patterns: [
                 {
                     from: __dirname + '/cartridges/rvw_dev_console/cartridge/client/default/img',
-                    to  :  __dirname + '/cartridges/rvw_dev_console/cartridge/static/default/img'
+                    to: __dirname + '/cartridges/rvw_dev_console/cartridge/static/default/img'
                 }
             ]
         }, {
@@ -28,8 +28,9 @@ function getPlugins() {
         }),
         new webpack.DefinePlugin({
             'process.env': {
-                PACKAGE_VERSION: '"' + version + '"'
-            }
+                PACKAGE_VERSION: '"' + version + '"',
+                IS_DEVELOPMENT: argv.mode === 'development'
+            },
         })
     ];
 }
@@ -72,10 +73,10 @@ module.exports = (mode, argv) => {
                 },
                 {
                     test: /\.scss$/,
-                    use : [
+                    use: [
                         MiniCssExtractPlugin.loader,
-                        { loader: 'css-loader', options: { url: false, sourceMap: mode === 'development' } },
-                        { loader: 'sass-loader', options: { sourceMap: mode === 'development' } }
+                        {loader: 'css-loader', options: {url: false, sourceMap: argv.mode === 'development'}},
+                        {loader: 'sass-loader', options: {sourceMap: argv.mode === 'development'}}
                     ]
                 }
             ]
@@ -86,7 +87,7 @@ module.exports = (mode, argv) => {
                 'vue$': 'vue/dist/vue.esm.js' // 'vue/dist/vue.common.js' for webpack 1
             }
         },
-        plugins: getPlugins()
+        plugins: getPlugins(mode, argv)
     };
 
     if (argv.mode === 'development') {
