@@ -18,8 +18,7 @@ function Show() {
     }
 
     if (System.getInstanceType() === System.PRODUCTION_SYSTEM) {
-        response.setStatus(403);
-        response.getWriter().print("Not available on production instance!");
+        response.redirect(URLUtils.https("Home-Show"));
         return;
     }
 
