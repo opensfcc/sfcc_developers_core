@@ -72,8 +72,9 @@ function Run() {
         );
         return;
     }
-
-    var result = null;
+  
+    var result;
+    const startTime = new Date();
 
     try {
         var myFunc = new Function("code", code)();
@@ -81,18 +82,20 @@ function Run() {
     } catch (e) {
         result = e;
     }
+  
+    const runtime = new Date().getTime() - startTime.getTime();
 
     var serializer = require("../scripts/serializer");
     result = serializer.serialize(result, maxDepth);
 
     if (typeof result === "string" || typeof result === "boolean" || typeof result === "number") {
         response.setContentType("application/json");
-        response.getWriter().print(JSON.stringify([result]));
+        response.getWriter().print(JSON.stringify({ result: [result], executionTime: runtime));
         return;
     }
 
     response.setContentType("application/json");
-    response.getWriter().print(JSON.stringify(result || {}));
+    response.getWriter().print(JSON.stringify({result: result || {}, executionTime: runtime));
 }
 
 module.exports.Run = Run;
