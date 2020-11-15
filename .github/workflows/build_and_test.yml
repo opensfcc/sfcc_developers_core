@@ -1,17 +1,17 @@
-name: Node.js CI
+name: RVW Developer Core CI
 
 on:
   push:
     branches:
-    - develop
-    - master
+      - develop
+      - master
   pull_request:
     branches:
-    - develop
-    - master
+      - develop
+      - master
 
 jobs:
-  build:
+  build_and_test:
 
     runs-on: ubuntu-latest
 
@@ -26,5 +26,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
+    - name: Run Build
     - run: npm run build --if-present
+    - name: Run Tests
     - run: npm test
