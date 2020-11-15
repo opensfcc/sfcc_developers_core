@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         node-version: [10.x, 12.x, 14.x]
-
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
