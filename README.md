@@ -7,10 +7,10 @@ RVW Developers Core - SFCC Cartridge
 
 ## Cartridges
 
-[![Dev Console](https://img.shields.io/badge/Dev_Console-EEEEEE.svg?logo=Salesforce&style=for-the-badge)](./cartridges/rvw_dev_console/) [![Dev Drawer](https://img.shields.io/badge/Dev_Drawer-EEEEEE.svg?logo=Salesforce&style=for-the-badge)](./cartridges/rvw_dev_drawer/)
+[![Dev Console](https://img.shields.io/badge/Dev_Console-EEEEEE.svg?logo=Salesforce&style=for-the-badge)](./cartridges/rvw_dev_console/) [![Dev Tools](https://img.shields.io/badge/Dev_Tools-EEEEEE.svg?logo=Salesforce&style=for-the-badge)](./cartridges/rvw_dev_tools/)
 
 - [X] **[Dev Console](./cartridges/rvw_dev_console/)** - Execute Server Side JavaScript in your Storefront
-- [X] **[Dev Drawer](./cartridges/rvw_dev_drawer/)** - Developer Drawer for Debugging your Storefront
+- [X] **[Dev Tools](./cartridges/rvw_dev_tools/)** - Developer Tools for Debugging your Storefront
 
 Installation
 ---

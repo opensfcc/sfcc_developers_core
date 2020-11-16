@@ -1,7 +1,7 @@
 /**
  * Red Van Workshop
  * (c) 2020 RedVanWorkshop.com
- * License: https://github.com/redvanworkshop/rvw_devtools/blob/master/README
+ * License: https://github.com/redvanworkshop/rvw_dev_tools/blob/master/README
  */
 var RVW_DevTools = (function() {
     /**
