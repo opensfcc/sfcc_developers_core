@@ -1,3 +1,12 @@
 {
-   "signedContributors": []
+  "signedContributors": [
+    {
+      "name": "seckela",
+      "id": 2212779,
+      "comment_id": 728430592,
+      "created_at": "2020-11-16T23:46:41Z",
+      "repoId": 308158747,
+      "pullRequestNo": 29
+    }
+  ]
 }
