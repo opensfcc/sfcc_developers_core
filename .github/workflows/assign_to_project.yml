@@ -1,0 +1,20 @@
+name: Assign to Project
+on:
+  issues:
+    types:
+      - opened
+  pull_request:
+    types:
+      - opened
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+jobs:
+  assign_to_project:
+    runs-on: ubuntu-latest
+    name: Assign to RVW Developers Core
+    steps:
+    - name: Check GitHub Event Action
+      uses: srggrs/assign-one-project-github-action@1.2.0
+      if: github.event.action == 'opened'
+      with:
+        project: 'https://github.com/redvanworkshop/rvw_developers_core/projects/1'
