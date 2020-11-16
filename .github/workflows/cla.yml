@@ -23,4 +23,3 @@ jobs:
           path-to-cla-document: 'https://github.com/redvanworkshop/rvw_developers_core/blob/develop/.github/cla/agreement.md'
           branch: 'develop'
           allowlist: manifestinteractive,zseeling,sergeystoma,johnkramlich,bot*
-          use-dco-flag: false
