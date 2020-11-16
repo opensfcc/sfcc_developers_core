@@ -20,6 +20,8 @@ Installation
 1. Unzip and Rename the folder to `rvw_developers_core`
 2. Move `rvw_developers_core` into the root of your SFCC Project
 3. Add `rvw_developers_core` to project or global `.gitignore`
+4. Add `rvw_dev_console` & `rvw_dev_tools` to Business Manager Storefront `Cartridges` Path
+5. Review Usage Instructions in each Cartridges README.md
 
 Contributing
 ---
