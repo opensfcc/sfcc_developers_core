@@ -16,7 +16,7 @@ Dev Console
 Installation
 ---
 
-1. [Install `rvw_developers_core` Cartridge](../../README.md)
+1. [Install Cartridge](../../README.md#installation)
 2. Add `rvw_dev_console` to Business Manager Storefront `Cartridges` Path
 3. Once installed, you can access the Dev Console on your sandbox at `/on/demandware.store/YOUR_SITE_ID/default/Console-Show` ( change `YOUR_SITE_ID` to your Site ID, e.g. `Sites-Site` ).
 
