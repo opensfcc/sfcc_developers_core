@@ -1,5 +1,4 @@
 name: RVW Developer Core CI
-
 on:
   push:
     branches:
@@ -9,16 +8,12 @@ on:
     branches:
       - develop
       - master
-
 jobs:
   build_and_test:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [10.x, 12.x, 14.x]
-    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}

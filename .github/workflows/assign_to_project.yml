@@ -1,5 +1,4 @@
 name: Assign to Project
-
 on:
   issues:
     types:

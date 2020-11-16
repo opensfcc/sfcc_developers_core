@@ -8,7 +8,6 @@ on:
       - opened
       - closed
       - synchronize
-
 jobs:
   CLAssistant:
     runs-on: ubuntu-latest
