@@ -14,6 +14,9 @@
     var log = <isprint value="${JSON.stringify(pdict.Debugger.log).replace(/</g, '&lt;')}" encoding="off" />;
     var warn = <isprint value="${JSON.stringify(pdict.Debugger.warn).replace(/</g, '&lt;')}" encoding="off" />;
 
+    console.log('lastRequestURL', '<isprint value="${pdict.Debugger.lastRequestURL}" encoding="off" />');
+    console.log('requestID', '<isprint value="${pdict.Debugger.requestID}" encoding="off" />');
+
     // Output Debug Messages if there are any
     if (debug.length > 0) {
         console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.groupHeader", "rvw_dev_tools", null, "Debug", pdict.Debugger.debug.length.toFixed(0))}', 'color: #98C379; font-weight: bold;', 'color: #999; font-weight: lighter;');
