@@ -6,18 +6,7 @@
 <div id="rvw_dev_tools"></div>
 
 <!-- RVW Dev Tools Static Assets -->
-<script>
-window.RVW_DEV_TOOLS = {
-    debugger: ${JSON.stringify(pdict.Debugger, null, 2)},
-    basket: ${JSON.stringify(pdict.basket, null, 2)},
-    preferences: ${JSON.stringify(pdict.preferences, null, 2)},
-    session: ${JSON.stringify(pdict.session, null, 2)},
-    site: ${JSON.stringify(pdict.site, null, 2)}
-};
-</script>
-
-<!-- RVW Dev Tools Static Assets -->
-<script type="text/javascript" src="${URLUtils.staticURL('/js/rvw-devtools.js')}"></script>
-<link href="${URLUtils.staticURL('/css/rvw-devtools.css')}" type="text/css" rel="stylesheet" />
+<link href="${URLUtils.staticURL('/css/dev_tools.css')}" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="${URLUtils.staticURL('/js/dev_tools.js')}"></script>
 
 </isif>

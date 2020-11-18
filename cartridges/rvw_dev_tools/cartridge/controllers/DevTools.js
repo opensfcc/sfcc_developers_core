@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Controller to handle the response from Afterpay
+ * Controller to handle AJAX Calls from Dev Tools Drawer
  *
  * @module controllers/DevTools
  */
@@ -10,7 +10,7 @@ var DevTools = require('../scripts/util/devtools');
 var serialize = require('../scripts/util/serialize');
 
 /**
- * Display development console template
+ * Fetch Data for Dev Drawer
  */
 function GetData() {
     if (request.httpMethod !== 'GET') {
@@ -35,34 +35,26 @@ function GetData() {
         return;
     }
 
-    // // Get Basket Info
-    // var BasketMgr = require('dw/order/BasketMgr');
-    // var basket = BasketMgr.getCurrentBasket();
+    // Get Basket Info
+    var BasketMgr = require('dw/order/BasketMgr');
+    var basket = BasketMgr.getCurrentBasket();
 
-    // // Get Preferences
-    // var Site = require('dw/system/Site');
-    // var currentSite = Site.getCurrent();
-    // var preferences = Site.getCurrent().getPreferences();
+    // Get Preferences
+    var Site = require('dw/system/Site');
+    var currentSite = Site.getCurrent();
+    var preferences = Site.getCurrent().getPreferences();
 
-    // var content = {
-    //     Debugger: session.custom.RVW_Debugger, // Clone Debugger
-    //     basket: serialize(basket),
-    //     preferences: serialize(preferences),
-    //     session: serialize(session),
-    //     site: serialize(currentSite)
-    // }
+    var content = {
+        Debugger: DevTools.getDebugger(),
+        basket: serialize(basket),
+        preferences: serialize(preferences),
+        session: serialize(session),
+        site: serialize(currentSite)
+    }
 
     // Send Content then Clear Logs
     DevTools.prune();
-    sendJSON(DevTools.getDebugger());
-    //DevTools.clear();
-
-    // if (request.requestID !== session.custom.RVW_Debugger.requestID) {
-    //     DevTools.clear();
-    // } else {
-    //     session.custom.RVW_Debugger.lastRequestURL = request.httpURL.toString();
-    //     session.custom.RVW_Debugger.requestID = request.requestID.toString();
-    // }
+    sendJSON(content);
 }
 
 /**

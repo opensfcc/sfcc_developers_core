@@ -1,0 +1,65 @@
+#rvw_dev_tools {
+  line-height: 1;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0; }
+  #rvw_dev_tools *, #rvw_dev_tools *:before, #rvw_dev_tools *:after {
+    box-sizing: inherit; }
+  #rvw_dev_tools div, #rvw_dev_tools span, #rvw_dev_tools applet, #rvw_dev_tools object, #rvw_dev_tools iframe, #rvw_dev_tools h1, #rvw_dev_tools h2, #rvw_dev_tools h3, #rvw_dev_tools h4, #rvw_dev_tools h5, #rvw_dev_tools h6, #rvw_dev_tools p, #rvw_dev_tools blockquote, #rvw_dev_tools pre, #rvw_dev_tools a, #rvw_dev_tools abbr, #rvw_dev_tools acronym, #rvw_dev_tools address, #rvw_dev_tools big, #rvw_dev_tools cite, #rvw_dev_tools code, #rvw_dev_tools del, #rvw_dev_tools dfn, #rvw_dev_tools em, #rvw_dev_tools img, #rvw_dev_tools ins, #rvw_dev_tools kbd, #rvw_dev_tools q, #rvw_dev_tools s, #rvw_dev_tools samp, #rvw_dev_tools small, #rvw_dev_tools strike, #rvw_dev_tools strong, #rvw_dev_tools sub, #rvw_dev_tools sup, #rvw_dev_tools tt, #rvw_dev_tools var, #rvw_dev_tools b, #rvw_dev_tools u, #rvw_dev_tools i, #rvw_dev_tools center, #rvw_dev_tools dl, #rvw_dev_tools dt, #rvw_dev_tools dd, #rvw_dev_tools ol, #rvw_dev_tools ul, #rvw_dev_tools li, #rvw_dev_tools fieldset, #rvw_dev_tools form, #rvw_dev_tools label, #rvw_dev_tools legend, #rvw_dev_tools table, #rvw_dev_tools caption, #rvw_dev_tools tbody, #rvw_dev_tools tfoot, #rvw_dev_tools thead, #rvw_dev_tools tr, #rvw_dev_tools th, #rvw_dev_tools td, #rvw_dev_tools article, #rvw_dev_tools aside, #rvw_dev_tools canvas, #rvw_dev_tools details, #rvw_dev_tools embed, #rvw_dev_tools figure, #rvw_dev_tools figcaption, #rvw_dev_tools footer, #rvw_dev_tools header, #rvw_dev_tools hgroup, #rvw_dev_tools menu, #rvw_dev_tools nav, #rvw_dev_tools output, #rvw_dev_tools ruby, #rvw_dev_tools section, #rvw_dev_tools summary, #rvw_dev_tools time, #rvw_dev_tools mark, #rvw_dev_tools audio, #rvw_dev_tools video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline; }
+  #rvw_dev_tools article, #rvw_dev_tools aside, #rvw_dev_tools details, #rvw_dev_tools figcaption, #rvw_dev_tools figure, #rvw_dev_tools footer, #rvw_dev_tools header, #rvw_dev_tools hgroup, #rvw_dev_tools menu, #rvw_dev_tools nav, #rvw_dev_tools section {
+    display: block; }
+  #rvw_dev_tools ol, #rvw_dev_tools ul {
+    list-style: none; }
+  #rvw_dev_tools blockquote, #rvw_dev_tools q {
+    quotes: none; }
+  #rvw_dev_tools blockquote:before, #rvw_dev_tools blockquote:after, #rvw_dev_tools q:before, #rvw_dev_tools q:after {
+    content: '';
+    content: none; }
+  #rvw_dev_tools table {
+    border-collapse: collapse;
+    border-spacing: 0; }
+
+#rvw_dev_tools .drawer {
+  background: #222;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 50vh;
+  z-index: 9998;
+  color: #fff; }
+
+#rvw_dev_tools .show-toolbar {
+  position: fixed;
+  bottom: 0;
+  right: 14px;
+  width: 44px;
+  height: 34px;
+  display: block;
+  z-index: 9999;
+  border-radius: 8px 8px 0 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: url("data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.086 18.61l5.996-14.004a1 1 0 011.878.678l-.04.11-5.996 14.004a1 1 0 01-1.878-.677l.04-.11 5.996-14.005-5.996 14.005zm-5.793-7.317l4-4a1 1 0 011.497 1.32l-.083.094L4.414 12l3.293 3.293a1 1 0 01-1.32 1.497l-.094-.083-4-4a1 1 0 01-.083-1.32l.083-.094 4-4-4 4zm14-4.001a1 1 0 011.32-.083l.093.083 4.001 4a1 1 0 01.083 1.321l-.083.095-4.001 3.995a1 1 0 01-1.497-1.32l.084-.095 3.292-3.289-3.293-3.293a1 1 0 010-1.414z' fill='%23FFFFFF' fill-rule='nonzero'/%3E%3C/svg%3E") no-repeat center center #222;
+  border: 2px solid #666;
+  border-bottom: none; }
+
+#rvw_dev_tools .toolbar {
+  background: #222;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 50px;
+  z-index: 9998;
+  color: #fff; }
+
+
+/*# sourceMappingURL=dev_tools.css.map*/

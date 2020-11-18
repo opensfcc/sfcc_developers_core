@@ -33,6 +33,20 @@ if (!session.custom.RVW_Debugger.requests.hasOwnProperty(requestID)) {
     };
 }
 
+var filterMessages = function(requestID, type) {
+    var messages = [];
+
+    for (var req in session.custom.RVW_Debugger.requests) {
+        var cur = session.custom.RVW_Debugger.requests[req];
+        // Delete Old Debug Requests
+        if (cur.messages[type].length > 0) {
+            messages = messages.concat(cur.messages[type]);
+        }
+    }
+
+    return messages;
+}
+
 /**
  * Generate Stack Trace for Better Debugging
  * @returns {Object} trace
@@ -159,7 +173,7 @@ function console() {
 
     var ISML = require('dw/template/ISML');
     ISML.renderTemplate('rvw/devtools/console', {
-        Debugger: getDebugger()
+        Debugger: session.custom.RVW_Debugger.requests[requestID].messages
     });
 }
 
@@ -221,10 +235,15 @@ function prune() {
     }
 }
 
+/**
+ * Get Debugger
+ * @example: dw.system.HookMgr.callHook('rvw.util.devtools', 'getDebugger');
+ */
 function getDebugger() {
     var req = session.custom.RVW_Debugger.requests;
     var sorted = {};
 
+    // Reorganize Requests for Newest is on top
     Object.keys(req).sort(function(a, b){
         return req[b].timestamp - req[a].timestamp;
     })
@@ -232,6 +251,7 @@ function getDebugger() {
         sorted[key] = req[key];
     });
 
+    // Update Requests to use Custom Sort
     session.custom.RVW_Debugger.requests = sorted;
 
     return session.custom.RVW_Debugger;
