@@ -6,7 +6,6 @@
  * @module controllers/DevTools
  */
 
-var DevTools = require('../scripts/util/devtools');
 var serialize = require('../scripts/util/serialize');
 
 /**
@@ -45,7 +44,7 @@ function GetData() {
     var preferences = Site.getCurrent().getPreferences();
 
     var content = {
-        Debugger: DevTools.getDebugger(),
+        Debugger: session.custom.RVW_Debugger,
         basket: serialize(basket),
         preferences: serialize(preferences),
         session: serialize(session),
@@ -53,7 +52,6 @@ function GetData() {
     }
 
     // Send Content then Clear Logs
-    DevTools.prune();
     sendJSON(content);
 }
 

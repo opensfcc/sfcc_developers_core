@@ -2,49 +2,22 @@
 
 var serialize = require('./serialize');
 
-var requestID = !empty(request.requestID) ? request.requestID.toString() : 'default';
-
-/**
- * Placeholder to store Server Side Debugger Messages
- */
-session.custom.RVW_Debugger = session.custom.RVW_Debugger || {
-    requests: {}
+var isAJAX = (request.httpParameterMap.format.stringValue === 'ajax');
+var defaultMessages = {
+    debug: [],
+    error: [],
+    fatal: [],
+    info: [],
+    log: [],
+    warn: []
 };
 
-// Store Current Request Data
-session.custom.RVW_Debugger.currentRequestID = requestID;
-session.custom.RVW_Debugger.currentRequestURL = request.httpURL.toString();
-session.custom.RVW_Debugger.currentTimeStamp = new Date().getTime();
+// Placeholder to store Server Side Debugger Messages
+session.custom.RVW_Debugger = session.custom.RVW_Debugger || defaultMessages;
 
-// Check if this is a New Request ( all requests on page load will use same `requestID` )
-if (!session.custom.RVW_Debugger.requests.hasOwnProperty(requestID)) {
-    // Create Debugger for Request
-    session.custom.RVW_Debugger.requests[requestID] = {
-        requestURL: request.httpURL.toString(),
-        timestamp: new Date().getTime(),
-        messages: {
-            debug: [],
-            error: [],
-            fatal: [],
-            info: [],
-            log: [],
-            warn: []
-        }
-    };
-}
-
-var filterMessages = function(requestID, type) {
-    var messages = [];
-
-    for (var req in session.custom.RVW_Debugger.requests) {
-        var cur = session.custom.RVW_Debugger.requests[req];
-        // Delete Old Debug Requests
-        if (cur.messages[type].length > 0) {
-            messages = messages.concat(cur.messages[type]);
-        }
-    }
-
-    return messages;
+// If this is not AJAX, reset debugger
+if (!isAJAX) {
+    session.custom.RVW_Debugger = defaultMessages;
 }
 
 /**
@@ -55,7 +28,11 @@ var stackTrace = function() {
     var trace = {
         fileName: null,
         lineNumber: null,
+        requestID: request.requestID.toString(),
+        requestType: (isAJAX) ? 'ajax' : 'http',
+        requestURL: request.httpURL.toString(),
         stack: null,
+        timestamp: new Date().getTime()
     };
 
     try {
@@ -93,7 +70,7 @@ var stackTrace = function() {
 var addMessages = function (method, messages, trace) {
     for (i in messages) {
         trace.message = serialize(messages[i]);
-        session.custom.RVW_Debugger.requests[requestID].messages[method].push(trace);
+        session.custom.RVW_Debugger[method].push(trace);
     }
 };
 
@@ -106,7 +83,7 @@ function debug() {
         var messages = Array.prototype.slice.call(arguments, 0) || [];
         addMessages('debug', messages, stackTrace());
     } catch (err) {
-        session.custom.RVW_Debugger.requests[requestID].messages.fatal.push(trace);
+        session.custom.RVW_Debugger.fatal.push(trace);
     }
 }
 
@@ -119,7 +96,7 @@ function error() {
         var messages = Array.prototype.slice.call(arguments, 0) || [];
         addMessages('error', messages, stackTrace());
     } catch (err) {
-        session.custom.RVW_Debugger.requests[requestID].messages.fatal.push(trace);
+        session.custom.RVW_Debugger.fatal.push(trace);
     }
 }
 
@@ -132,7 +109,7 @@ function info() {
         var messages = Array.prototype.slice.call(arguments, 0) || [];
         addMessages('info', messages, stackTrace());
     } catch (err) {
-        session.custom.RVW_Debugger.requests[requestID].messages.fatal.push(trace);
+        session.custom.RVW_Debugger.fatal.push(trace);
     }
 }
 
@@ -146,7 +123,7 @@ function log() {
         var messages = Array.prototype.slice.call(arguments, 0) || [];
         addMessages('log', messages, stackTrace());
     } catch (err) {
-        session.custom.RVW_Debugger.requests[requestID].messages.fatal.push(trace);
+        session.custom.RVW_Debugger.fatal.push(trace);
     }
 }
 
@@ -159,7 +136,7 @@ function warn() {
         var messages = Array.prototype.slice.call(arguments, 0) || [];
         addMessages('warn', messages, stackTrace());
     } catch (err) {
-        session.custom.RVW_Debugger.requests[requestID].messages.fatal.push(trace);
+        session.custom.RVW_Debugger.fatal.push(trace);
     }
 }
 
@@ -168,12 +145,9 @@ function warn() {
  * @example: dw.system.HookMgr.callHook('rvw.util.devtools', 'console');
  */
 function console() {
-    // Clear Old Messages
-    prune();
-
     var ISML = require('dw/template/ISML');
     ISML.renderTemplate('rvw/devtools/console', {
-        Debugger: session.custom.RVW_Debugger.requests[requestID].messages
+        Debugger: session.custom.RVW_Debugger
     });
 }
 
@@ -182,9 +156,6 @@ function console() {
  * @example: dw.system.HookMgr.callHook('rvw.util.devtools', 'drawer');
  */
 function drawer() {
-    // Clear Old Messages
-    prune();
-
     var ISML = require('dw/template/ISML');
 
     // Get Basket Info
@@ -205,65 +176,13 @@ function drawer() {
     });
 }
 
-/**
- * Clear Debugger
- * @example: dw.system.HookMgr.callHook('rvw.util.devtools', 'clear');
- */
-function clear() {
-    session.custom.RVW_Debugger = null;
-}
-
-/**
- * Prune Old Messages
- * @example: dw.system.HookMgr.callHook('rvw.util.devtools', 'prune');
- */
-function prune() {
-    var now = new Date().getTime();
-    var expires = 60000; // 60 seconds
-
-    for (var req in session.custom.RVW_Debugger.requests) {
-        var cur = session.custom.RVW_Debugger.requests[req];
-        // Delete Old Debug Requests
-        if (now - cur.timestamp > expires) {
-            delete session.custom.RVW_Debugger.requests[req];
-        }
-
-        // Delete Empty Debug Requests
-        if (cur.messages.debug.length === 0 && cur.messages.error.length === 0 && cur.messages.fatal.length === 0 && cur.messages.info.length === 0 && cur.messages.log.length === 0 && cur.messages.warn.length === 0) {
-            delete session.custom.RVW_Debugger.requests[req];
-        }
-    }
-}
-
-/**
- * Get Debugger
- * @example: dw.system.HookMgr.callHook('rvw.util.devtools', 'getDebugger');
- */
-function getDebugger() {
-    var req = session.custom.RVW_Debugger.requests;
-    var sorted = {};
-
-    // Reorganize Requests for Newest is on top
-    Object.keys(req).sort(function(a, b){
-        return req[b].timestamp - req[a].timestamp;
-    })
-    .forEach(function(key) {
-        sorted[key] = req[key];
-    });
-
-    // Update Requests to use Custom Sort
-    session.custom.RVW_Debugger.requests = sorted;
-
-    return session.custom.RVW_Debugger;
-}
-
-exports.getDebugger = getDebugger;
-exports.console = console;
+// Export Functions
 exports.debug = debug;
-exports.drawer = drawer;
 exports.error = error;
 exports.info = info;
 exports.log = log;
 exports.warn = warn;
-exports.clear = clear;
-exports.prune = prune;
+
+// Export Templates
+exports.console = console;
+exports.drawer = drawer;

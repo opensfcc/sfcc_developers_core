@@ -7,93 +7,92 @@
 <script type="text/javascript">
 (function() {
     // Convert Server Side Debug Messages to JSON ( and convert HTML Tags )
-    var debug = <isprint value="${JSON.stringify(pdict.Debugger.debug).replace(/</g, '&lt;')}" encoding="off" />;
-    var error = <isprint value="${JSON.stringify(pdict.Debugger.error).replace(/</g, '&lt;')}" encoding="off" />;
-    var fatal = <isprint value="${JSON.stringify(pdict.Debugger.fatal).replace(/</g, '&lt;')}" encoding="off" />;
-    var info = <isprint value="${JSON.stringify(pdict.Debugger.info).replace(/</g, '&lt;')}" encoding="off" />;
-    var log = <isprint value="${JSON.stringify(pdict.Debugger.log).replace(/</g, '&lt;')}" encoding="off" />;
-    var warn = <isprint value="${JSON.stringify(pdict.Debugger.warn).replace(/</g, '&lt;')}" encoding="off" />;
+    var RVW_Debugger = <isprint value="${JSON.stringify(pdict.Debugger).replace(/</g, '&lt;')}" encoding="off" />;
 
-    // Output Debug Messages if there are any
-    if (debug.length > 0) {
-        console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.groupHeader", "rvw_dev_tools", null, "Debug", pdict.Debugger.debug.length.toFixed(0))}', 'color: #98C379; font-weight: bold;', 'color: #999; font-weight: lighter;');
+    var generateOutput = function(messages) {
+        // Output Debug Messages if there are any
+        if (messages.debug.length > 0) {
+            console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.groupHeader", "rvw_dev_tools", null, "Debug", pdict.Debugger.debug.length.toFixed(0))}', 'color: #98C379; font-weight: bold;', 'color: #999; font-weight: lighter;');
 
-        for (msg of debug) {
-            console.debug(msg.message);
-            console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.stackTrace", "rvw_dev_tools", null)}', 'color: #999; font-weight: lighter;');
-            console.table(msg.stack);
+            for (msg of messages.debug) {
+                console.debug(msg.message);
+                console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.stackTrace", "rvw_dev_tools", null)}', 'color: #999; font-weight: lighter;');
+                console.table(msg.stack);
+                console.groupEnd();
+            }
+
             console.groupEnd();
         }
 
-        console.groupEnd();
-    }
+        // Output Error Messages if there are any
+        if (messages.error.length > 0) {
+            console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.groupHeader", "rvw_dev_tools", null, "Error", pdict.Debugger.error.length.toFixed(0))}', 'color: #F44747; font-weight: bold;', 'color: #999; font-weight: lighter;');
 
-    // Output Error Messages if there are any
-    if (error.length > 0) {
-        console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.groupHeader", "rvw_dev_tools", null, "Error", pdict.Debugger.error.length.toFixed(0))}', 'color: #F44747; font-weight: bold;', 'color: #999; font-weight: lighter;');
+            for (msg of messages.error) {
+                console.error(msg.message);
+                console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.stackTrace", "rvw_dev_tools", null)}', 'color: #999; font-weight: lighter;');
+                console.table(msg.stack);
+                console.groupEnd();
+            }
 
-        for (msg of error) {
-            console.error(msg.message);
-            console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.stackTrace", "rvw_dev_tools", null)}', 'color: #999; font-weight: lighter;');
-            console.table(msg.stack);
             console.groupEnd();
         }
 
-        console.groupEnd();
-    }
+        // Output Fatal Messages if there are any ( These are Failed Debugger Attempts )
+        if (messages.fatal.length > 0) {
+            console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.groupHeader", "rvw_dev_tools", null, "Fatal", pdict.Debugger.fatal.length.toFixed(0))}', 'color: #F44747; font-weight: bold;', 'color: #999; font-weight: lighter;');
 
-    // Output Fatal Messages if there are any ( These are Failed Debugger Attempts )
-    if (fatal.length > 0) {
-        console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.groupHeader", "rvw_dev_tools", null, "Fatal", pdict.Debugger.fatal.length.toFixed(0))}', 'color: #F44747; font-weight: bold;', 'color: #999; font-weight: lighter;');
+            for (msg of messages.fatal) {
+                console.error(msg.message);
+            }
 
-        for (msg of fatal) {
-            console.error(msg.message);
-        }
-
-        console.groupEnd();
-    }
-
-    // Output Info Messages if there are any
-    if (info.length > 0) {
-        console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.groupHeader", "rvw_dev_tools", null, "Info", pdict.Debugger.info.length.toFixed(0))}', 'color: #528BFF; font-weight: bold;', 'color: #999; font-weight: lighter;');
-
-        for (msg of info) {
-            console.info(msg.message);
-            console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.stackTrace", "rvw_dev_tools", null)}', 'color: #999; font-weight: lighter;');
-            console.table(msg.stack);
             console.groupEnd();
         }
 
-        console.groupEnd();
-    }
+        // Output Info Messages if there are any
+        if (messages.info.length > 0) {
+            console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.groupHeader", "rvw_dev_tools", null, "Info", pdict.Debugger.info.length.toFixed(0))}', 'color: #528BFF; font-weight: bold;', 'color: #999; font-weight: lighter;');
 
-    // Output Log Messages if there are any
-    if (log.length > 0) {
-        console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.groupHeader", "rvw_dev_tools", null, "Log", pdict.Debugger.log.length.toFixed(0))}', 'font-weight: bold;', 'color: #999; font-weight: lighter;');
+            for (msg of messages.info) {
+                console.info(msg.message);
+                console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.stackTrace", "rvw_dev_tools", null)}', 'color: #999; font-weight: lighter;');
+                console.table(msg.stack);
+                console.groupEnd();
+            }
 
-        for (msg of log) {
-            console.log(msg.message);
-            console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.stackTrace", "rvw_dev_tools", null)}', 'color: #999; font-weight: lighter;');
-            console.table(msg.stack);
             console.groupEnd();
         }
 
-        console.groupEnd();
-    }
+        // Output Log Messages if there are any
+        if (messages.log.length > 0) {
+            console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.groupHeader", "rvw_dev_tools", null, "Log", pdict.Debugger.log.length.toFixed(0))}', 'font-weight: bold;', 'color: #999; font-weight: lighter;');
 
-    // Output Warn Messages if there are any
-    if (warn.length > 0) {
-        console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.groupHeader", "rvw_dev_tools", null, "Warn", pdict.Debugger.warn.length.toFixed(0))}', 'color: orange; font-weight: bold;', 'color: #999; font-weight: lighter;');
+            for (msg of messages.log) {
+                console.log(msg.message);
+                console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.stackTrace", "rvw_dev_tools", null)}', 'color: #999; font-weight: lighter;');
+                console.table(msg.stack);
+                console.groupEnd();
+            }
 
-        for (msg of warn) {
-            console.warn(msg.message);
-            console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.stackTrace", "rvw_dev_tools", null)}', 'color: #999; font-weight: lighter;');
-            console.table(msg.stack);
             console.groupEnd();
         }
 
-        console.groupEnd();
-    }
+        // Output Warn Messages if there are any
+        if (messages.warn.length > 0) {
+            console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.groupHeader", "rvw_dev_tools", null, "Warn", pdict.Debugger.warn.length.toFixed(0))}', 'color: orange; font-weight: bold;', 'color: #999; font-weight: lighter;');
+
+            for (msg of messages.warn) {
+                console.warn(msg.message);
+                console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.stackTrace", "rvw_dev_tools", null)}', 'color: #999; font-weight: lighter;');
+                console.table(msg.stack);
+                console.groupEnd();
+            }
+
+            console.groupEnd();
+        }
+    };
+
+    generateOutput(RVW_Debugger);
 })();
 </script>
 
