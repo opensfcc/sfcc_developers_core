@@ -6,17 +6,16 @@
 <!-- Output RVW Dev Tools Debug Messages to `window.console` -->
 <script type="text/javascript">
 (function() {
-    // Convert Server Side Debug Messages to JSON ( and convert HTML Tags )
-    var RVW_Debugger = <isprint value="${JSON.stringify(pdict.Debugger).replace(/</g, '&lt;')}" encoding="off" />;
-
-    var generateOutput = function(messages) {
+    var lastDebugTimeStamp = 0;
+    var debugTimout = null;
+    function generateDebugOutput(messages) {
         // Output Debug Messages if there are any
         if (messages.debug.length > 0) {
-            console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.groupHeader", "rvw_dev_tools", null, "Debug", pdict.Debugger.debug.length.toFixed(0))}', 'color: #98C379; font-weight: bold;', 'color: #999; font-weight: lighter;');
+            console.groupCollapsed('SFCC: %cDebug %c(' + messages.debug.length + ')', 'color: #98C379; font-weight: bold;', 'color: #999; font-weight: lighter;');
 
             for (msg of messages.debug) {
                 console.debug(msg.message);
-                console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.stackTrace", "rvw_dev_tools", null)}', 'color: #999; font-weight: lighter;');
+                console.groupCollapsed('%cSTACK TRACE', 'color: #999; font-weight: lighter;');
                 console.table(msg.stack);
                 console.groupEnd();
             }
@@ -26,11 +25,11 @@
 
         // Output Error Messages if there are any
         if (messages.error.length > 0) {
-            console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.groupHeader", "rvw_dev_tools", null, "Error", pdict.Debugger.error.length.toFixed(0))}', 'color: #F44747; font-weight: bold;', 'color: #999; font-weight: lighter;');
+            console.groupCollapsed('SFCC: %cError %c(' + messages.error.length + ')', 'color: #F44747; font-weight: bold;', 'color: #999; font-weight: lighter;');
 
             for (msg of messages.error) {
                 console.error(msg.message);
-                console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.stackTrace", "rvw_dev_tools", null)}', 'color: #999; font-weight: lighter;');
+                console.groupCollapsed('%cSTACK TRACE', 'color: #999; font-weight: lighter;');
                 console.table(msg.stack);
                 console.groupEnd();
             }
@@ -40,7 +39,7 @@
 
         // Output Fatal Messages if there are any ( These are Failed Debugger Attempts )
         if (messages.fatal.length > 0) {
-            console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.groupHeader", "rvw_dev_tools", null, "Fatal", pdict.Debugger.fatal.length.toFixed(0))}', 'color: #F44747; font-weight: bold;', 'color: #999; font-weight: lighter;');
+            console.groupCollapsed('SFCC: %cFatal %c(' + messages.fatal.length + ')', 'color: #F44747; font-weight: bold;', 'color: #999; font-weight: lighter;');
 
             for (msg of messages.fatal) {
                 console.error(msg.message);
@@ -51,11 +50,11 @@
 
         // Output Info Messages if there are any
         if (messages.info.length > 0) {
-            console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.groupHeader", "rvw_dev_tools", null, "Info", pdict.Debugger.info.length.toFixed(0))}', 'color: #528BFF; font-weight: bold;', 'color: #999; font-weight: lighter;');
+            console.groupCollapsed('SFCC: %cInfo %c(' + messages.info.length + ')', 'color: #528BFF; font-weight: bold;', 'color: #999; font-weight: lighter;');
 
             for (msg of messages.info) {
                 console.info(msg.message);
-                console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.stackTrace", "rvw_dev_tools", null)}', 'color: #999; font-weight: lighter;');
+                console.groupCollapsed('%cSTACK TRACE', 'color: #999; font-weight: lighter;');
                 console.table(msg.stack);
                 console.groupEnd();
             }
@@ -65,11 +64,11 @@
 
         // Output Log Messages if there are any
         if (messages.log.length > 0) {
-            console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.groupHeader", "rvw_dev_tools", null, "Log", pdict.Debugger.log.length.toFixed(0))}', 'font-weight: bold;', 'color: #999; font-weight: lighter;');
+            console.groupCollapsed('SFCC: %cLog %c(' + messages.log.length + ')', 'font-weight: bold;', 'color: #999; font-weight: lighter;');
 
             for (msg of messages.log) {
                 console.log(msg.message);
-                console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.stackTrace", "rvw_dev_tools", null)}', 'color: #999; font-weight: lighter;');
+                console.groupCollapsed('%cSTACK TRACE', 'color: #999; font-weight: lighter;');
                 console.table(msg.stack);
                 console.groupEnd();
             }
@@ -79,11 +78,11 @@
 
         // Output Warn Messages if there are any
         if (messages.warn.length > 0) {
-            console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.groupHeader", "rvw_dev_tools", null, "Warn", pdict.Debugger.warn.length.toFixed(0))}', 'color: orange; font-weight: bold;', 'color: #999; font-weight: lighter;');
+            console.groupCollapsed('SFCC: %cWarn %c(' + messages.warn.length + ')', 'color: orange; font-weight: bold;', 'color: #999; font-weight: lighter;');
 
             for (msg of messages.warn) {
                 console.warn(msg.message);
-                console.groupCollapsed('${Resource.msgf("rvw_dev_tools.console.stackTrace", "rvw_dev_tools", null)}', 'color: #999; font-weight: lighter;');
+                console.groupCollapsed('%cSTACK TRACE', 'color: #999; font-weight: lighter;');
                 console.table(msg.stack);
                 console.groupEnd();
             }
@@ -92,7 +91,27 @@
         }
     };
 
-    generateOutput(RVW_Debugger);
+    function getDebugMessages() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '${dw.web.URLUtils.url("DevTools-GetData").toString()}?console=true&timestamp=' + lastDebugTimeStamp);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                lastDebugTimeStamp = response.timestamp;
+                generateDebugOutput(response.messages);
+            }
+        };
+        xhr.send();
+    };
+
+    // Get Initial Debug Messages
+    getDebugMessages();
+
+    // Add Event Listeners most likely to trigger new AJAX Debug Events
+    document.addEventListener('click', function() {
+        clearTimeout(debugTimout);
+        debugTimout = setTimeout(getDebugMessages, 1000);
+    });
 })();
 </script>
 

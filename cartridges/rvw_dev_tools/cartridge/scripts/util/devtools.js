@@ -2,6 +2,7 @@
 
 var serialize = require('./serialize');
 
+var requestID = !empty(request.requestID) ? request.requestID.toString() : null;
 var isAJAX = (request.httpParameterMap.format.stringValue === 'ajax');
 var defaultMessages = {
     debug: [],
@@ -15,10 +16,13 @@ var defaultMessages = {
 // Placeholder to store Server Side Debugger Messages
 session.custom.RVW_Debugger = session.custom.RVW_Debugger || defaultMessages;
 
-// If this is not AJAX, reset debugger
-if (!isAJAX) {
+// If this is not AJAX, and this is a brand new request ID, reset debugger
+if (!isAJAX && !empty(requestID) && !empty(session.custom.RVW_Debugger.requestID) && session.custom.RVW_Debugger.requestID !== requestID) {
     session.custom.RVW_Debugger = defaultMessages;
 }
+
+// Track Current Debug Request Session ID
+session.custom.RVW_Debugger.requestID = requestID;
 
 /**
  * Generate Stack Trace for Better Debugging
@@ -28,7 +32,7 @@ var stackTrace = function() {
     var trace = {
         fileName: null,
         lineNumber: null,
-        requestID: request.requestID.toString(),
+        requestID: requestID,
         requestType: (isAJAX) ? 'ajax' : 'http',
         requestURL: request.httpURL.toString(),
         stack: null,
@@ -168,7 +172,7 @@ function drawer() {
     var preferences = Site.getCurrent().getPreferences();
 
     ISML.renderTemplate('rvw/devtools/drawer', {
-        Debugger: getDebugger(),
+        Debugger: session.custom.RVW_Debugger,
         basket: serialize(basket),
         preferences: serialize(preferences),
         session: serialize(session),
