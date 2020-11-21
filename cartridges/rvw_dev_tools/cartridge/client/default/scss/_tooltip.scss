@@ -1,9 +1,5 @@
-.tooltip {
+.devtool-tooltip {
     z-index: 99999;
-
-    &.disabled {
-        display: none !important;
-    }
 
     .tooltip-inner {
         background: black;
@@ -109,4 +105,8 @@
         opacity: 1;
         transition: opacity .15s;
     }
+}
+
+.devtool-tooltip-disabled {
+    display: none !important;
 }

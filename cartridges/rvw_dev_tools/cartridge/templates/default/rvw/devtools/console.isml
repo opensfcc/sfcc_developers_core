@@ -7,7 +7,7 @@
 <script type="text/javascript">
 (function() {
     var lastDebugTimeStamp = 0;
-    var debugTimout = null;
+    var debugTimeout = null;
     function generateDebugOutput(messages) {
         // Output Debug Messages if there are any
         if (messages.debug.length > 0) {
@@ -104,14 +104,22 @@
         xhr.send();
     };
 
+    function eventHandler(evt) {
+        // Only pay attention to elements that are likely to trigger AJAX calls
+        var canTriggerAjax = ['A', 'BUTTON', 'INPUT', 'SELECT', 'TEXTAREA'];
+
+        if (canTriggerAjax.indexOf(evt.target.tagName) > -1 && (!evt.target.hasAttribute || (evt.target.hasAttribute && !evt.target.hasAttribute('data-devtool')))) {
+            clearTimeout(debugTimeout);
+            debugTimeout = setTimeout(getDebugMessages, 1000);
+        }
+    };
+
     // Get Initial Debug Messages
     getDebugMessages();
 
     // Add Event Listeners most likely to trigger new AJAX Debug Events
-    document.addEventListener('click', function() {
-        clearTimeout(debugTimout);
-        debugTimout = setTimeout(getDebugMessages, 1000);
-    });
+    document.addEventListener('click', eventHandler, { passive: true });
+    document.addEventListener('change', eventHandler, { passive: true });
 })();
 </script>
 

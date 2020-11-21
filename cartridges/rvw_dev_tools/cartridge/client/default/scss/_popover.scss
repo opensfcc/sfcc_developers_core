@@ -1,5 +1,5 @@
 #rvw_dev_tools {
-    .popover {
+    .devtool-popover {
         background: #000;
         border-radius: 0;
         border: none;
@@ -37,14 +37,6 @@
                 text-align: left;
                 transition: all 0.25s;
 
-                &.empty {
-                    opacity: 0.33;
-
-                    &:hover {
-                        opacity: 1;
-                    }
-                }
-
                 span.count {
                     color: #FFF;
                     display: inline-block;
@@ -59,31 +51,31 @@
                     top: 2px;
                     width: 20px;
 
-                    &.debug {
+                    &.notice-debug {
                         background: $toolbar-color-debug;
                     }
 
-                    &.error {
+                    &.notice-error {
                         background: $toolbar-color-error;
                     }
 
-                    &.fatal {
+                    &.notice-fatal {
                         background: $toolbar-color-fatal;
                     }
 
-                    &.info {
+                    &.notice-info {
                         background: $toolbar-color-info;
                     }
 
-                    &.log {
+                    &.notice-log {
                         background: $toolbar-color-log;
                     }
 
-                    &.warn {
+                    &.notice-warn {
                         background: $toolbar-color-warn;
                     }
 
-                    &.disabled {
+                    &.notice-disabled {
                         background: #555;
                         color: #EEE;
                     }
@@ -94,8 +86,27 @@
                     display: inline-block;
                 }
 
-                &:hover {
+                &:hover, &:focus, &:active {
                     background: #222222;
+                    outline: none;
+                }
+
+                &.empty {
+                    color: #666;
+
+                    span.count {
+                        background: #000;
+                        color: #999;
+                    }
+
+                    &:hover, &:focus, &:active {
+                        color: #999;
+                        outline: none;
+
+                        span.count {
+                            color: #BBB;
+                        }
+                    }
                 }
             }
         }

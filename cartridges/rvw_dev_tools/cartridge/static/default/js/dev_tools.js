@@ -2304,38 +2304,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'DevTools',
   components: {},
@@ -2344,8 +2312,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       basketCount: 0,
       debugData: null,
+      debugTimout: null,
       drawerOpen: false,
-      lastDebugTimeStamp: 0,
       messageCount: {
         debug: 0,
         error: 0,
@@ -2367,13 +2335,16 @@ __webpack_require__.r(__webpack_exports__);
       section: null,
       subsection: null,
       toolbarShown: false,
-      tooltipDelay: 300
+      tooltipDelay: 300,
+      listeningForClicks: false
     };
   },
 
   mounted() {
     const drawerOpen = localStorage.getItem('RVW_DrawerOpen');
     const toolbarShown = localStorage.getItem('RVW_ToolbarShown');
+    const section = localStorage.getItem('RVW_DrawerSection');
+    const subsection = localStorage.getItem('RVW_DrawerSubsection');
 
     if (drawerOpen) {
       this.drawerOpen = JSON.parse(drawerOpen);
@@ -2383,25 +2354,34 @@ __webpack_require__.r(__webpack_exports__);
       this.toolbarShown = JSON.parse(toolbarShown);
     }
 
+    if (section) {
+      this.section = section;
+    }
+
+    if (subsection) {
+      this.subsection = subsection;
+    }
+
     if (this.drawerOpen || this.toolbarShown) {
       this.fetchData();
+      this.eventListener();
     }
   },
 
   computed: {
     messageClass() {
       if (this.messageCount.fatal > 0) {
-        return 'fatal';
+        return 'notice-fatal';
       } else if (this.messageCount.error > 0) {
-        return 'error';
+        return 'notice-error';
       } else if (this.messageCount.warn > 0) {
-        return 'warn';
+        return 'notice-warn';
       } else if (this.messageCount.info > 0) {
-        return 'info';
+        return 'notice-info';
       } else if (this.messageCount.debug > 0) {
-        return 'debug';
+        return 'notice-debug';
       } else if (this.messageCount.log > 0) {
-        return 'log';
+        return 'notice-log';
       }
 
       return '';
@@ -2420,15 +2400,45 @@ __webpack_require__.r(__webpack_exports__);
       this.toolbarShown = false;
     },
 
+    eventHandler(evt) {
+      // Only pay attention to elements that are likely to trigger AJAX calls
+      const canTriggerAjax = ['A', 'BUTTON', 'INPUT', 'SELECT', 'TEXTAREA'];
+
+      if (canTriggerAjax.indexOf(evt.target.tagName) > -1 && (!evt.target.hasAttribute || evt.target.hasAttribute && !evt.target.hasAttribute('data-devtool'))) {
+        clearTimeout(this.debugTimout);
+        this.debugTimout = setTimeout(this.fetchData, 1000);
+      }
+    },
+
+    eventListener() {
+      if (!this.drawerOpen && !this.toolbarShown && this.listeningForClicks) {
+        clearTimeout(this.debugTimout);
+        document.removeEventListener('click', this.eventHandler, {
+          passive: true
+        });
+        document.removeEventListener('change', this.eventHandler, {
+          passive: true
+        });
+        this.listeningForClicks = false;
+      } else if (!this.listeningForClicks) {
+        document.addEventListener('click', this.eventHandler, {
+          passive: true
+        });
+        document.addEventListener('change', this.eventHandler, {
+          passive: true
+        });
+        this.listeningForClicks = true;
+      }
+    },
+
     async fetchData() {
-      const response = await this.axios.get(`${window.RVW_DevToolsURL}?timestamp=${this.lastDebugTimeStamp}`);
+      const response = await this.axios.get(window.RVW_DevToolsURL);
 
       if (response && typeof response.data !== 'undefined') {
         this.debugData = response.data;
 
         if (typeof response.data.messages !== 'undefined') {
           const msg = response.data.messages;
-          console.log(msg);
           this.messageCount.debug = msg.debug.length;
           this.messageCount.error = msg.error.length;
           this.messageCount.fatal = msg.fatal.length;
@@ -2469,12 +2479,26 @@ __webpack_require__.r(__webpack_exports__);
     drawerOpen: {
       handler() {
         localStorage.setItem('RVW_DrawerOpen', this.drawerOpen);
+        this.eventListener();
+      }
+
+    },
+    section: {
+      handler() {
+        localStorage.setItem('RVW_DrawerSection', this.section);
+      }
+
+    },
+    subsection: {
+      handler() {
+        localStorage.setItem('RVW_DrawerSubsection', this.subsection);
       }
 
     },
     toolbarShown: {
       handler() {
         localStorage.setItem('RVW_ToolbarShown', this.toolbarShown);
+        this.eventListener();
       }
 
     }
@@ -26353,1845 +26377,1409 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "rvw_dev_tools" } }, [
-    _vm.drawerOpen
-      ? _c("div", { staticClass: "drawer" }, [
-          _c("button", {
-            staticClass: "close-drawer",
-            on: {
-              click: function($event) {
-                $event.preventDefault()
-                return _vm.closeDrawer()
-              }
-            }
-          })
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.toolbarShown && !_vm.drawerOpen
-      ? _c(
-          "div",
-          {
-            staticClass: "toolbar",
-            on: {
-              click: function($event) {
-                if ($event.target !== $event.currentTarget) {
-                  return null
-                }
-                return _vm.resetToolbar()
-              }
-            }
-          },
-          [
-            _c(
+  return _c(
+    "div",
+    { attrs: { id: "rvw_dev_tools" } },
+    [
+      _c("transition", { attrs: { name: "fade" } }, [
+        _vm.drawerOpen
+          ? _c(
               "div",
-              { staticClass: "toolbar-button-wrapper" },
+              { staticClass: "devtool-drawer" },
               [
-                _c("transition", { attrs: { name: "fade" } }, [
-                  _vm.popovers.basket
-                    ? _c(
-                        "div",
-                        {
-                          ref: "popoverBasket",
-                          staticClass: "popover basket",
-                          attrs: { id: "popoverBasket", role: "tooltip" }
-                        },
-                        [
-                          _c("div", { staticClass: "table" }, [
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#debug" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "debug")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Debug")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count debug" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#error" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "error")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Error")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count error" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#fatal" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "fatal")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Fatal")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count fatal" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#info" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "info")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Info")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count info" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#log" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "log")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Log")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count log" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#warn" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "warn")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Warn")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count warn" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            )
-                          ])
-                        ]
-                      )
-                    : _vm._e()
-                ]),
-                _vm._v(" "),
                 _c(
                   "button",
                   {
-                    directives: [
-                      {
-                        name: "tooltip",
-                        rawName: "v-tooltip",
-                        value: {
-                          content: "Basket",
-                          classes: _vm.popovers.basket ? "disabled" : "enabled",
-                          delay: { show: _vm.tooltipDelay }
-                        },
-                        expression:
-                          "{ content: 'Basket', classes: popovers.basket ? 'disabled' : 'enabled', delay: { show: tooltipDelay } }"
-                      }
-                    ],
-                    ref: "popoverButtonBasket",
-                    staticClass: "toolbar-button basket",
-                    class: {
-                      active: _vm.popovers.basket,
-                      "no-count": _vm.basketCount === 0
-                    },
-                    attrs: {
-                      id: "popoverButtonBasket",
-                      "aria-describedby": "popoverBasket"
-                    },
+                    staticClass: "devtool-close-drawer",
+                    attrs: { "data-devtool": "" },
                     on: {
                       click: function($event) {
                         $event.preventDefault()
-                        return _vm.togglePopover("basket")
+                        return _vm.closeDrawer()
                       }
                     }
                   },
                   [
-                    _vm.basketCount > 0
-                      ? _c("span", [_vm._v(_vm._s(_vm.basketCount))])
-                      : _vm._e(),
+                    _c("svg", { attrs: { role: "img" } }, [
+                      _c("use", { attrs: { href: "#devtool-close" } })
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "devtool-menu" }, [
+                  _c("ul", [
+                    _c("li", [
+                      _c(
+                        "button",
+                        {
+                          class: { active: _vm.section === "basket" },
+                          attrs: { "data-devtool": "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.openDrawer("basket", "")
+                            }
+                          }
+                        },
+                        [
+                          _c("svg", { attrs: { role: "img" } }, [
+                            _c("use", { attrs: { href: "#devtool-basket" } })
+                          ]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("Basket")]),
+                          _vm._v(" "),
+                          _vm.basketCount > 0
+                            ? _c("span", { staticClass: "count" }, [
+                                _vm._v(_vm._s(_vm.basketCount))
+                              ])
+                            : _vm._e()
+                        ]
+                      )
+                    ]),
                     _vm._v(" "),
-                    _c(
-                      "svg",
-                      {
-                        attrs: {
-                          xmlns: "http://www.w3.org/2000/svg",
-                          viewBox: "0 0 48.12 47.06"
-                        }
-                      },
-                      [
-                        _c(
-                          "g",
-                          {
-                            attrs: {
-                              fill: "none",
-                              stroke: "#FFFFFF",
-                              "stroke-miterlimit": "10"
-                            }
-                          },
-                          [
-                            _c("ellipse", {
-                              attrs: {
-                                cx: "19.41",
-                                cy: "41.45",
-                                rx: "3.68",
-                                ry: "3.78",
-                                "stroke-width": "3.65"
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("ellipse", {
-                              attrs: {
-                                cx: "35.07",
-                                cy: "41.45",
-                                rx: "3.68",
-                                ry: "3.78",
-                                "stroke-width": "3.65"
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("path", {
-                              attrs: {
-                                d:
-                                  "M10 8h35.41c.52 0 .82.07.67.55L40.68 26c-.15.47-.55 1.05-.91 1.05H15.63c-.36 0-.76-.72-.91-1.21L9.32 8.73C9.17 8.25 9.47 8 10 8z",
-                                "stroke-width": "4"
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("path", {
-                              attrs: {
-                                "stroke-linecap": "round",
-                                "stroke-width": "3.65",
-                                d:
-                                  "M9.28 7.86L7.44 3.23M15.73 26.78c-.34 0-.73.39-.88.88L12 35.3"
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("path", {
-                              attrs: {
-                                "stroke-linecap": "round",
-                                "stroke-width": "4",
-                                d: "M2 2h5M12 36h29"
-                              }
-                            })
-                          ]
-                        )
-                      ]
-                    )
-                  ]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "toolbar-button-wrapper" },
-              [
-                _c("transition", { attrs: { name: "fade" } }, [
-                  _vm.popovers.geolocation
-                    ? _c(
-                        "div",
+                    _c("li", [
+                      _c(
+                        "button",
                         {
-                          ref: "popoverGeolocation",
-                          staticClass: "popover geolocation",
-                          attrs: { id: "popoverGeolocation", role: "tooltip" }
+                          class: { active: _vm.section === "geolocation" },
+                          attrs: { "data-devtool": "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.openDrawer("geolocation", "")
+                            }
+                          }
                         },
                         [
-                          _c("div", { staticClass: "table" }, [
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#debug" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "debug")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Debug")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count debug" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#error" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "error")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Error")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count error" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#fatal" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "fatal")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Fatal")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count fatal" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#info" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "info")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Info")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count info" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#log" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "log")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Log")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count log" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#warn" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "warn")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Warn")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count warn" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            )
-                          ])
-                        ]
-                      )
-                    : _vm._e()
-                ]),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    directives: [
-                      {
-                        name: "tooltip",
-                        rawName: "v-tooltip",
-                        value: {
-                          content: "Geolocation",
-                          classes: _vm.popovers.geolocation
-                            ? "disabled"
-                            : "enabled",
-                          delay: { show: _vm.tooltipDelay }
-                        },
-                        expression:
-                          "{ content: 'Geolocation', classes: popovers.geolocation ? 'disabled' : 'enabled', delay: { show: tooltipDelay } }"
-                      }
-                    ],
-                    ref: "popoverButtonGeolocation",
-                    staticClass: "toolbar-button geolocation no-count",
-                    class: { active: _vm.popovers.geolocation },
-                    attrs: {
-                      id: "popoverButtonGeolocation",
-                      "aria-describedby": "popoverGeolocation"
-                    },
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.togglePopover("geolocation")
-                      }
-                    }
-                  },
-                  [
-                    _c(
-                      "svg",
-                      {
-                        attrs: {
-                          xmlns: "http://www.w3.org/2000/svg",
-                          viewBox: "0 0 36 46"
-                        }
-                      },
-                      [
-                        _c(
-                          "g",
-                          {
-                            attrs: {
-                              fill: "none",
-                              stroke: "#FFFF",
-                              "stroke-linecap": "round",
-                              "stroke-linejoin": "round",
-                              "stroke-width": "4"
-                            }
-                          },
-                          [
-                            _c("path", {
-                              attrs: {
-                                d:
-                                  "M18 2a15.82 15.82 0 0116 15.63A15.34 15.34 0 0130.83 27"
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("circle", {
-                              attrs: { cx: "18", cy: "17.63", r: "5" }
-                            }),
-                            _vm._v(" "),
-                            _c("path", {
-                              attrs: {
-                                d:
-                                  "M18 44l12.83-17.03M18 2A15.82 15.82 0 002 17.63 15.34 15.34 0 005.17 27M18 44L5.17 26.97"
-                              }
+                          _c("svg", { attrs: { role: "img" } }, [
+                            _c("use", {
+                              attrs: { href: "#devtool-geolocation" }
                             })
-                          ]
-                        )
-                      ]
-                    )
-                  ]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "toolbar-button-wrapper" },
-              [
-                _c("transition", { attrs: { name: "fade" } }, [
-                  _vm.popovers.messages
-                    ? _c(
-                        "div",
-                        {
-                          ref: "popoverMessages",
-                          staticClass: "popover messages",
-                          attrs: { id: "popoverMessages", role: "tooltip" }
-                        },
-                        [
-                          _c("div", { staticClass: "table" }, [
-                            _c(
-                              "button",
-                              {
-                                directives: [
-                                  {
-                                    name: "tooltip",
-                                    rawName: "v-tooltip.right",
-                                    value: {
-                                      content:
-                                        _vm.messageCount.debug > 0
-                                          ? "View Debug Messages"
-                                          : "No Debug Messages",
-                                      delay: { show: _vm.tooltipDelay }
-                                    },
-                                    expression:
-                                      "{ content: messageCount.debug > 0 ? 'View Debug Messages' : 'No Debug Messages', delay: { show: tooltipDelay } }",
-                                    modifiers: { right: true }
-                                  }
-                                ],
-                                class: { empty: _vm.messageCount.debug === 0 },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "debug")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Debug")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count debug" }, [
-                                  _vm._v(_vm._s(_vm.messageCount.debug))
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "button",
-                              {
-                                directives: [
-                                  {
-                                    name: "tooltip",
-                                    rawName: "v-tooltip.right",
-                                    value: {
-                                      content:
-                                        _vm.messageCount.error > 0
-                                          ? "View Error Messages"
-                                          : "No Error Messages",
-                                      delay: { show: _vm.tooltipDelay }
-                                    },
-                                    expression:
-                                      "{ content: messageCount.error > 0 ? 'View Error Messages' : 'No Error Messages', delay: { show: tooltipDelay } }",
-                                    modifiers: { right: true }
-                                  }
-                                ],
-                                class: { empty: _vm.messageCount.error === 0 },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "error")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Error")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count error" }, [
-                                  _vm._v(_vm._s(_vm.messageCount.error))
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "button",
-                              {
-                                directives: [
-                                  {
-                                    name: "tooltip",
-                                    rawName: "v-tooltip.right",
-                                    value: {
-                                      content:
-                                        _vm.messageCount.fatal > 0
-                                          ? "View Fatal Messages"
-                                          : "No Fatal Messages",
-                                      delay: { show: _vm.tooltipDelay }
-                                    },
-                                    expression:
-                                      "{ content: messageCount.fatal > 0 ? 'View Fatal Messages' : 'No Fatal Messages', delay: { show: tooltipDelay } }",
-                                    modifiers: { right: true }
-                                  }
-                                ],
-                                class: { empty: _vm.messageCount.fatal === 0 },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "fatal")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Fatal")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count fatal" }, [
-                                  _vm._v(_vm._s(_vm.messageCount.fatal))
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "button",
-                              {
-                                directives: [
-                                  {
-                                    name: "tooltip",
-                                    rawName: "v-tooltip.right",
-                                    value: {
-                                      content:
-                                        _vm.messageCount.info > 0
-                                          ? "View Info Messages"
-                                          : "No Info Messages",
-                                      delay: { show: _vm.tooltipDelay }
-                                    },
-                                    expression:
-                                      "{ content: messageCount.info > 0 ? 'View Info Messages' : 'No Info Messages', delay: { show: tooltipDelay } }",
-                                    modifiers: { right: true }
-                                  }
-                                ],
-                                class: { empty: _vm.messageCount.info === 0 },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "info")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Info")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count info" }, [
-                                  _vm._v(_vm._s(_vm.messageCount.info))
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "button",
-                              {
-                                directives: [
-                                  {
-                                    name: "tooltip",
-                                    rawName: "v-tooltip.right",
-                                    value: {
-                                      content:
-                                        _vm.messageCount.log > 0
-                                          ? "View Log Messages"
-                                          : "No Log Messages",
-                                      delay: { show: _vm.tooltipDelay }
-                                    },
-                                    expression:
-                                      "{ content: messageCount.log > 0 ? 'View Log Messages' : 'No Log Messages', delay: { show: tooltipDelay } }",
-                                    modifiers: { right: true }
-                                  }
-                                ],
-                                class: { empty: _vm.messageCount.log === 0 },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "log")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Log")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count log" }, [
-                                  _vm._v(_vm._s(_vm.messageCount.log))
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "button",
-                              {
-                                directives: [
-                                  {
-                                    name: "tooltip",
-                                    rawName: "v-tooltip.right",
-                                    value: {
-                                      content:
-                                        _vm.messageCount.warn > 0
-                                          ? "View Warn Messages"
-                                          : "No Warn Messages",
-                                      delay: { show: _vm.tooltipDelay }
-                                    },
-                                    expression:
-                                      "{ content: messageCount.warn > 0 ? 'View Warn Messages' : 'No Warn Messages', delay: { show: tooltipDelay } }",
-                                    modifiers: { right: true }
-                                  }
-                                ],
-                                class: { empty: _vm.messageCount.warn === 0 },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "warn")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Warn")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count warn" }, [
-                                  _vm._v(_vm._s(_vm.messageCount.warn))
-                                ])
-                              ]
-                            )
-                          ])
+                          ]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("Geolocation")])
                         ]
                       )
-                    : _vm._e()
-                ]),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    directives: [
-                      {
-                        name: "tooltip",
-                        rawName: "v-tooltip",
-                        value: {
-                          content: "Messages",
-                          classes: _vm.popovers.messages
-                            ? "disabled"
-                            : "enabled",
-                          delay: { show: _vm.tooltipDelay }
-                        },
-                        expression:
-                          "{ content: 'Messages', classes: popovers.messages ? 'disabled' : 'enabled', delay: { show: tooltipDelay } }"
-                      }
-                    ],
-                    ref: "popoverButtonMessages",
-                    staticClass: "toolbar-button messages",
-                    class: [
-                      {
-                        active: _vm.popovers.messages,
-                        "no-count": _vm.messageCount.total === 0
-                      },
-                      _vm.messageClass
-                    ],
-                    attrs: {
-                      id: "popoverButtonMessages",
-                      "aria-describedby": "popoverMessages"
-                    },
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.togglePopover("messages")
-                      }
-                    }
-                  },
-                  [
-                    _vm.messageCount.total > 0
-                      ? _c("span", [_vm._v(_vm._s(_vm.messageCount.total))])
-                      : _vm._e(),
+                    ]),
                     _vm._v(" "),
-                    _c(
-                      "svg",
-                      {
-                        attrs: {
-                          xmlns: "http://www.w3.org/2000/svg",
-                          viewBox: "0 0 46 42.83"
-                        }
-                      },
-                      [
-                        _c(
-                          "g",
-                          {
-                            attrs: {
-                              fill: "none",
-                              stroke: "#FFFFFF",
-                              "stroke-linecap": "round",
-                              "stroke-linejoin": "round",
-                              "stroke-width": "4"
+                    _c("li", [
+                      _c(
+                        "button",
+                        {
+                          class: { active: _vm.section === "messages" },
+                          attrs: { "data-devtool": "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.openDrawer("messages", "")
                             }
-                          },
-                          [
-                            _c("path", {
-                              attrs: {
-                                d:
-                                  "M15 32.08H3c-.55 0-1-.81-1-1.37V2.34c0-.56.45-.26 1-.26h40c.55 0 1-.3 1 .26v28.37c0 .56-.45 1.37-1 1.37H29M22 40.83l6.63-8.11M22 40.83l-6.62-8.11"
-                              }
+                          }
+                        },
+                        [
+                          _c("svg", { attrs: { role: "img" } }, [
+                            _c("use", { attrs: { href: "#devtool-messages" } })
+                          ]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("Messages")]),
+                          _vm._v(" "),
+                          _vm.messageCount.total > 0
+                            ? _c(
+                                "span",
+                                {
+                                  staticClass: "count",
+                                  class: _vm.messageClass
+                                },
+                                [_vm._v(_vm._s(_vm.messageCount.total))]
+                              )
+                            : _vm._e()
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c(
+                        "button",
+                        {
+                          class: { active: _vm.section === "preferences" },
+                          attrs: { "data-devtool": "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.openDrawer("preferences", "")
+                            }
+                          }
+                        },
+                        [
+                          _c("svg", { attrs: { role: "img" } }, [
+                            _c("use", {
+                              attrs: { href: "#devtool-preferences" }
                             })
-                          ]
-                        )
-                      ]
-                    )
-                  ]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "toolbar-button-wrapper" },
-              [
+                          ]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("Preferences")])
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c(
+                        "button",
+                        {
+                          class: { active: _vm.section === "session" },
+                          attrs: { "data-devtool": "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.openDrawer("session", "")
+                            }
+                          }
+                        },
+                        [
+                          _c("svg", { attrs: { role: "img" } }, [
+                            _c("use", { attrs: { href: "#devtool-session" } })
+                          ]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("Session")])
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c(
+                        "button",
+                        {
+                          class: { active: _vm.section === "site" },
+                          attrs: { "data-devtool": "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.openDrawer("site", "")
+                            }
+                          }
+                        },
+                        [
+                          _c("svg", { attrs: { role: "img" } }, [
+                            _c("use", { attrs: { href: "#devtool-site" } })
+                          ]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("Site")])
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c(
+                        "button",
+                        {
+                          class: { active: _vm.section === "user" },
+                          attrs: { "data-devtool": "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.openDrawer("user", "")
+                            }
+                          }
+                        },
+                        [
+                          _c("svg", { attrs: { role: "img" } }, [
+                            _c("use", { attrs: { href: "#devtool-user" } })
+                          ]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("User")])
+                        ]
+                      )
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
                 _c("transition", { attrs: { name: "fade" } }, [
-                  _vm.popovers.preferences
+                  _vm.section === "basket"
                     ? _c(
                         "div",
                         {
-                          ref: "popoverPreferences",
-                          staticClass: "popover preferences",
-                          attrs: { id: "popoverPreferences", role: "tooltip" }
+                          staticClass: "devtool-drawer-section section-basket"
                         },
                         [
-                          _c("div", { staticClass: "table" }, [
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#debug" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "debug")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Debug")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count debug" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#error" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "error")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Error")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count error" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#fatal" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "fatal")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Fatal")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count fatal" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#info" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "info")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Info")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count info" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#log" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "log")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Log")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count log" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#warn" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "warn")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Warn")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count warn" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            )
-                          ])
+                          _vm._v(
+                            "\n                    Basket\n                "
+                          )
                         ]
                       )
                     : _vm._e()
                 ]),
                 _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    directives: [
-                      {
-                        name: "tooltip",
-                        rawName: "v-tooltip",
-                        value: {
-                          content: "Preferences",
-                          classes: _vm.popovers.preferences
-                            ? "disabled"
-                            : "enabled",
-                          delay: { show: _vm.tooltipDelay }
-                        },
-                        expression:
-                          "{ content: 'Preferences', classes: popovers.preferences ? 'disabled' : 'enabled', delay: { show: tooltipDelay } }"
-                      }
-                    ],
-                    ref: "popoverButtonPreferences",
-                    staticClass: "toolbar-button preferences no-count",
-                    class: { active: _vm.popovers.preferences },
-                    attrs: {
-                      id: "popoverButtonPreferences",
-                      "aria-describedby": "popoverPreferences"
-                    },
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.togglePopover("preferences")
-                      }
-                    }
-                  },
-                  [
-                    _c(
-                      "svg",
-                      {
-                        attrs: {
-                          xmlns: "http://www.w3.org/2000/svg",
-                          viewBox: "0 0 46 44"
-                        }
-                      },
-                      [
-                        _c(
-                          "g",
-                          {
-                            attrs: {
-                              fill: "none",
-                              stroke: "#FFFFFF",
-                              "stroke-linecap": "round",
-                              "stroke-linejoin": "round",
-                              "stroke-width": "4"
-                            }
-                          },
-                          [
-                            _c("path", {
-                              attrs: {
-                                d:
-                                  "M2 6h8M10 2h12v8H10zM22 6h22M44 22h-8M36 26H24v-8h12zM24 22H2M2 38h8M10 34h12v8H10zM22 38h22"
-                              }
-                            })
-                          ]
-                        )
-                      ]
-                    )
-                  ]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "toolbar-button-wrapper" },
-              [
                 _c("transition", { attrs: { name: "fade" } }, [
-                  _vm.popovers.session
+                  _vm.section === "geolocation"
                     ? _c(
                         "div",
                         {
-                          ref: "popoverSession",
-                          staticClass: "popover session",
-                          attrs: { id: "popoverSession", role: "tooltip" }
+                          staticClass:
+                            "devtool-drawer-section section-geolocation"
                         },
                         [
-                          _c("div", { staticClass: "table" }, [
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#debug" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "debug")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Debug")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count debug" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#error" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "error")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Error")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count error" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#fatal" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "fatal")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Fatal")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count fatal" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#info" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "info")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Info")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count info" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#log" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "log")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Log")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count log" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#warn" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "warn")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Warn")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count warn" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            )
-                          ])
+                          _vm._v(
+                            "\n                    Geolocation\n                "
+                          )
                         ]
                       )
                     : _vm._e()
                 ]),
                 _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    directives: [
-                      {
-                        name: "tooltip",
-                        rawName: "v-tooltip",
-                        value: {
-                          content: "Session",
-                          classes: _vm.popovers.session
-                            ? "disabled"
-                            : "enabled",
-                          delay: { show: _vm.tooltipDelay }
-                        },
-                        expression:
-                          "{ content: 'Session', classes: popovers.session ? 'disabled' : 'enabled', delay: { show: tooltipDelay } }"
-                      }
-                    ],
-                    ref: "popoverButtonSession",
-                    staticClass: "toolbar-button session no-count",
-                    class: { active: _vm.popovers.session },
-                    attrs: {
-                      id: "popoverButtonSession",
-                      "aria-describedby": "popoverSession"
-                    },
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.togglePopover("session")
-                      }
-                    }
-                  },
-                  [
-                    _c(
-                      "svg",
-                      {
-                        attrs: {
-                          xmlns: "http://www.w3.org/2000/svg",
-                          viewBox: "0 0 41.92 41.92"
-                        }
-                      },
-                      [
-                        _c(
-                          "g",
-                          {
-                            attrs: {
-                              fill: "none",
-                              stroke: "#FFFFFF",
-                              "stroke-linecap": "round"
-                            }
-                          },
-                          [
-                            _c("circle", {
-                              attrs: {
-                                cx: "20.96",
-                                cy: "20.96",
-                                r: "19",
-                                "stroke-miterlimit": "10",
-                                "stroke-width": "3.92"
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("path", {
-                              attrs: {
-                                "stroke-linejoin": "round",
-                                "stroke-width": "4",
-                                d: "M19.96 12.46v9.22l5.34 3.72"
-                              }
-                            })
-                          ]
-                        )
-                      ]
-                    )
-                  ]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "toolbar-button-wrapper" },
-              [
                 _c("transition", { attrs: { name: "fade" } }, [
-                  _vm.popovers.site
+                  _vm.section === "messages"
                     ? _c(
                         "div",
                         {
-                          ref: "popoverSite",
-                          staticClass: "popover site",
-                          attrs: { id: "popoverSite", role: "tooltip" }
+                          staticClass: "devtool-drawer-section section-messages"
                         },
                         [
-                          _c("div", { staticClass: "table" }, [
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#debug" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "debug")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Debug")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count debug" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#error" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "error")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Error")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count error" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#fatal" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "fatal")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Fatal")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count fatal" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#info" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "info")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Info")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count info" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#log" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "log")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Log")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count log" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#warn" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "warn")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Warn")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count warn" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            )
-                          ])
+                          _vm._v(
+                            "\n                    Messages\n                "
+                          )
                         ]
                       )
                     : _vm._e()
                 ]),
                 _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    directives: [
-                      {
-                        name: "tooltip",
-                        rawName: "v-tooltip",
-                        value: {
-                          content: "Site",
-                          classes: _vm.popovers.site ? "disabled" : "enabled",
-                          delay: { show: _vm.tooltipDelay }
-                        },
-                        expression:
-                          "{ content: 'Site', classes: popovers.site ? 'disabled' : 'enabled', delay: { show: tooltipDelay } }"
-                      }
-                    ],
-                    ref: "popoverButtonSite",
-                    staticClass: "toolbar-button site no-count",
-                    class: { active: _vm.popovers.site },
-                    attrs: {
-                      id: "popoverButtonSite",
-                      "aria-describedby": "popoverSite"
-                    },
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.togglePopover("site")
-                      }
-                    }
-                  },
-                  [
-                    _c(
-                      "svg",
-                      {
-                        attrs: {
-                          xmlns: "http://www.w3.org/2000/svg",
-                          viewBox: "0 0 40 46"
-                        }
-                      },
-                      [
-                        _c(
-                          "g",
-                          {
-                            attrs: {
-                              fill: "none",
-                              stroke: "#FFFFFF",
-                              "stroke-linejoin": "round",
-                              "stroke-width": "4"
-                            }
-                          },
-                          [
-                            _c("path", {
-                              attrs: {
-                                d:
-                                  "M13 44H2.88a.78.78 0 01-.88-.74V18M38 19v24.26a.78.78 0 01-.88.74H26"
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("path", {
-                              attrs: {
-                                "stroke-linecap": "round",
-                                d: "M38 18.89L20 2 2 18.43"
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("path", { attrs: { d: "M14 46V31h12v15" } })
-                          ]
-                        )
-                      ]
-                    )
-                  ]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "toolbar-button-wrapper" },
-              [
                 _c("transition", { attrs: { name: "fade" } }, [
-                  _vm.popovers.user
+                  _vm.section === "preferences"
                     ? _c(
                         "div",
                         {
-                          ref: "popoverUser",
-                          staticClass: "popover user",
-                          attrs: { id: "popoverUser", role: "tooltip" }
+                          staticClass:
+                            "devtool-drawer-section section-preferences"
                         },
                         [
-                          _c("div", { staticClass: "table" }, [
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#debug" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "debug")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Debug")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count debug" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#error" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "error")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Error")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count error" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#fatal" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "fatal")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Fatal")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count fatal" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#info" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "info")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Info")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count info" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#log" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "log")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Log")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count log" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#warn" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.openDrawer("debugger", "warn")
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", { staticClass: "label" }, [
-                                  _vm._v("Warn")
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "count warn" }, [
-                                  _vm._v("0")
-                                ])
-                              ]
-                            )
-                          ])
+                          _vm._v(
+                            "\n                    Preferences\n                "
+                          )
                         ]
                       )
                     : _vm._e()
                 ]),
                 _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    directives: [
-                      {
-                        name: "tooltip",
-                        rawName: "v-tooltip",
-                        value: {
-                          content: "User",
-                          classes: _vm.popovers.user ? "disabled" : "enabled",
-                          delay: { show: _vm.tooltipDelay }
+                _c("transition", { attrs: { name: "fade" } }, [
+                  _vm.section === "session"
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "devtool-drawer-section section-session"
                         },
-                        expression:
-                          "{ content: 'User', classes: popovers.user ? 'disabled' : 'enabled', delay: { show: tooltipDelay } }"
-                      }
-                    ],
-                    ref: "popoverButtonUser",
-                    staticClass: "toolbar-button user no-count",
-                    class: { active: _vm.popovers.user },
-                    attrs: {
-                      id: "popoverButtonUser",
-                      "aria-describedby": "popoverUser"
-                    },
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.togglePopover("user")
-                      }
-                    }
-                  },
-                  [
-                    _c(
-                      "svg",
-                      {
-                        attrs: {
-                          xmlns: "http://www.w3.org/2000/svg",
-                          viewBox: "0 0 44 46.99"
-                        }
-                      },
-                      [
-                        _c(
-                          "g",
-                          {
-                            attrs: {
-                              fill: "none",
-                              stroke: "#FFFFFF",
-                              "stroke-linecap": "round",
-                              "stroke-miterlimit": "10",
-                              "stroke-width": "4"
-                            }
-                          },
-                          [
-                            _c("circle", {
-                              attrs: { cx: "22", cy: "13", r: "11" }
-                            }),
-                            _vm._v(" "),
-                            _c("path", {
-                              attrs: {
-                                d:
-                                  "M42 36.74v6.07c0 .58-.2 2.18-.78 2.18H3.28C2.71 45 2 43.39 2 42.81v-6.57c0-6.63 9-12 20-12s20 5.37 20 12z"
-                              }
-                            })
-                          ]
-                        )
-                      ]
-                    )
-                  ]
-                )
+                        [
+                          _vm._v(
+                            "\n                    Session\n                "
+                          )
+                        ]
+                      )
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("transition", { attrs: { name: "fade" } }, [
+                  _vm.section === "site"
+                    ? _c(
+                        "div",
+                        { staticClass: "devtool-drawer-section section-site" },
+                        [_vm._v("\n                    Site\n                ")]
+                      )
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("transition", { attrs: { name: "fade" } }, [
+                  _vm.section === "user"
+                    ? _c(
+                        "div",
+                        { staticClass: "devtool-drawer-section section-user" },
+                        [_vm._v("\n                    User\n                ")]
+                      )
+                    : _vm._e()
+                ])
               ],
               1
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
+            )
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("transition", { attrs: { name: "fade" } }, [
+        _vm.toolbarShown && !_vm.drawerOpen
+          ? _c(
+              "div",
               {
-                directives: [
-                  {
-                    name: "tooltip",
-                    rawName: "v-tooltip",
-                    value: {
-                      content: "Hide Toolbar",
-                      delay: { show: _vm.tooltipDelay }
-                    },
-                    expression:
-                      "{ content: 'Hide Toolbar', delay: { show: tooltipDelay } }"
-                  }
-                ],
-                staticClass: "hide-toolbar",
+                staticClass: "devtool-toolbar",
                 on: {
                   click: function($event) {
-                    return _vm.closeToolbar()
+                    if ($event.target !== $event.currentTarget) {
+                      return null
+                    }
+                    return _vm.resetToolbar()
                   }
                 }
               },
               [
                 _c(
-                  "svg",
-                  {
-                    attrs: {
-                      xmlns: "http://www.w3.org/2000/svg",
-                      viewBox: "0 0 33.84 33.67"
-                    }
-                  },
+                  "div",
+                  { staticClass: "toolbar-button-wrapper" },
                   [
+                    _c("transition", { attrs: { name: "fade" } }, [
+                      _vm.popovers.basket
+                        ? _c(
+                            "div",
+                            {
+                              ref: "popoverBasket",
+                              staticClass: "devtool-popover basket",
+                              attrs: { id: "popoverBasket", role: "tooltip" }
+                            },
+                            [_c("div", { staticClass: "table" })]
+                          )
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
                     _c(
-                      "g",
+                      "button",
                       {
+                        directives: [
+                          {
+                            name: "tooltip",
+                            rawName: "v-tooltip",
+                            value: {
+                              content: "Basket",
+                              classes: _vm.popovers.basket
+                                ? "devtool-tooltip-disabled"
+                                : "devtool-tooltip",
+                              delay: { show: _vm.tooltipDelay }
+                            },
+                            expression:
+                              "{ content: 'Basket', classes: popovers.basket ? 'devtool-tooltip-disabled' : 'devtool-tooltip', delay: { show: tooltipDelay } }"
+                          }
+                        ],
+                        ref: "popoverButtonBasket",
+                        staticClass: "toolbar-button basket",
+                        class: {
+                          active: _vm.popovers.basket,
+                          "no-count": _vm.basketCount === 0
+                        },
                         attrs: {
-                          fill: "none",
-                          stroke: "#FFFFFF",
-                          "stroke-linecap": "round",
-                          "stroke-miterlimit": "10",
-                          "stroke-width": "4"
+                          id: "popoverButtonBasket",
+                          "aria-describedby": "popoverBasket",
+                          "data-devtool": ""
+                        },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.togglePopover("basket")
+                          }
                         }
                       },
                       [
-                        _c("path", {
-                          attrs: { d: "M2 2l29.84 29.67M31.84 2L2 31.67" }
-                        })
+                        _vm.basketCount > 0
+                          ? _c("span", [_vm._v(_vm._s(_vm.basketCount))])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c("svg", { attrs: { role: "img" } }, [
+                          _c("use", { attrs: { href: "#devtool-basket" } })
+                        ])
                       ]
                     )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "toolbar-button-wrapper" },
+                  [
+                    _c("transition", { attrs: { name: "fade" } }, [
+                      _vm.popovers.geolocation
+                        ? _c(
+                            "div",
+                            {
+                              ref: "popoverGeolocation",
+                              staticClass: "devtool-popover geolocation",
+                              attrs: {
+                                id: "popoverGeolocation",
+                                role: "tooltip"
+                              }
+                            },
+                            [_c("div", { staticClass: "table" })]
+                          )
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "tooltip",
+                            rawName: "v-tooltip",
+                            value: {
+                              content: "Geolocation",
+                              classes: _vm.popovers.geolocation
+                                ? "devtool-tooltip-disabled"
+                                : "devtool-tooltip",
+                              delay: { show: _vm.tooltipDelay }
+                            },
+                            expression:
+                              "{ content: 'Geolocation', classes: popovers.geolocation ? 'devtool-tooltip-disabled' : 'devtool-tooltip', delay: { show: tooltipDelay } }"
+                          }
+                        ],
+                        ref: "popoverButtonGeolocation",
+                        staticClass: "toolbar-button geolocation no-count",
+                        class: { active: _vm.popovers.geolocation },
+                        attrs: {
+                          id: "popoverButtonGeolocation",
+                          "aria-describedby": "popoverGeolocation",
+                          "data-devtool": ""
+                        },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.togglePopover("geolocation")
+                          }
+                        }
+                      },
+                      [
+                        _c("svg", { attrs: { role: "img" } }, [
+                          _c("use", { attrs: { href: "#devtool-geolocation" } })
+                        ])
+                      ]
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "toolbar-button-wrapper" },
+                  [
+                    _c("transition", { attrs: { name: "fade" } }, [
+                      _vm.popovers.messages
+                        ? _c(
+                            "div",
+                            {
+                              ref: "popoverMessages",
+                              staticClass: "devtool-popover messages",
+                              attrs: { id: "popoverMessages", role: "tooltip" }
+                            },
+                            [
+                              _c("div", { staticClass: "table" }, [
+                                _c(
+                                  "button",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "tooltip",
+                                        rawName: "v-tooltip.right",
+                                        value: {
+                                          content:
+                                            _vm.messageCount.debug > 0
+                                              ? "View Debug Messages"
+                                              : "No Debug Messages",
+                                          classes: "devtool-tooltip",
+                                          delay: { show: _vm.tooltipDelay }
+                                        },
+                                        expression:
+                                          "{ content: messageCount.debug > 0 ? 'View Debug Messages' : 'No Debug Messages', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }",
+                                        modifiers: { right: true }
+                                      }
+                                    ],
+                                    class: {
+                                      empty: _vm.messageCount.debug === 0
+                                    },
+                                    attrs: { "data-devtool": "" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.openDrawer(
+                                          "messages",
+                                          "debug"
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("span", { staticClass: "label" }, [
+                                      _vm._v("Debug")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      { staticClass: "count notice-debug" },
+                                      [_vm._v(_vm._s(_vm.messageCount.debug))]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "tooltip",
+                                        rawName: "v-tooltip.right",
+                                        value: {
+                                          content:
+                                            _vm.messageCount.error > 0
+                                              ? "View Error Messages"
+                                              : "No Error Messages",
+                                          classes: "devtool-tooltip",
+                                          delay: { show: _vm.tooltipDelay }
+                                        },
+                                        expression:
+                                          "{ content: messageCount.error > 0 ? 'View Error Messages' : 'No Error Messages', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }",
+                                        modifiers: { right: true }
+                                      }
+                                    ],
+                                    class: {
+                                      empty: _vm.messageCount.error === 0
+                                    },
+                                    attrs: { "data-devtool": "" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.openDrawer(
+                                          "messages",
+                                          "error"
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("span", { staticClass: "label" }, [
+                                      _vm._v("Error")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      { staticClass: "count notice-error" },
+                                      [_vm._v(_vm._s(_vm.messageCount.error))]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "tooltip",
+                                        rawName: "v-tooltip.right",
+                                        value: {
+                                          content:
+                                            _vm.messageCount.fatal > 0
+                                              ? "View Fatal Messages"
+                                              : "No Fatal Messages",
+                                          classes: "devtool-tooltip",
+                                          delay: { show: _vm.tooltipDelay }
+                                        },
+                                        expression:
+                                          "{ content: messageCount.fatal > 0 ? 'View Fatal Messages' : 'No Fatal Messages', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }",
+                                        modifiers: { right: true }
+                                      }
+                                    ],
+                                    class: {
+                                      empty: _vm.messageCount.fatal === 0
+                                    },
+                                    attrs: { "data-devtool": "" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.openDrawer(
+                                          "messages",
+                                          "fatal"
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("span", { staticClass: "label" }, [
+                                      _vm._v("Fatal")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      { staticClass: "count notice-fatal" },
+                                      [_vm._v(_vm._s(_vm.messageCount.fatal))]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "tooltip",
+                                        rawName: "v-tooltip.right",
+                                        value: {
+                                          content:
+                                            _vm.messageCount.info > 0
+                                              ? "View Info Messages"
+                                              : "No Info Messages",
+                                          classes: "devtool-tooltip",
+                                          delay: { show: _vm.tooltipDelay }
+                                        },
+                                        expression:
+                                          "{ content: messageCount.info > 0 ? 'View Info Messages' : 'No Info Messages', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }",
+                                        modifiers: { right: true }
+                                      }
+                                    ],
+                                    class: {
+                                      empty: _vm.messageCount.info === 0
+                                    },
+                                    attrs: { "data-devtool": "" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.openDrawer(
+                                          "messages",
+                                          "info"
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("span", { staticClass: "label" }, [
+                                      _vm._v("Info")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      { staticClass: "count notice-info" },
+                                      [_vm._v(_vm._s(_vm.messageCount.info))]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "tooltip",
+                                        rawName: "v-tooltip.right",
+                                        value: {
+                                          content:
+                                            _vm.messageCount.log > 0
+                                              ? "View Log Messages"
+                                              : "No Log Messages",
+                                          classes: "devtool-tooltip",
+                                          delay: { show: _vm.tooltipDelay }
+                                        },
+                                        expression:
+                                          "{ content: messageCount.log > 0 ? 'View Log Messages' : 'No Log Messages', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }",
+                                        modifiers: { right: true }
+                                      }
+                                    ],
+                                    class: {
+                                      empty: _vm.messageCount.log === 0
+                                    },
+                                    attrs: { "data-devtool": "" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.openDrawer("messages", "log")
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("span", { staticClass: "label" }, [
+                                      _vm._v("Log")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      { staticClass: "count notice-log" },
+                                      [_vm._v(_vm._s(_vm.messageCount.log))]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "tooltip",
+                                        rawName: "v-tooltip.right",
+                                        value: {
+                                          content:
+                                            _vm.messageCount.warn > 0
+                                              ? "View Warn Messages"
+                                              : "No Warn Messages",
+                                          classes: "devtool-tooltip",
+                                          delay: { show: _vm.tooltipDelay }
+                                        },
+                                        expression:
+                                          "{ content: messageCount.warn > 0 ? 'View Warn Messages' : 'No Warn Messages', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }",
+                                        modifiers: { right: true }
+                                      }
+                                    ],
+                                    class: {
+                                      empty: _vm.messageCount.warn === 0
+                                    },
+                                    attrs: { "data-devtool": "" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.openDrawer(
+                                          "messages",
+                                          "warn"
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("span", { staticClass: "label" }, [
+                                      _vm._v("Warn")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      { staticClass: "count notice-warn" },
+                                      [_vm._v(_vm._s(_vm.messageCount.warn))]
+                                    )
+                                  ]
+                                )
+                              ])
+                            ]
+                          )
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "tooltip",
+                            rawName: "v-tooltip",
+                            value: {
+                              content: "Messages",
+                              classes: _vm.popovers.messages
+                                ? "devtool-tooltip-disabled"
+                                : "devtool-tooltip",
+                              delay: { show: _vm.tooltipDelay }
+                            },
+                            expression:
+                              "{ content: 'Messages', classes: popovers.messages ? 'devtool-tooltip-disabled' : 'devtool-tooltip', delay: { show: tooltipDelay } }"
+                          }
+                        ],
+                        ref: "popoverButtonMessages",
+                        staticClass: "toolbar-button messages",
+                        class: [
+                          {
+                            active: _vm.popovers.messages,
+                            "no-count": _vm.messageCount.total === 0
+                          },
+                          _vm.messageClass
+                        ],
+                        attrs: {
+                          id: "popoverButtonMessages",
+                          "aria-describedby": "popoverMessages",
+                          "data-devtool": ""
+                        },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.togglePopover("messages")
+                          }
+                        }
+                      },
+                      [
+                        _vm.messageCount.total > 0
+                          ? _c("span", [_vm._v(_vm._s(_vm.messageCount.total))])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c("svg", { attrs: { role: "img" } }, [
+                          _c("use", { attrs: { href: "#devtool-messages" } })
+                        ])
+                      ]
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "toolbar-button-wrapper" },
+                  [
+                    _c("transition", { attrs: { name: "fade" } }, [
+                      _vm.popovers.preferences
+                        ? _c(
+                            "div",
+                            {
+                              ref: "popoverPreferences",
+                              staticClass: "devtool-popover preferences",
+                              attrs: {
+                                id: "popoverPreferences",
+                                role: "tooltip"
+                              }
+                            },
+                            [_c("div", { staticClass: "table" })]
+                          )
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "tooltip",
+                            rawName: "v-tooltip",
+                            value: {
+                              content: "Preferences",
+                              classes: _vm.popovers.preferences
+                                ? "devtool-tooltip-disabled"
+                                : "devtool-tooltip",
+                              delay: { show: _vm.tooltipDelay }
+                            },
+                            expression:
+                              "{ content: 'Preferences', classes: popovers.preferences ? 'devtool-tooltip-disabled' : 'devtool-tooltip', delay: { show: tooltipDelay } }"
+                          }
+                        ],
+                        ref: "popoverButtonPreferences",
+                        staticClass: "toolbar-button preferences no-count",
+                        class: { active: _vm.popovers.preferences },
+                        attrs: {
+                          id: "popoverButtonPreferences",
+                          "aria-describedby": "popoverPreferences",
+                          "data-devtool": ""
+                        },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.togglePopover("preferences")
+                          }
+                        }
+                      },
+                      [
+                        _c("svg", { attrs: { role: "img" } }, [
+                          _c("use", { attrs: { href: "#devtool-preferences" } })
+                        ])
+                      ]
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "toolbar-button-wrapper" },
+                  [
+                    _c("transition", { attrs: { name: "fade" } }, [
+                      _vm.popovers.session
+                        ? _c(
+                            "div",
+                            {
+                              ref: "popoverSession",
+                              staticClass: "devtool-popover session",
+                              attrs: { id: "popoverSession", role: "tooltip" }
+                            },
+                            [_c("div", { staticClass: "table" })]
+                          )
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "tooltip",
+                            rawName: "v-tooltip",
+                            value: {
+                              content: "Session",
+                              classes: _vm.popovers.session
+                                ? "devtool-tooltip-disabled"
+                                : "devtool-tooltip",
+                              delay: { show: _vm.tooltipDelay }
+                            },
+                            expression:
+                              "{ content: 'Session', classes: popovers.session ? 'devtool-tooltip-disabled' : 'devtool-tooltip', delay: { show: tooltipDelay } }"
+                          }
+                        ],
+                        ref: "popoverButtonSession",
+                        staticClass: "toolbar-button session no-count",
+                        class: { active: _vm.popovers.session },
+                        attrs: {
+                          id: "popoverButtonSession",
+                          "aria-describedby": "popoverSession",
+                          "data-devtool": ""
+                        },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.togglePopover("session")
+                          }
+                        }
+                      },
+                      [
+                        _c("svg", { attrs: { role: "img" } }, [
+                          _c("use", { attrs: { href: "#devtool-session" } })
+                        ])
+                      ]
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "toolbar-button-wrapper" },
+                  [
+                    _c("transition", { attrs: { name: "fade" } }, [
+                      _vm.popovers.site
+                        ? _c(
+                            "div",
+                            {
+                              ref: "popoverSite",
+                              staticClass: "devtool-popover site",
+                              attrs: { id: "popoverSite", role: "tooltip" }
+                            },
+                            [_c("div", { staticClass: "table" })]
+                          )
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "tooltip",
+                            rawName: "v-tooltip",
+                            value: {
+                              content: "Site",
+                              classes: _vm.popovers.site
+                                ? "devtool-tooltip-disabled"
+                                : "devtool-tooltip",
+                              delay: { show: _vm.tooltipDelay }
+                            },
+                            expression:
+                              "{ content: 'Site', classes: popovers.site ? 'devtool-tooltip-disabled' : 'devtool-tooltip', delay: { show: tooltipDelay } }"
+                          }
+                        ],
+                        ref: "popoverButtonSite",
+                        staticClass: "toolbar-button site no-count",
+                        class: { active: _vm.popovers.site },
+                        attrs: {
+                          id: "popoverButtonSite",
+                          "aria-describedby": "popoverSite",
+                          "data-devtool": ""
+                        },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.togglePopover("site")
+                          }
+                        }
+                      },
+                      [
+                        _c("svg", { attrs: { role: "img" } }, [
+                          _c("use", { attrs: { href: "#devtool-site" } })
+                        ])
+                      ]
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "toolbar-button-wrapper" },
+                  [
+                    _c("transition", { attrs: { name: "fade" } }, [
+                      _vm.popovers.user
+                        ? _c(
+                            "div",
+                            {
+                              ref: "popoverUser",
+                              staticClass: "devtool-popover user",
+                              attrs: { id: "popoverUser", role: "tooltip" }
+                            },
+                            [_c("div", { staticClass: "table" })]
+                          )
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "tooltip",
+                            rawName: "v-tooltip",
+                            value: {
+                              content: "User",
+                              classes: _vm.popovers.user
+                                ? "devtool-tooltip-disabled"
+                                : "devtool-tooltip",
+                              delay: { show: _vm.tooltipDelay }
+                            },
+                            expression:
+                              "{ content: 'User', classes: popovers.user ? 'devtool-tooltip-disabled' : 'devtool-tooltip', delay: { show: tooltipDelay } }"
+                          }
+                        ],
+                        ref: "popoverButtonUser",
+                        staticClass: "toolbar-button user no-count",
+                        class: { active: _vm.popovers.user },
+                        attrs: {
+                          id: "popoverButtonUser",
+                          "aria-describedby": "popoverUser",
+                          "data-devtool": ""
+                        },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.togglePopover("user")
+                          }
+                        }
+                      },
+                      [
+                        _c("svg", { attrs: { role: "img" } }, [
+                          _c("use", { attrs: { href: "#devtool-user" } })
+                        ])
+                      ]
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    directives: [
+                      {
+                        name: "tooltip",
+                        rawName: "v-tooltip",
+                        value: {
+                          content: "Hide Toolbar",
+                          classes: "devtool-tooltip",
+                          delay: { show: _vm.tooltipDelay }
+                        },
+                        expression:
+                          "{ content: 'Hide Toolbar', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }"
+                      }
+                    ],
+                    staticClass: "hide-toolbar",
+                    attrs: { "data-devtool": "" },
+                    on: {
+                      click: function($event) {
+                        return _vm.closeToolbar()
+                      }
+                    }
+                  },
+                  [
+                    _c("svg", { attrs: { role: "img" } }, [
+                      _c("use", { attrs: { href: "#devtool-close" } })
+                    ])
                   ]
                 )
               ]
             )
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("transition", { attrs: { name: "fade" } }, [
+        !_vm.toolbarShown && !_vm.drawerOpen
+          ? _c("button", {
+              directives: [
+                {
+                  name: "tooltip",
+                  rawName: "v-tooltip",
+                  value: {
+                    content: "Show Toolbar",
+                    classes: "devtool-tooltip",
+                    delay: { show: _vm.tooltipDelay }
+                  },
+                  expression:
+                    "{ content: 'Show Toolbar', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }"
+                }
+              ],
+              staticClass: "devtool-show-toolbar",
+              attrs: { "data-devtool": "" },
+              on: {
+                click: function($event) {
+                  return _vm.openToolbar()
+                }
+              }
+            })
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("svg", { attrs: { xmlns: "http://www.w3.org/2000/svg" } }, [
+        _c(
+          "symbol",
+          { attrs: { id: "devtool-basket", viewBox: "0 0 48.12 47.06" } },
+          [
+            _c(
+              "g",
+              {
+                attrs: {
+                  fill: "none",
+                  stroke: "#FFFFFF",
+                  "stroke-miterlimit": "10"
+                }
+              },
+              [
+                _c("ellipse", {
+                  attrs: {
+                    cx: "19.41",
+                    cy: "41.45",
+                    rx: "3.68",
+                    ry: "3.78",
+                    "stroke-width": "3.65"
+                  }
+                }),
+                _vm._v(" "),
+                _c("ellipse", {
+                  attrs: {
+                    cx: "35.07",
+                    cy: "41.45",
+                    rx: "3.68",
+                    ry: "3.78",
+                    "stroke-width": "3.65"
+                  }
+                }),
+                _vm._v(" "),
+                _c("path", {
+                  attrs: {
+                    d:
+                      "M10 8h35.41c.52 0 .82.07.67.55L40.68 26c-.15.47-.55 1.05-.91 1.05H15.63c-.36 0-.76-.72-.91-1.21L9.32 8.73C9.17 8.25 9.47 8 10 8z",
+                    "stroke-width": "4"
+                  }
+                }),
+                _vm._v(" "),
+                _c("path", {
+                  attrs: {
+                    "stroke-linecap": "round",
+                    "stroke-width": "3.65",
+                    d:
+                      "M9.28 7.86L7.44 3.23M15.73 26.78c-.34 0-.73.39-.88.88L12 35.3"
+                  }
+                }),
+                _vm._v(" "),
+                _c("path", {
+                  attrs: {
+                    "stroke-linecap": "round",
+                    "stroke-width": "4",
+                    d: "M2 2h5M12 36h29"
+                  }
+                })
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "symbol",
+          { attrs: { id: "devtool-close", viewBox: "0 0 33.84 33.67" } },
+          [
+            _c(
+              "g",
+              {
+                attrs: {
+                  fill: "none",
+                  stroke: "#FFFFFF",
+                  "stroke-linecap": "round",
+                  "stroke-miterlimit": "10",
+                  "stroke-width": "4"
+                }
+              },
+              [_c("path", { attrs: { d: "M2 2l29.84 29.67M31.84 2L2 31.67" } })]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "symbol",
+          { attrs: { id: "devtool-geolocation", viewBox: "0 0 36 46" } },
+          [
+            _c(
+              "g",
+              {
+                attrs: {
+                  fill: "none",
+                  stroke: "#FFFF",
+                  "stroke-linecap": "round",
+                  "stroke-linejoin": "round",
+                  "stroke-width": "4"
+                }
+              },
+              [
+                _c("path", {
+                  attrs: {
+                    d: "M18 2a15.82 15.82 0 0116 15.63A15.34 15.34 0 0130.83 27"
+                  }
+                }),
+                _vm._v(" "),
+                _c("circle", { attrs: { cx: "18", cy: "17.63", r: "5" } }),
+                _vm._v(" "),
+                _c("path", {
+                  attrs: {
+                    d:
+                      "M18 44l12.83-17.03M18 2A15.82 15.82 0 002 17.63 15.34 15.34 0 005.17 27M18 44L5.17 26.97"
+                  }
+                })
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "symbol",
+          { attrs: { id: "devtool-messages", viewBox: "0 0 46 42.83" } },
+          [
+            _c(
+              "g",
+              {
+                attrs: {
+                  fill: "none",
+                  stroke: "#FFFFFF",
+                  "stroke-linecap": "round",
+                  "stroke-linejoin": "round",
+                  "stroke-width": "4"
+                }
+              },
+              [
+                _c("path", {
+                  attrs: {
+                    d:
+                      "M15 32.08H3c-.55 0-1-.81-1-1.37V2.34c0-.56.45-.26 1-.26h40c.55 0 1-.3 1 .26v28.37c0 .56-.45 1.37-1 1.37H29M22 40.83l6.63-8.11M22 40.83l-6.62-8.11"
+                  }
+                })
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "symbol",
+          { attrs: { id: "devtool-preferences", viewBox: "0 0 46 44" } },
+          [
+            _c(
+              "g",
+              {
+                attrs: {
+                  fill: "none",
+                  stroke: "#FFFFFF",
+                  "stroke-linecap": "round",
+                  "stroke-linejoin": "round",
+                  "stroke-width": "4"
+                }
+              },
+              [
+                _c("path", {
+                  attrs: {
+                    d:
+                      "M2 6h8M10 2h12v8H10zM22 6h22M44 22h-8M36 26H24v-8h12zM24 22H2M2 38h8M10 34h12v8H10zM22 38h22"
+                  }
+                })
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "symbol",
+          { attrs: { id: "devtool-session", viewBox: "0 0 41.92 41.92" } },
+          [
+            _c(
+              "g",
+              {
+                attrs: {
+                  fill: "none",
+                  stroke: "#FFFFFF",
+                  "stroke-linecap": "round"
+                }
+              },
+              [
+                _c("circle", {
+                  attrs: {
+                    cx: "20.96",
+                    cy: "20.96",
+                    r: "19",
+                    "stroke-miterlimit": "10",
+                    "stroke-width": "3.92"
+                  }
+                }),
+                _vm._v(" "),
+                _c("path", {
+                  attrs: {
+                    "stroke-linejoin": "round",
+                    "stroke-width": "4",
+                    d: "M19.96 12.46v9.22l5.34 3.72"
+                  }
+                })
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c("symbol", { attrs: { id: "devtool-site", viewBox: "0 0 40 46" } }, [
+          _c(
+            "g",
+            {
+              attrs: {
+                fill: "none",
+                stroke: "#FFFFFF",
+                "stroke-linejoin": "round",
+                "stroke-width": "4"
+              }
+            },
+            [
+              _c("path", {
+                attrs: {
+                  d:
+                    "M13 44H2.88a.78.78 0 01-.88-.74V18M38 19v24.26a.78.78 0 01-.88.74H26"
+                }
+              }),
+              _vm._v(" "),
+              _c("path", {
+                attrs: {
+                  "stroke-linecap": "round",
+                  d: "M38 18.89L20 2 2 18.43"
+                }
+              }),
+              _vm._v(" "),
+              _c("path", { attrs: { d: "M14 46V31h12v15" } })
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _c(
+          "symbol",
+          { attrs: { id: "devtool-user", viewBox: "0 0 44 46.99" } },
+          [
+            _c(
+              "g",
+              {
+                attrs: {
+                  fill: "none",
+                  stroke: "#FFFFFF",
+                  "stroke-linecap": "round",
+                  "stroke-miterlimit": "10",
+                  "stroke-width": "4"
+                }
+              },
+              [
+                _c("circle", { attrs: { cx: "22", cy: "13", r: "11" } }),
+                _vm._v(" "),
+                _c("path", {
+                  attrs: {
+                    d:
+                      "M42 36.74v6.07c0 .58-.2 2.18-.78 2.18H3.28C2.71 45 2 43.39 2 42.81v-6.57c0-6.63 9-12 20-12s20 5.37 20 12z"
+                  }
+                })
+              ]
+            )
           ]
         )
-      : _vm._e(),
-    _vm._v(" "),
-    !_vm.toolbarShown && !_vm.drawerOpen
-      ? _c("button", {
-          directives: [
-            {
-              name: "tooltip",
-              rawName: "v-tooltip",
-              value: {
-                content: "Show Toolbar",
-                delay: { show: _vm.tooltipDelay }
-              },
-              expression:
-                "{ content: 'Show Toolbar', delay: { show: tooltipDelay } }"
-            }
-          ],
-          staticClass: "show-toolbar",
-          on: {
-            click: function($event) {
-              return _vm.openToolbar()
-            }
-          }
-        })
-      : _vm._e()
-  ])
+      ])
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

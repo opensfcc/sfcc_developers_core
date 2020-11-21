@@ -1,12 +1,163 @@
 #rvw_dev_tools {
-    .drawer {
+    .devtool-drawer {
         background: #222;
-        position: fixed;
         bottom: 0;
-        left: 0;
-        width: 100vw;
-        height: 50vh;
-        z-index: 99999;
         color: #fff;
+        height: 50vh;
+        left: 0;
+        min-height: 330px;
+        position: fixed;
+        width: 100vw;
+        z-index: 99999;
+
+        .devtool-menu {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: $drawer-sidebar-width;
+            height: 100%;
+            background: #111;
+            text-align: left;
+            color: #FFF;
+
+            ul {
+                display: block;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                margin-top: 10px;
+
+                li {
+                    display: block;
+                    width: 100%;
+                    text-align: left;
+
+                    button {
+                        background: transparent;
+                        border: none;
+                        border-top: 1px solid #111111;
+                        color: #999;
+                        display: block;
+                        font-size: 16px;
+                        height: 44px;
+                        line-height: 44px;
+                        margin: 0;
+                        padding: 0 16px;
+                        position: relative;
+                        text-align: left;
+                        transition: all 0.25s;
+                        width: 100%;
+
+                        span.count {
+                            color: #FFF;
+                            display: inline-block;
+                            font-size: 12px;
+                            height: 20px;
+                            line-height: 20px;
+                            margin: 0;
+                            padding: 0;
+                            position: absolute;
+                            right: 10px;
+                            text-align: center;
+                            top: 12px;
+                            width: 20px;
+                            background: #000;
+                            color: #999;
+                            transition: all 0.25s;
+                        }
+
+                        svg {
+                            height: 16px;
+                            margin-right: 8px;
+                            opacity: 0.25;
+                            position: relative;
+                            top: 2px;
+                            transition: all 0.25s;
+                            width: 16px;
+                        }
+
+                        &:hover, &:focus, &:active, &.active {
+                            background: #222;
+                            color: white;
+                            outline: none;
+
+                            span.count {
+                                color: white;
+
+                                &.notice-debug {
+                                    background: $toolbar-color-debug;
+                                }
+
+                                &.notice-error {
+                                    background: $toolbar-color-error;
+                                }
+
+                                &.notice-fatal {
+                                    background: $toolbar-color-fatal;
+                                }
+
+                                &.notice-info {
+                                    background: $toolbar-color-info;
+                                }
+
+                                &.notice-log {
+                                    background: $toolbar-color-log;
+                                }
+
+                                &.notice-warn {
+                                    background: $toolbar-color-warn;
+                                }
+
+                                &.notice-disabled {
+                                    background: #555;
+                                    color: #EEE;
+                                }
+                            }
+
+                            svg {
+                                opacity: 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .devtool-close-drawer {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            margin: 0;
+            background: transparent;
+            border: none;
+            opacity: 0.33;
+            transition: opacity 0.25s;
+            z-index: 10000;
+
+            svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            &:hover, &:focus, &:active {
+                opacity: 1;
+                outline: none;
+            }
+        }
+
+        .devtool-drawer-section {
+            width: calc(100% - $drawer-sidebar-width);
+            position: absolute;
+            top: 0;
+            left: $drawer-sidebar-width;
+            height: 100%;
+            overflow: auto;
+            padding: 20px;
+            font-size: 16px;
+            color: #FFF;
+        }
     }
 }

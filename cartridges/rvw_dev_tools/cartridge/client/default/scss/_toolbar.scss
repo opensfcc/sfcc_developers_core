@@ -1,5 +1,5 @@
 #rvw_dev_tools {
-    .toolbar {
+    .devtool-toolbar {
         background: #222;
         position: fixed;
         bottom: 0;
@@ -37,8 +37,9 @@
                         top: 4px;
                     }
 
-                    &:hover, &.active {
+                    &:hover, &:focus, &:active, &.active {
                         background: #000;
+                        outline: none;
                     }
 
                     &.no-count {
@@ -50,50 +51,50 @@
                         }
                     }
 
-                    &.debug {
+                    &.notice-debug {
                         background: $toolbar-color-debug;
 
-                        &:hover, &.active {
+                        &:hover, &:focus, &:active, &.active {
                             background: #000;
                         }
                     }
 
-                    &.error {
+                    &.notice-error {
                         background: $toolbar-color-error;
 
-                        &:hover, &.active {
+                        &:hover, &:focus, &:active, &.active {
                             background: #000;
                         }
                     }
 
-                    &.fatal {
+                    &.notice-fatal {
                         background: $toolbar-color-fatal;
 
-                        &:hover, &.active {
+                        &:hover, &:focus, &:active, &.active {
                             background: #000;
                         }
                     }
 
-                    &.info {
+                    &.notice-info {
                         background: $toolbar-color-info;
 
-                        &:hover, &.active {
+                        &:hover, &:focus, &:active, &.active {
                             background: #000;
                         }
                     }
 
-                    &.log {
+                    &.notice-log {
                         background: $toolbar-color-log;
 
-                        &:hover, &.active {
+                        &:hover, &:focus, &:active, &.active {
                             background: #000;
                         }
                     }
 
-                    &.warn {
+                    &.notice-warn {
                         background: $toolbar-color-warn;
 
-                        &:hover, &.active {
+                        &:hover, &:focus, &:active, &.active {
                             background: #000;
                         }
                     }
