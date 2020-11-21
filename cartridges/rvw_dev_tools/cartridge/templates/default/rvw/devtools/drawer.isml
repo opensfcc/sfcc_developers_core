@@ -7,6 +7,7 @@
 
 <!-- RVW Dev Tools Static Assets -->
 <link href="${URLUtils.staticURL('/css/dev_tools.css')}" type="text/css" rel="stylesheet" />
+<script>window.RVW_DevToolsURL = '${dw.web.URLUtils.url("DevTools-GetData").toString()}';</script>
 <script type="text/javascript" src="${URLUtils.staticURL('/js/dev_tools.js')}"></script>
 
 </isif>

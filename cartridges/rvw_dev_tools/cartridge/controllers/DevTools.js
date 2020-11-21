@@ -27,6 +27,7 @@ function GetData() {
 
     const timestamp = request.getHttpParameterMap().get('timestamp').getDoubleValue(0);
     const isConsole = request.getHttpParameterMap().get('console').getBooleanValue(false);
+    const location = request.getGeolocation();
 
     if (System.getInstanceType() === System.PRODUCTION_SYSTEM) {
         sendJSON({
@@ -104,6 +105,7 @@ function GetData() {
     } else {
         sendJSON({
             basket: serialize(basket),
+            geolocation: serialize(location),
             messages: messages,
             preferences: serialize(preferences),
             session: serialize(session),

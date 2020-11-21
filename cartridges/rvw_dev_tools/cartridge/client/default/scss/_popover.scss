@@ -1,92 +1,103 @@
-.popover {
-    box-shadow: rgb(58, 58, 58) 0 0 6px 0;
-    display: inline-block;
-    font-size: 14px;
-    font-weight: normal;
-    padding: 2px;
-    position: absolute;
-    text-align: center;
-    width: auto;
-    z-index: 200000;
-    position: absolute;
-    bottom: 40px;
-    left: 0;
-}
+#rvw_dev_tools {
+    .popover {
+        background: #000;
+        border-radius: 0;
+        border: none;
+        bottom: 40px;
+        color: #FFF;
+        display: inline-block;
+        font-size: 14px;
+        font-weight: normal;
+        left: 0;
+        padding: 0;
+        position: absolute;
+        width: auto;
+        z-index: 99999;
+        padding: 14px 0;
 
-.popover .popover__arrow {
-    display: none;
-}
-
-.popover.messages {
-    background: #333;
-    color: #FFF;
-    border: none;
-    padding: 0;
-    border-radius: 0;
-
-    .popover__arrow {
-        display: none;
-    }
-}
-
-.popover .table {
-    padding: 14px;
-    text-align: left;
-    line-height: 24px;
-
-    & > a {
-        color: white;
-        display: block;
-        position: relative;
-        text-decoration: none;
-
-        span.count {
-            color: #FFF;
-            display: inline-block;
-            font-size: 12px;
-            height: 20px;
-            line-height: 20px;
-            margin: 0;
-            padding: 0;
-            position: absolute;
-            right: 0;
-            text-align: center;
-            top: 2px;
-            width: 20px;
-
-            &.debug {
-                background: $toolbar-color-debug;
-            }
-
-            &.error {
-                background: $toolbar-color-error;
-            }
-
-            &.fatal {
-                background: $toolbar-color-fatal;
-            }
-
-            &.info {
-                background: $toolbar-color-info;
-            }
-
-            &.log {
-                background: $toolbar-color-log;
-            }
-
-            &.warn {
-                background: $toolbar-color-warn;
-            }
-
-            &.disabled {
-                background: #555;
-                color: #EEE;
-            }
+        .popover__arrow {
+            display: none;
         }
 
-        span.label {
-            width: 70px;
-            display: inline-block;
+        .table {
+            text-align: left;
+            line-height: 24px;
+
+            & > button {
+                background: transparent;
+                border: none;
+                color: white;
+                display: block;
+                font-size: 14px;
+                height: 24px;
+                line-height: 24px;
+                margin: 0;
+                padding: 0 14px;
+                position: relative;
+                text-align: left;
+                transition: all 0.25s;
+
+                &.empty {
+                    opacity: 0.33;
+
+                    &:hover {
+                        opacity: 1;
+                    }
+                }
+
+                span.count {
+                    color: #FFF;
+                    display: inline-block;
+                    font-size: 12px;
+                    height: 20px;
+                    line-height: 20px;
+                    margin: 0;
+                    padding: 0;
+                    position: absolute;
+                    right: 14px;
+                    text-align: center;
+                    top: 2px;
+                    width: 20px;
+
+                    &.debug {
+                        background: $toolbar-color-debug;
+                    }
+
+                    &.error {
+                        background: $toolbar-color-error;
+                    }
+
+                    &.fatal {
+                        background: $toolbar-color-fatal;
+                    }
+
+                    &.info {
+                        background: $toolbar-color-info;
+                    }
+
+                    &.log {
+                        background: $toolbar-color-log;
+                    }
+
+                    &.warn {
+                        background: $toolbar-color-warn;
+                    }
+
+                    &.disabled {
+                        background: #555;
+                        color: #EEE;
+                    }
+                }
+
+                span.label {
+                    width: 70px;
+                    display: inline-block;
+                }
+
+                &:hover {
+                    background: #222222;
+                }
+            }
         }
     }
 }

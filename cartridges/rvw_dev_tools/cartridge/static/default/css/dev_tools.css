@@ -13,75 +13,89 @@
   left: 0;
   width: 100vw;
   height: 50vh;
-  z-index: 9998;
+  z-index: 99999;
   color: #fff; }
 
-.popover {
-  box-shadow: #3a3a3a 0 0 6px 0;
+@media only screen and (max-width: 480px) {
+  #rvw_dev_tools .toolbar button.toolbar-button {
+    padding: 0 8px; }
+    #rvw_dev_tools .toolbar button.toolbar-button svg {
+      margin-left: 4px; }
+    #rvw_dev_tools .toolbar button.toolbar-button.no-count {
+      padding: 0 10px; }
+      #rvw_dev_tools .toolbar button.toolbar-button.no-count svg {
+        margin-left: 0; } }
+
+#rvw_dev_tools .popover {
+  background: #000;
+  border-radius: 0;
+  border: none;
+  bottom: 40px;
+  color: #FFF;
   display: inline-block;
   font-size: 14px;
   font-weight: normal;
-  padding: 2px;
-  position: absolute;
-  text-align: center;
-  width: auto;
-  z-index: 200000;
-  position: absolute;
-  bottom: 40px;
-  left: 0; }
-
-.popover .popover__arrow {
-  display: none; }
-
-.popover.messages {
-  background: #333;
-  color: #FFF;
-  border: none;
+  left: 0;
   padding: 0;
-  border-radius: 0; }
-  .popover.messages .popover__arrow {
+  position: absolute;
+  width: auto;
+  z-index: 99999;
+  padding: 14px 0; }
+  #rvw_dev_tools .popover .popover__arrow {
     display: none; }
-
-.popover .table {
-  padding: 14px;
-  text-align: left;
-  line-height: 24px; }
-  .popover .table > a {
-    color: white;
-    display: block;
-    position: relative;
-    text-decoration: none; }
-    .popover .table > a span.count {
-      color: #FFF;
-      display: inline-block;
-      font-size: 12px;
-      height: 20px;
-      line-height: 20px;
+  #rvw_dev_tools .popover .table {
+    text-align: left;
+    line-height: 24px; }
+    #rvw_dev_tools .popover .table > button {
+      background: transparent;
+      border: none;
+      color: white;
+      display: block;
+      font-size: 14px;
+      height: 24px;
+      line-height: 24px;
       margin: 0;
-      padding: 0;
-      position: absolute;
-      right: 0;
-      text-align: center;
-      top: 2px;
-      width: 20px; }
-      .popover .table > a span.count.debug {
-        background: #84bd00; }
-      .popover .table > a span.count.error {
-        background: #d70000; }
-      .popover .table > a span.count.fatal {
-        background: #990000; }
-      .popover .table > a span.count.info {
-        background: #286981; }
-      .popover .table > a span.count.log {
+      padding: 0 14px;
+      position: relative;
+      text-align: left;
+      transition: all 0.25s; }
+      #rvw_dev_tools .popover .table > button.empty {
+        opacity: 0.33; }
+        #rvw_dev_tools .popover .table > button.empty:hover {
+          opacity: 1; }
+      #rvw_dev_tools .popover .table > button span.count {
+        color: #FFF;
+        display: inline-block;
+        font-size: 12px;
+        height: 20px;
+        line-height: 20px;
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        right: 14px;
+        text-align: center;
+        top: 2px;
+        width: 20px; }
+        #rvw_dev_tools .popover .table > button span.count.debug {
+          background: #84bd00; }
+        #rvw_dev_tools .popover .table > button span.count.error {
+          background: #d70000; }
+        #rvw_dev_tools .popover .table > button span.count.fatal {
+          background: #990000; }
+        #rvw_dev_tools .popover .table > button span.count.info {
+          background: #286981; }
+        #rvw_dev_tools .popover .table > button span.count.log {
+          background: #444444; }
+        #rvw_dev_tools .popover .table > button span.count.warn {
+          background: #ec6919; }
+        #rvw_dev_tools .popover .table > button span.count.disabled {
+          background: #555;
+          color: #EEE; }
+      #rvw_dev_tools .popover .table > button span.label {
+        width: 70px;
+        display: inline-block; }
+      #rvw_dev_tools .popover .table > button:hover {
         background: #222222; }
-      .popover .table > a span.count.warn {
-        background: #ec6919; }
-      .popover .table > a span.count.disabled {
-        background: #555;
-        color: #EEE; }
-    .popover .table > a span.label {
-      width: 70px;
-      display: inline-block; }
 
 #rvw_dev_tools .show-toolbar {
   position: fixed;
@@ -106,55 +120,177 @@
   left: 0;
   width: 100vw;
   height: 40px;
-  z-index: 9998;
+  z-index: 99999;
   color: #fff; }
   #rvw_dev_tools .toolbar .toolbar-button-wrapper {
     position: relative;
     display: inline-block; }
-  #rvw_dev_tools .toolbar button {
+    #rvw_dev_tools .toolbar .toolbar-button-wrapper > button {
+      border: none;
+      color: #FFF;
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 500;
+      height: 40px;
+      line-height: 40px;
+      margin: 0;
+      padding: 0 12px; }
+      #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button {
+        background: transparent; }
+        #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button svg {
+          width: 16px;
+          height: 16px;
+          margin: 0;
+          padding: 0;
+          margin-left: 8px;
+          position: relative;
+          top: 4px; }
+        #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button:hover, #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.active {
+          background: #000; }
+        #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.no-count {
+          padding: 0 14px; }
+          #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.no-count svg {
+            margin-left: 0;
+            top: 2px; }
+        #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.debug {
+          background: #84bd00; }
+          #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.debug:hover, #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.debug.active {
+            background: #000; }
+        #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.error {
+          background: #d70000; }
+          #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.error:hover, #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.error.active {
+            background: #000; }
+        #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.fatal {
+          background: #990000; }
+          #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.fatal:hover, #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.fatal.active {
+            background: #000; }
+        #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.info {
+          background: #286981; }
+          #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.info:hover, #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.info.active {
+            background: #000; }
+        #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.log {
+          background: #444444; }
+          #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.log:hover, #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.log.active {
+            background: #000; }
+        #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.warn {
+          background: #ec6919; }
+          #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.warn:hover, #rvw_dev_tools .toolbar .toolbar-button-wrapper > button.toolbar-button.warn.active {
+            background: #000; }
+  #rvw_dev_tools .toolbar .hide-toolbar {
+    background: #333;
     border: none;
     color: #FFF;
     display: inline-block;
-    font-size: 16px;
+    float: right;
+    font-size: 14px;
     font-weight: 500;
     height: 40px;
     line-height: 40px;
     margin: 0;
-    padding: 0 12px; }
-    #rvw_dev_tools .toolbar button.toolbar-button {
-      background: #333; }
-      #rvw_dev_tools .toolbar button.toolbar-button svg {
-        width: 20px;
-        height: 20px;
-        margin: 0;
-        padding: 0;
-        margin-left: 8px;
-        position: relative;
-        top: 6px; }
-        #rvw_dev_tools .toolbar button.toolbar-button svg path {
-          fill: #FFF; }
-      #rvw_dev_tools .toolbar button.toolbar-button:hover {
-        background: #000; }
-    #rvw_dev_tools .toolbar button.hide-toolbar {
-      background: #333;
-      float: right; }
-      #rvw_dev_tools .toolbar button.hide-toolbar svg {
-        width: 12px;
-        height: 12px;
-        margin: 0;
-        padding: 0;
-        position: relative;
-        top: 3px; }
-        #rvw_dev_tools .toolbar button.hide-toolbar svg path {
-          fill: #FFF; }
-      #rvw_dev_tools .toolbar button.hide-toolbar:hover {
-        background: #000; }
+    padding: 0 14px; }
+    #rvw_dev_tools .toolbar .hide-toolbar svg {
+      width: 12px;
+      height: 12px;
+      margin: 0;
+      padding: 0;
+      position: relative;
+      top: 2px; }
+    #rvw_dev_tools .toolbar .hide-toolbar:hover {
+      background: #000; }
+
+.tooltip {
+  z-index: 99999; }
+  .tooltip.disabled {
+    display: none !important; }
+  .tooltip .tooltip-inner {
+    background: black;
+    color: white;
+    border-radius: 4px;
+    padding: 6px 12px; }
+  .tooltip .tooltip-arrow {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    position: absolute;
+    margin: 5px;
+    border-color: black;
+    z-index: 1; }
+  .tooltip[x-placement^="top"] {
+    margin-bottom: 5px; }
+    .tooltip[x-placement^="top"] .tooltip-arrow {
+      border-width: 5px 5px 0 5px;
+      border-left-color: transparent !important;
+      border-right-color: transparent !important;
+      border-bottom-color: transparent !important;
+      bottom: -5px;
+      left: calc(50% - 5px);
+      margin-top: 0;
+      margin-bottom: 0; }
+  .tooltip[x-placement^="bottom"] {
+    margin-top: 5px; }
+    .tooltip[x-placement^="bottom"] .tooltip-arrow {
+      border-width: 0 5px 5px 5px;
+      border-left-color: transparent !important;
+      border-right-color: transparent !important;
+      border-top-color: transparent !important;
+      top: -5px;
+      left: calc(50% - 5px);
+      margin-top: 0;
+      margin-bottom: 0; }
+  .tooltip[x-placement^="right"] {
+    margin-left: 5px; }
+    .tooltip[x-placement^="right"] .tooltip-arrow {
+      border-width: 5px 5px 5px 0;
+      border-left-color: transparent !important;
+      border-top-color: transparent !important;
+      border-bottom-color: transparent !important;
+      left: -5px;
+      top: calc(50% - 5px);
+      margin-left: 0;
+      margin-right: 0; }
+  .tooltip[x-placement^="left"] {
+    margin-right: 5px; }
+    .tooltip[x-placement^="left"] .tooltip-arrow {
+      border-width: 5px 0 5px 5px;
+      border-top-color: transparent !important;
+      border-right-color: transparent !important;
+      border-bottom-color: transparent !important;
+      right: -5px;
+      top: calc(50% - 5px);
+      margin-left: 0;
+      margin-right: 0; }
+  .tooltip.popover .popover-inner {
+    background: #f9f9f9;
+    color: black;
+    padding: 24px;
+    border-radius: 5px;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1); }
+  .tooltip.popover .popover-arrow {
+    border-color: #f9f9f9; }
+  .tooltip[aria-hidden='true'] {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .15s, visibility .15s; }
+  .tooltip[aria-hidden='false'] {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity .15s; }
 
 #rvw_dev_tools .fade-enter-active, #rvw_dev_tools .fade-leave-active {
   transition: opacity .25s; }
 
 #rvw_dev_tools .fade-enter, #rvw_dev_tools .fade-leave-to {
   opacity: 0; }
+
+@media only screen and (max-width: 480px) {
+  #rvw_dev_tools .toolbar button.toolbar-button {
+    padding: 0 8px; }
+    #rvw_dev_tools .toolbar button.toolbar-button svg {
+      margin-left: 4px; }
+    #rvw_dev_tools .toolbar button.toolbar-button.no-count {
+      padding: 0 10px; }
+      #rvw_dev_tools .toolbar button.toolbar-button.no-count svg {
+        margin-left: 0; } }
 
 
 /*# sourceMappingURL=dev_tools.css.map*/

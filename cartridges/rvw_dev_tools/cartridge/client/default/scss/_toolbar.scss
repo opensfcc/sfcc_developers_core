@@ -6,67 +6,125 @@
         left: 0;
         width: 100vw;
         height: $toolbar-height;
-        z-index: 9998;
+        z-index: 99999;
         color: #fff;
 
         .toolbar-button-wrapper {
             position: relative;
             display: inline-block;
+
+            & > button {
+                border: none;
+                color: #FFF;
+                display: inline-block;
+                font-size: 14px;
+                font-weight: 500;
+                height: $toolbar-height;
+                line-height: $toolbar-height;
+                margin: 0;
+                padding: 0 12px;
+
+                &.toolbar-button {
+                    background: transparent;
+
+                    svg {
+                        width: 16px;
+                        height: 16px;
+                        margin: 0;
+                        padding: 0;
+                        margin-left: 8px;
+                        position: relative;
+                        top: 4px;
+                    }
+
+                    &:hover, &.active {
+                        background: #000;
+                    }
+
+                    &.no-count {
+                        padding: 0 14px;
+
+                        svg {
+                            margin-left: 0;
+                            top: 2px;
+                        }
+                    }
+
+                    &.debug {
+                        background: $toolbar-color-debug;
+
+                        &:hover, &.active {
+                            background: #000;
+                        }
+                    }
+
+                    &.error {
+                        background: $toolbar-color-error;
+
+                        &:hover, &.active {
+                            background: #000;
+                        }
+                    }
+
+                    &.fatal {
+                        background: $toolbar-color-fatal;
+
+                        &:hover, &.active {
+                            background: #000;
+                        }
+                    }
+
+                    &.info {
+                        background: $toolbar-color-info;
+
+                        &:hover, &.active {
+                            background: #000;
+                        }
+                    }
+
+                    &.log {
+                        background: $toolbar-color-log;
+
+                        &:hover, &.active {
+                            background: #000;
+                        }
+                    }
+
+                    &.warn {
+                        background: $toolbar-color-warn;
+
+                        &:hover, &.active {
+                            background: #000;
+                        }
+                    }
+                }
+            }
         }
 
-        button {
+        .hide-toolbar {
+            background: #333;
             border: none;
             color: #FFF;
             display: inline-block;
-            font-size: 16px;
+            float: right;
+            font-size: 14px;
             font-weight: 500;
             height: $toolbar-height;
             line-height: $toolbar-height;
             margin: 0;
-            padding: 0 12px;
+            padding: 0 14px;
 
-            &.toolbar-button {
-                background: #333;
-
-                svg {
-                    width: 20px;
-                    height: 20px;
-                    margin: 0;
-                    padding: 0;
-                    margin-left: 8px;
-                    position: relative;
-                    top: 6px;
-
-                    path {
-                        fill: #FFF;
-                    }
-                }
-
-                &:hover {
-                    background: #000;
-                }
+            svg {
+                width: 12px;
+                height: 12px;
+                margin: 0;
+                padding: 0;
+                position: relative;
+                top: 2px;
             }
 
-            &.hide-toolbar {
-                background: #333;
-                float: right;
-
-                svg {
-                    width: 12px;
-                    height: 12px;
-                    margin: 0;
-                    padding: 0;
-                    position: relative;
-                    top: 3px;
-
-                    path {
-                        fill: #FFF;
-                    }
-                }
-
-                &:hover {
-                    background: #000;
-                }
+            &:hover {
+                background: #000;
             }
         }
     }

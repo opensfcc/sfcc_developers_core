@@ -6,11 +6,12 @@
         </div>
 
         <!-- Toolbar -->
-        <div class="toolbar" v-if="toolbarShown && !drawerOpen">
+        <div class="toolbar" v-if="toolbarShown && !drawerOpen" @click.self="resetToolbar()">
+            <!-- Basket -->
             <div class="toolbar-button-wrapper">
-                <!-- Messages Popover -->
+                <!-- Basket Popover -->
                 <transition name="fade">
-                    <div class="popover messages" id="popoverMessages" ref="popoverMessages" role="tooltip" v-show="popoverMessages">
+                    <div class="popover basket" id="popoverBasket" ref="popoverBasket" role="tooltip" v-if="popovers.basket">
                         <div class="table">
                             <a href="#debug" @click.prevent="openDrawer('debugger', 'debug')">
                                 <span class="label">Debug</span>
@@ -40,29 +41,360 @@
                     </div>
                 </transition>
 
+                <!-- Basket Button -->
+                <button class="toolbar-button basket" id="popoverButtonBasket" ref="popoverButtonBasket" aria-describedby="popoverBasket"
+                    @click.prevent="togglePopover('basket')"
+                    v-tooltip="{ content: 'Basket', classes: popovers.basket ? 'disabled' : 'enabled', delay: { show: tooltipDelay } }"
+                    :class="{ 'active': popovers.basket, 'no-count': basketCount === 0 }"
+                >
+                    <span v-if="basketCount > 0">{{ basketCount }}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48.12 47.06">
+                        <g fill="none" stroke="#FFFFFF" stroke-miterlimit="10">
+                            <ellipse cx="19.41" cy="41.45" rx="3.68" ry="3.78" stroke-width="3.65"/>
+                            <ellipse cx="35.07" cy="41.45" rx="3.68" ry="3.78" stroke-width="3.65"/>
+                            <path d="M10 8h35.41c.52 0 .82.07.67.55L40.68 26c-.15.47-.55 1.05-.91 1.05H15.63c-.36 0-.76-.72-.91-1.21L9.32 8.73C9.17 8.25 9.47 8 10 8z" stroke-width="4"/>
+                            <path stroke-linecap="round" stroke-width="3.65" d="M9.28 7.86L7.44 3.23M15.73 26.78c-.34 0-.73.39-.88.88L12 35.3"/>
+                            <path stroke-linecap="round" stroke-width="4" d="M2 2h5M12 36h29"/>
+                        </g>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Geolocation -->
+            <div class="toolbar-button-wrapper">
+                <!-- Geolocation Popover -->
+                <transition name="fade">
+                    <div class="popover geolocation" id="popoverGeolocation" ref="popoverGeolocation" role="tooltip" v-if="popovers.geolocation">
+                        <div class="table">
+                            <a href="#debug" @click.prevent="openDrawer('debugger', 'debug')">
+                                <span class="label">Debug</span>
+                                <span class="count debug">0</span>
+                            </a>
+                            <a href="#error" @click.prevent="openDrawer('debugger', 'error')">
+                                <span class="label">Error</span>
+                                <span class="count error">0</span>
+                            </a>
+                            <a href="#fatal" @click.prevent="openDrawer('debugger', 'fatal')">
+                                <span class="label">Fatal</span>
+                                <span class="count fatal">0</span>
+                            </a>
+                            <a href="#info" @click.prevent="openDrawer('debugger', 'info')">
+                                <span class="label">Info</span>
+                                <span class="count info">0</span>
+                            </a>
+                            <a href="#log" @click.prevent="openDrawer('debugger', 'log')">
+                                <span class="label">Log</span>
+                                <span class="count log">0</span>
+                            </a>
+                            <a href="#warn" @click.prevent="openDrawer('debugger', 'warn')">
+                                <span class="label">Warn</span>
+                                <span class="count warn">0</span>
+                            </a>
+                        </div>
+                    </div>
+                </transition>
+
+                <!-- Geolocation Button -->
+                <button class="toolbar-button geolocation no-count" id="popoverButtonGeolocation" ref="popoverButtonGeolocation" aria-describedby="popoverGeolocation"
+                    @click.prevent="togglePopover('geolocation')"
+                    v-tooltip="{ content: 'Geolocation', classes: popovers.geolocation ? 'disabled' : 'enabled', delay: { show: tooltipDelay } }"
+                    :class="{ 'active': popovers.geolocation }"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 46">
+                        <g fill="none" stroke="#FFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
+                            <path d="M18 2a15.82 15.82 0 0116 15.63A15.34 15.34 0 0130.83 27"/>
+                            <circle cx="18" cy="17.63" r="5"/>
+                            <path d="M18 44l12.83-17.03M18 2A15.82 15.82 0 002 17.63 15.34 15.34 0 005.17 27M18 44L5.17 26.97"/>
+                        </g>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Messages -->
+            <div class="toolbar-button-wrapper">
+                <!-- Messages Popover -->
+                <transition name="fade">
+                    <div class="popover messages" id="popoverMessages" ref="popoverMessages" role="tooltip" v-if="popovers.messages">
+                        <div class="table">
+                            <button
+                                @click.prevent="openDrawer('debugger', 'debug')"
+                                :class="{ 'empty': messageCount.debug === 0 }"
+                                v-tooltip.right="{ content: messageCount.debug > 0 ? 'View Debug Messages' : 'No Debug Messages', delay: { show: tooltipDelay } }"
+                            >
+                                <span class="label">Debug</span>
+                                <span class="count debug">{{ messageCount.debug }}</span>
+                            </button>
+                            <button
+                                @click.prevent="openDrawer('debugger', 'error')"
+                                :class="{ 'empty': messageCount.error === 0 }"
+                                v-tooltip.right="{ content: messageCount.error > 0 ? 'View Error Messages' : 'No Error Messages', delay: { show: tooltipDelay } }"
+                            >
+                                <span class="label">Error</span>
+                                <span class="count error">{{ messageCount.error }}</span>
+                            </button>
+                            <button
+                                @click.prevent="openDrawer('debugger', 'fatal')"
+                                :class="{ 'empty': messageCount.fatal === 0 }"
+                                v-tooltip.right="{ content: messageCount.fatal > 0 ? 'View Fatal Messages' : 'No Fatal Messages', delay: { show: tooltipDelay } }"
+                            >
+                                <span class="label">Fatal</span>
+                                <span class="count fatal">{{ messageCount.fatal }}</span>
+                            </button>
+                            <button
+                                @click.prevent="openDrawer('debugger', 'info')"
+                                :class="{ 'empty': messageCount.info === 0 }"
+                                v-tooltip.right="{ content: messageCount.info > 0 ? 'View Info Messages' : 'No Info Messages', delay: { show: tooltipDelay } }"
+                            >
+                                <span class="label">Info</span>
+                                <span class="count info">{{ messageCount.info }}</span>
+                            </button>
+                            <button
+                                @click.prevent="openDrawer('debugger', 'log')"
+                                :class="{ 'empty': messageCount.log === 0 }"
+                                v-tooltip.right="{ content: messageCount.log > 0 ? 'View Log Messages' : 'No Log Messages', delay: { show: tooltipDelay } }"
+                            >
+                                <span class="label">Log</span>
+                                <span class="count log">{{ messageCount.log }}</span>
+                            </button>
+                            <button
+                                @click.prevent="openDrawer('debugger', 'warn')"
+                                :class="{ 'empty': messageCount.warn === 0 }"
+                                v-tooltip.right="{ content: messageCount.warn > 0 ? 'View Warn Messages' : 'No Warn Messages', delay: { show: tooltipDelay } }"
+                            >
+                                <span class="label">Warn</span>
+                                <span class="count warn">{{ messageCount.warn }}</span>
+                            </button>
+                        </div>
+                    </div>
+                </transition>
+
                 <!-- Messages Button -->
-                <button class="toolbar-button messages" id="popoverButtonMessages" ref="popoverButtonMessages" aria-describedby="popoverMessages" @click="popoverMessages = !popoverMessages">
-                    {{ messageCount }}
-                    <svg xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 360 360" xml:space="preserve">
-                        <g>
-                            <path d="M344.259 126.683h-48.518V77.834L212.719 0H15.741v360h280v-50.59h48.518V126.683zm-30 152.727h-210V156.683h210V279.41z"/>
-                            <path d="M170.892 234.942h-31.857V183.11h-12.143v62.48h44z"/>
-                            <path d="M178.943 236.218c2.669 2.963 5.866 5.339 9.593 7.128 3.725 1.79 7.876 2.684 12.451 2.684 4.4 0 8.477-.865 12.232-2.596 3.754-1.73 6.98-4.048 9.68-6.952 2.698-2.904 4.811-6.248 6.336-10.032 1.525-3.784 2.288-7.758 2.288-11.924 0-3.93-.734-7.802-2.199-11.616-1.468-3.813-3.521-7.216-6.16-10.208-2.641-2.992-5.823-5.412-9.548-7.26-3.727-1.848-7.848-2.772-12.364-2.772-4.4 0-8.479.866-12.232 2.596-3.755 1.732-6.996 4.064-9.724 6.996-2.729 2.935-4.87 6.307-6.424 10.12-1.556 3.814-2.332 7.803-2.332 11.968 0 3.991.733 7.892 2.2 11.704 1.465 3.814 3.533 7.202 6.203 10.164zm5.105-29.48c.792-2.493 1.949-4.722 3.476-6.688 1.525-1.965 3.433-3.549 5.721-4.752 2.288-1.202 4.898-1.804 7.832-1.804 2.815 0 5.352.572 7.611 1.716 2.258 1.144 4.165 2.684 5.721 4.62 1.554 1.936 2.757 4.166 3.607 6.688.85 2.523 1.276 5.134 1.276 7.831 0 2.583-.397 5.119-1.189 7.612-.792 2.494-1.966 4.738-3.52 6.732-1.556 1.995-3.463 3.594-5.721 4.796-2.259 1.203-4.854 1.804-7.787 1.804-2.876 0-5.442-.586-7.7-1.76-2.26-1.173-4.166-2.728-5.72-4.664-1.556-1.936-2.743-4.165-3.564-6.688-.822-2.521-1.232-5.133-1.232-7.832 0-2.58.397-5.117 1.189-7.611z"/><path id="XMLID_236_" d="M245.823 236.79c2.669 2.875 5.809 5.134 9.416 6.776 3.608 1.643 7.465 2.464 11.572 2.464 6.629 0 12.436-2.493 17.424-7.48v7.04h10.032v-32.12h-22.616v8.888h12.584v4.4c-4.87 5.691-10.326 8.536-16.368 8.536-2.64 0-5.09-.542-7.348-1.628-2.259-1.085-4.21-2.566-5.852-4.444-1.644-1.877-2.935-4.092-3.872-6.644-.939-2.552-1.408-5.293-1.408-8.228 0-2.816.425-5.485 1.276-8.008.85-2.521 2.053-4.752 3.607-6.688 1.554-1.936 3.432-3.461 5.632-4.576 2.2-1.114 4.62-1.672 7.261-1.672 3.344 0 6.438.822 9.283 2.464 2.845 1.644 5.061 4.02 6.645 7.128l9.064-6.688c-2.111-4.165-5.266-7.48-9.46-9.944-4.195-2.464-9.226-3.696-15.092-3.696-4.342 0-8.36.836-12.056 2.508-3.696 1.672-6.908 3.931-9.637 6.776-2.728 2.847-4.87 6.16-6.424 9.944-1.555 3.784-2.332 7.818-2.332 12.1 0 4.518.777 8.727 2.332 12.628 1.555 3.902 3.667 7.29 6.337 10.164z"/>
+                <button class="toolbar-button messages" id="popoverButtonMessages" ref="popoverButtonMessages" aria-describedby="popoverMessages"
+                    @click.prevent="togglePopover('messages')"
+                    v-tooltip="{ content: 'Messages', classes: popovers.messages ? 'disabled' : 'enabled', delay: { show: tooltipDelay } }"
+                    :class="[{ 'active': popovers.messages, 'no-count': messageCount.total === 0 }, messageClass]"
+                >
+                    <span v-if="messageCount.total > 0">{{ messageCount.total }}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 42.83">
+                        <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
+                            <path d="M15 32.08H3c-.55 0-1-.81-1-1.37V2.34c0-.56.45-.26 1-.26h40c.55 0 1-.3 1 .26v28.37c0 .56-.45 1.37-1 1.37H29M22 40.83l6.63-8.11M22 40.83l-6.62-8.11"/>
+                        </g>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Preferences -->
+            <div class="toolbar-button-wrapper">
+                <!-- Preferences Popover -->
+                <transition name="fade">
+                    <div class="popover preferences" id="popoverPreferences" ref="popoverPreferences" role="tooltip" v-if="popovers.preferences">
+                        <div class="table">
+                            <a href="#debug" @click.prevent="openDrawer('debugger', 'debug')">
+                                <span class="label">Debug</span>
+                                <span class="count debug">0</span>
+                            </a>
+                            <a href="#error" @click.prevent="openDrawer('debugger', 'error')">
+                                <span class="label">Error</span>
+                                <span class="count error">0</span>
+                            </a>
+                            <a href="#fatal" @click.prevent="openDrawer('debugger', 'fatal')">
+                                <span class="label">Fatal</span>
+                                <span class="count fatal">0</span>
+                            </a>
+                            <a href="#info" @click.prevent="openDrawer('debugger', 'info')">
+                                <span class="label">Info</span>
+                                <span class="count info">0</span>
+                            </a>
+                            <a href="#log" @click.prevent="openDrawer('debugger', 'log')">
+                                <span class="label">Log</span>
+                                <span class="count log">0</span>
+                            </a>
+                            <a href="#warn" @click.prevent="openDrawer('debugger', 'warn')">
+                                <span class="label">Warn</span>
+                                <span class="count warn">0</span>
+                            </a>
+                        </div>
+                    </div>
+                </transition>
+
+                <!-- Preferences Button -->
+                <button class="toolbar-button preferences no-count" id="popoverButtonPreferences" ref="popoverButtonPreferences" aria-describedby="popoverPreferences"
+                    @click.prevent="togglePopover('preferences')"
+                    v-tooltip="{ content: 'Preferences', classes: popovers.preferences ? 'disabled' : 'enabled', delay: { show: tooltipDelay } }"
+                    :class="{ 'active': popovers.preferences }"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 44">
+                        <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
+                            <path d="M2 6h8M10 2h12v8H10zM22 6h22M44 22h-8M36 26H24v-8h12zM24 22H2M2 38h8M10 34h12v8H10zM22 38h22"/>
+                        </g>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Session -->
+            <div class="toolbar-button-wrapper">
+                <!-- Session Popover -->
+                <transition name="fade">
+                    <div class="popover session" id="popoverSession" ref="popoverSession" role="tooltip" v-if="popovers.session">
+                        <div class="table">
+                            <a href="#debug" @click.prevent="openDrawer('debugger', 'debug')">
+                                <span class="label">Debug</span>
+                                <span class="count debug">0</span>
+                            </a>
+                            <a href="#error" @click.prevent="openDrawer('debugger', 'error')">
+                                <span class="label">Error</span>
+                                <span class="count error">0</span>
+                            </a>
+                            <a href="#fatal" @click.prevent="openDrawer('debugger', 'fatal')">
+                                <span class="label">Fatal</span>
+                                <span class="count fatal">0</span>
+                            </a>
+                            <a href="#info" @click.prevent="openDrawer('debugger', 'info')">
+                                <span class="label">Info</span>
+                                <span class="count info">0</span>
+                            </a>
+                            <a href="#log" @click.prevent="openDrawer('debugger', 'log')">
+                                <span class="label">Log</span>
+                                <span class="count log">0</span>
+                            </a>
+                            <a href="#warn" @click.prevent="openDrawer('debugger', 'warn')">
+                                <span class="label">Warn</span>
+                                <span class="count warn">0</span>
+                            </a>
+                        </div>
+                    </div>
+                </transition>
+
+                <!-- Session Button -->
+                <button class="toolbar-button session no-count" id="popoverButtonSession" ref="popoverButtonSession" aria-describedby="popoverSession"
+                    @click.prevent="togglePopover('session')"
+                    v-tooltip="{ content: 'Session', classes: popovers.session ? 'disabled' : 'enabled', delay: { show: tooltipDelay } }"
+                    :class="{ 'active': popovers.session }"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41.92 41.92">
+                        <g fill="none" stroke="#FFFFFF" stroke-linecap="round">
+                            <circle cx="20.96" cy="20.96" r="19" stroke-miterlimit="10" stroke-width="3.92"/>
+                            <path stroke-linejoin="round" stroke-width="4" d="M19.96 12.46v9.22l5.34 3.72"/>
+                        </g>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Site -->
+            <div class="toolbar-button-wrapper">
+                <!-- Site Popover -->
+                <transition name="fade">
+                    <div class="popover site" id="popoverSite" ref="popoverSite" role="tooltip" v-if="popovers.site">
+                        <div class="table">
+                            <a href="#debug" @click.prevent="openDrawer('debugger', 'debug')">
+                                <span class="label">Debug</span>
+                                <span class="count debug">0</span>
+                            </a>
+                            <a href="#error" @click.prevent="openDrawer('debugger', 'error')">
+                                <span class="label">Error</span>
+                                <span class="count error">0</span>
+                            </a>
+                            <a href="#fatal" @click.prevent="openDrawer('debugger', 'fatal')">
+                                <span class="label">Fatal</span>
+                                <span class="count fatal">0</span>
+                            </a>
+                            <a href="#info" @click.prevent="openDrawer('debugger', 'info')">
+                                <span class="label">Info</span>
+                                <span class="count info">0</span>
+                            </a>
+                            <a href="#log" @click.prevent="openDrawer('debugger', 'log')">
+                                <span class="label">Log</span>
+                                <span class="count log">0</span>
+                            </a>
+                            <a href="#warn" @click.prevent="openDrawer('debugger', 'warn')">
+                                <span class="label">Warn</span>
+                                <span class="count warn">0</span>
+                            </a>
+                        </div>
+                    </div>
+                </transition>
+
+                <!-- Site Button -->
+                <button class="toolbar-button site no-count" id="popoverButtonSite" ref="popoverButtonSite" aria-describedby="popoverSite"
+                    @click.prevent="togglePopover('site')"
+                    v-tooltip="{ content: 'Site', classes: popovers.site ? 'disabled' : 'enabled', delay: { show: tooltipDelay } }"
+                    :class="{ 'active': popovers.site }"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 46">
+                        <g fill="none" stroke="#FFFFFF" stroke-linejoin="round" stroke-width="4">
+                            <path d="M13 44H2.88a.78.78 0 01-.88-.74V18M38 19v24.26a.78.78 0 01-.88.74H26"/>
+                            <path stroke-linecap="round" d="M38 18.89L20 2 2 18.43"/>
+                            <path d="M14 46V31h12v15"/>
+                        </g>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- User -->
+            <div class="toolbar-button-wrapper">
+                <!-- User Popover -->
+                <transition name="fade">
+                    <div class="popover user" id="popoverUser" ref="popoverUser" role="tooltip" v-if="popovers.user">
+                        <div class="table">
+                            <a href="#debug" @click.prevent="openDrawer('debugger', 'debug')">
+                                <span class="label">Debug</span>
+                                <span class="count debug">0</span>
+                            </a>
+                            <a href="#error" @click.prevent="openDrawer('debugger', 'error')">
+                                <span class="label">Error</span>
+                                <span class="count error">0</span>
+                            </a>
+                            <a href="#fatal" @click.prevent="openDrawer('debugger', 'fatal')">
+                                <span class="label">Fatal</span>
+                                <span class="count fatal">0</span>
+                            </a>
+                            <a href="#info" @click.prevent="openDrawer('debugger', 'info')">
+                                <span class="label">Info</span>
+                                <span class="count info">0</span>
+                            </a>
+                            <a href="#log" @click.prevent="openDrawer('debugger', 'log')">
+                                <span class="label">Log</span>
+                                <span class="count log">0</span>
+                            </a>
+                            <a href="#warn" @click.prevent="openDrawer('debugger', 'warn')">
+                                <span class="label">Warn</span>
+                                <span class="count warn">0</span>
+                            </a>
+                        </div>
+                    </div>
+                </transition>
+
+                <!-- User Button -->
+                <button class="toolbar-button user no-count" id="popoverButtonUser" ref="popoverButtonUser" aria-describedby="popoverUser"
+                    @click.prevent="togglePopover('user')"
+                    v-tooltip="{ content: 'User', classes: popovers.user ? 'disabled' : 'enabled', delay: { show: tooltipDelay } }"
+                    :class="{ 'active': popovers.user }"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 46.99">
+                        <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-miterlimit="10" stroke-width="4">
+                            <circle cx="22" cy="13" r="11"/>
+                            <path d="M42 36.74v6.07c0 .58-.2 2.18-.78 2.18H3.28C2.71 45 2 43.39 2 42.81v-6.57c0-6.63 9-12 20-12s20 5.37 20 12z"/>
                         </g>
                     </svg>
                 </button>
             </div>
 
             <!-- Close Toolbar -->
-            <button class="hide-toolbar" @click="toolbarShown = false">
-                <svg xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve">
-                    <path d="M512 59.076L452.922 0 256 196.922 59.076 0 0 59.076 196.922 256 0 452.922 59.076 512 256 315.076 452.922 512 512 452.922 315.076 256z"/>
+            <button class="hide-toolbar" @click="closeToolbar()" v-tooltip="{ content: 'Hide Toolbar', delay: { show: tooltipDelay } }">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33.84 33.67">
+                    <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-miterlimit="10" stroke-width="4">
+                        <path d="M2 2l29.84 29.67M31.84 2L2 31.67"/>
+                    </g>
                 </svg>
             </button>
         </div>
 
         <!-- Show Toolbar -->
-        <button class="show-toolbar" v-if="!toolbarShown && !drawerOpen" @click="toolbarShown = true"></button>
+        <button class="show-toolbar"
+            v-if="!toolbarShown && !drawerOpen"
+            @click="openToolbar()"
+            v-tooltip="{ content: 'Show Toolbar', delay: { show: tooltipDelay } }"
+        ></button>
     </div>
 </template>
 
@@ -72,12 +404,32 @@ export default {
     components: {},
     data() {
         return {
-            messageCount: 0,
+            basketCount: 0,
+            debugData: null,
             drawerOpen: false,
-            toolbarShown: false,
-            popoverMessages: false,
+            lastDebugTimeStamp: 0,
+            messageCount: {
+                debug: 0,
+                error: 0,
+                fatal: 0,
+                info: 0,
+                log: 0,
+                warn: 0,
+                total: 0
+            },
+            popovers: {
+                basket: false,
+                geolocation: false,
+                messages: false,
+                preferences: false,
+                session: false,
+                site: false,
+                user: false
+            },
             section: null,
-            subsection: null
+            subsection: null,
+            toolbarShown: false,
+            tooltipDelay: 300
         };
     },
     mounted() {
@@ -85,24 +437,86 @@ export default {
         const toolbarShown = localStorage.getItem('RVW_ToolbarShown');
 
         if (drawerOpen) {
-            this.drawerOpenb = JSON.parse(drawerOpen);
+            this.drawerOpen = JSON.parse(drawerOpen);
         }
 
         if (toolbarShown) {
             this.toolbarShown = JSON.parse(toolbarShown);
         }
+
+        if (this.drawerOpen || this.toolbarShown) {
+            this.fetchData();
+        }
     },
-    computed: {},
+    computed: {
+        messageClass() {
+            if (this.messageCount.fatal > 0) {
+                return 'fatal';
+            } else if (this.messageCount.error > 0) {
+                return 'error';
+            } else if (this.messageCount.warn > 0) {
+                return 'warn';
+            } else if (this.messageCount.info > 0) {
+                return 'info';
+            } else if (this.messageCount.debug > 0) {
+                return 'debug';
+            } else if (this.messageCount.log > 0) {
+                return 'log';
+            }
+
+            return '';
+        },
+    },
     methods: {
         closeDrawer() {
             this.drawerOpen = false;
             this.section = null;
             this.subsection = null;
         },
+        closeToolbar() {
+            this.resetToolbar();
+            this.toolbarShown = false;
+        },
+        async fetchData() {
+            const response = await this.axios.get(`${window.RVW_DevToolsURL}?timestamp=${this.lastDebugTimeStamp}`);
+
+            if (response && typeof response.data !== 'undefined') {
+                this.debugData = response.data;
+
+                if (typeof response.data.messages !== 'undefined') {
+                    const msg = response.data.messages;
+
+                    console.log(msg);
+
+                    this.messageCount.debug = msg.debug.length;
+                    this.messageCount.error = msg.error.length;
+                    this.messageCount.fatal = msg.fatal.length;
+                    this.messageCount.info = msg.info.length;
+                    this.messageCount.log = msg.log.length;
+                    this.messageCount.warn = msg.warn.length;
+                    this.messageCount.total = (msg.debug.length + msg.error.length + msg.fatal.length + msg.info.length + msg.log.length + msg.warn.length);
+                }
+            }
+        },
         openDrawer(section, subsection) {
-            this.drawerOpen = true;
+            this.resetToolbar();
             this.section = section;
             this.subsection = subsection;
+            this.drawerOpen = true;
+        },
+        openToolbar() {
+            this.toolbarShown = true;
+        },
+        resetToolbar(ignore) {
+            Object.keys(this.popovers).forEach((id) => {
+                if (!ignore || ignore !== id) {
+                    this.popovers[id] = false;
+                }
+            });
+        },
+        togglePopover(id) {
+            this.resetToolbar(id);
+            this.popovers[id] = !this.popovers[id];
         }
     },
     watch: {
