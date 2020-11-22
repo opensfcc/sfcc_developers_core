@@ -2317,6 +2317,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'DevTools',
   components: {},
@@ -26470,346 +26484,390 @@ var render = function() {
     [
       _c("transition", { attrs: { name: "fade" } }, [
         _vm.drawerOpen && _vm.mounted && _vm.debugData
-          ? _c("div", { staticClass: "devtool-drawer" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "devtool-close-drawer",
-                  attrs: { "data-devtool": "" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.closeDrawer()
+          ? _c(
+              "div",
+              { staticClass: "devtool-drawer" },
+              [
+                _c(
+                  "button",
+                  {
+                    staticClass: "devtool-close-drawer",
+                    attrs: { "data-devtool": "" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.closeDrawer()
+                      }
                     }
-                  }
-                },
-                [
-                  _c("svg", { attrs: { role: "img" } }, [
-                    _c("use", { attrs: { href: "#devtool-close" } })
+                  },
+                  [
+                    _c("svg", { attrs: { role: "img" } }, [
+                      _c("use", { attrs: { href: "#devtool-close" } })
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "devtool-menu" }, [
+                  _c("ul", [
+                    _c("li", [
+                      _c(
+                        "button",
+                        {
+                          class: { active: _vm.section === "basket" },
+                          attrs: { "data-devtool": "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.openDrawer("basket", "")
+                            }
+                          }
+                        },
+                        [
+                          _c("svg", { attrs: { role: "img" } }, [
+                            _c("use", { attrs: { href: "#devtool-basket" } })
+                          ]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("Basket")]),
+                          _vm._v(" "),
+                          _vm.basketCount > 0
+                            ? _c("span", { staticClass: "count" }, [
+                                _vm._v(_vm._s(_vm.basketCount))
+                              ])
+                            : _vm._e()
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c(
+                        "button",
+                        {
+                          class: { active: _vm.section === "customer" },
+                          attrs: { "data-devtool": "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.openDrawer("customer", "")
+                            }
+                          }
+                        },
+                        [
+                          _c("svg", { attrs: { role: "img" } }, [
+                            _c("use", { attrs: { href: "#devtool-customer" } })
+                          ]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("Customer")])
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c(
+                        "button",
+                        {
+                          class: { active: _vm.section === "geolocation" },
+                          attrs: { "data-devtool": "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.openDrawer("geolocation", "")
+                            }
+                          }
+                        },
+                        [
+                          _c("svg", { attrs: { role: "img" } }, [
+                            _c("use", {
+                              attrs: { href: "#devtool-geolocation" }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("Geolocation")])
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c(
+                        "button",
+                        {
+                          class: { active: _vm.section === "messages" },
+                          attrs: { "data-devtool": "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.openDrawer("messages", "")
+                            }
+                          }
+                        },
+                        [
+                          _c("svg", { attrs: { role: "img" } }, [
+                            _c("use", { attrs: { href: "#devtool-messages" } })
+                          ]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("Messages")]),
+                          _vm._v(" "),
+                          _vm.messageCount.total > 0
+                            ? _c(
+                                "span",
+                                {
+                                  staticClass: "count",
+                                  class: _vm.messageClass
+                                },
+                                [_vm._v(_vm._s(_vm.messageCount.total))]
+                              )
+                            : _vm._e()
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c(
+                        "button",
+                        {
+                          class: { active: _vm.section === "preferences" },
+                          attrs: { "data-devtool": "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.openDrawer("preferences", "")
+                            }
+                          }
+                        },
+                        [
+                          _c("svg", { attrs: { role: "img" } }, [
+                            _c("use", {
+                              attrs: { href: "#devtool-preferences" }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("Preferences")])
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c(
+                        "button",
+                        {
+                          class: { active: _vm.section === "session" },
+                          attrs: { "data-devtool": "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.openDrawer("session", "")
+                            }
+                          }
+                        },
+                        [
+                          _c("svg", { attrs: { role: "img" } }, [
+                            _c("use", { attrs: { href: "#devtool-session" } })
+                          ]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("Session")])
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c(
+                        "button",
+                        {
+                          class: { active: _vm.section === "site" },
+                          attrs: { "data-devtool": "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.openDrawer("site", "")
+                            }
+                          }
+                        },
+                        [
+                          _c("svg", { attrs: { role: "img" } }, [
+                            _c("use", { attrs: { href: "#devtool-site" } })
+                          ]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("Site")])
+                        ]
+                      )
+                    ])
                   ])
-                ]
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "devtool-menu" }, [
-                _c("ul", [
-                  _c("li", [
-                    _c(
-                      "button",
-                      {
-                        class: { active: _vm.section === "basket" },
-                        attrs: { "data-devtool": "" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.openDrawer("basket", "")
-                          }
-                        }
-                      },
-                      [
-                        _c("svg", { attrs: { role: "img" } }, [
-                          _c("use", { attrs: { href: "#devtool-basket" } })
-                        ]),
-                        _vm._v(" "),
-                        _c("span", [_vm._v("Basket")]),
-                        _vm._v(" "),
-                        _vm.basketCount > 0
-                          ? _c("span", { staticClass: "count" }, [
-                              _vm._v(_vm._s(_vm.basketCount))
-                            ])
-                          : _vm._e()
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c(
-                      "button",
-                      {
-                        class: { active: _vm.section === "customer" },
-                        attrs: { "data-devtool": "" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.openDrawer("customer", "")
-                          }
-                        }
-                      },
-                      [
-                        _c("svg", { attrs: { role: "img" } }, [
-                          _c("use", { attrs: { href: "#devtool-customer" } })
-                        ]),
-                        _vm._v(" "),
-                        _c("span", [_vm._v("Customer")])
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c(
-                      "button",
-                      {
-                        class: { active: _vm.section === "geolocation" },
-                        attrs: { "data-devtool": "" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.openDrawer("geolocation", "")
-                          }
-                        }
-                      },
-                      [
-                        _c("svg", { attrs: { role: "img" } }, [
-                          _c("use", { attrs: { href: "#devtool-geolocation" } })
-                        ]),
-                        _vm._v(" "),
-                        _c("span", [_vm._v("Geolocation")])
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c(
-                      "button",
-                      {
-                        class: { active: _vm.section === "messages" },
-                        attrs: { "data-devtool": "" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.openDrawer("messages", "")
-                          }
-                        }
-                      },
-                      [
-                        _c("svg", { attrs: { role: "img" } }, [
-                          _c("use", { attrs: { href: "#devtool-messages" } })
-                        ]),
-                        _vm._v(" "),
-                        _c("span", [_vm._v("Messages")]),
-                        _vm._v(" "),
-                        _vm.messageCount.total > 0
-                          ? _c(
-                              "span",
-                              { staticClass: "count", class: _vm.messageClass },
-                              [_vm._v(_vm._s(_vm.messageCount.total))]
-                            )
-                          : _vm._e()
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c(
-                      "button",
-                      {
-                        class: { active: _vm.section === "preferences" },
-                        attrs: { "data-devtool": "" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.openDrawer("preferences", "")
-                          }
-                        }
-                      },
-                      [
-                        _c("svg", { attrs: { role: "img" } }, [
-                          _c("use", { attrs: { href: "#devtool-preferences" } })
-                        ]),
-                        _vm._v(" "),
-                        _c("span", [_vm._v("Preferences")])
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c(
-                      "button",
-                      {
-                        class: { active: _vm.section === "session" },
-                        attrs: { "data-devtool": "" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.openDrawer("session", "")
-                          }
-                        }
-                      },
-                      [
-                        _c("svg", { attrs: { role: "img" } }, [
-                          _c("use", { attrs: { href: "#devtool-session" } })
-                        ]),
-                        _vm._v(" "),
-                        _c("span", [_vm._v("Session")])
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c(
-                      "button",
-                      {
-                        class: { active: _vm.section === "site" },
-                        attrs: { "data-devtool": "" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.openDrawer("site", "")
-                          }
-                        }
-                      },
-                      [
-                        _c("svg", { attrs: { role: "img" } }, [
-                          _c("use", { attrs: { href: "#devtool-site" } })
-                        ]),
-                        _vm._v(" "),
-                        _c("span", [_vm._v("Site")])
-                      ]
-                    )
-                  ])
+                ]),
+                _vm._v(" "),
+                _c("transition", { attrs: { name: "fade" } }, [
+                  _vm.section === "basket" && _vm.debugData.basket
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "devtool-drawer-section section-basket"
+                        },
+                        [
+                          _c("tree-view", {
+                            staticClass: "outputTree",
+                            attrs: {
+                              data: _vm.sortObjectByKeys(_vm.debugData.basket),
+                              options: {
+                                rootObjectKey: "basket",
+                                link: true,
+                                maxDepth: 1
+                              }
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("transition", { attrs: { name: "fade" } }, [
+                  _vm.section === "customer" && _vm.debugData.session
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "devtool-drawer-section section-customer"
+                        },
+                        [
+                          _c("tree-view", {
+                            staticClass: "outputTree",
+                            attrs: {
+                              data: _vm.sortObjectByKeys(
+                                _vm.debugData.session.customer
+                              ),
+                              options: {
+                                rootObjectKey: "customer",
+                                link: true,
+                                maxDepth: 1
+                              }
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("transition", { attrs: { name: "fade" } }, [
+                  _vm.section === "geolocation" && _vm.debugData.geolocation
+                    ? _c(
+                        "div",
+                        {
+                          staticClass:
+                            "devtool-drawer-section section-geolocation"
+                        },
+                        [
+                          _c("tree-view", {
+                            staticClass: "outputTree",
+                            attrs: {
+                              data: _vm.sortObjectByKeys(
+                                _vm.debugData.geolocation
+                              ),
+                              options: {
+                                rootObjectKey: "geolocation",
+                                link: true,
+                                maxDepth: 1
+                              }
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("transition", { attrs: { name: "fade" } }, [
+                  _vm.section === "messages"
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "devtool-drawer-section section-messages"
+                        },
+                        [
+                          _vm._v(
+                            "\n                    Messages\n                "
+                          )
+                        ]
+                      )
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("transition", { attrs: { name: "fade" } }, [
+                  _vm.section === "preferences" && _vm.debugData.preferences
+                    ? _c(
+                        "div",
+                        {
+                          staticClass:
+                            "devtool-drawer-section section-preferences"
+                        },
+                        [
+                          _c("tree-view", {
+                            staticClass: "outputTree",
+                            attrs: {
+                              data: _vm.sortObjectByKeys(
+                                _vm.debugData.preferences
+                              ),
+                              options: {
+                                rootObjectKey: "preferences",
+                                link: true,
+                                maxDepth: 1
+                              }
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("transition", { attrs: { name: "fade" } }, [
+                  _vm.section === "session" && _vm.debugData.session
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "devtool-drawer-section section-session"
+                        },
+                        [
+                          _c("tree-view", {
+                            staticClass: "outputTree",
+                            attrs: {
+                              data: _vm.sortObjectByKeys(_vm.debugData.session),
+                              options: {
+                                rootObjectKey: "session",
+                                link: true,
+                                maxDepth: 1
+                              }
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("transition", { attrs: { name: "fade" } }, [
+                  _vm.section === "site" && _vm.debugData.site
+                    ? _c(
+                        "div",
+                        { staticClass: "devtool-drawer-section section-site" },
+                        [
+                          _c("tree-view", {
+                            staticClass: "outputTree",
+                            attrs: {
+                              data: _vm.sortObjectByKeys(_vm.debugData.site),
+                              options: {
+                                rootObjectKey: "site",
+                                link: true,
+                                maxDepth: 1,
+                                limitRenderDepth: 2
+                              }
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    : _vm._e()
                 ])
-              ]),
-              _vm._v(" "),
-              _vm.section === "basket" && _vm.debugData.basket
-                ? _c(
-                    "div",
-                    { staticClass: "devtool-drawer-section section-basket" },
-                    [
-                      _c("tree-view", {
-                        staticClass: "outputTree",
-                        attrs: {
-                          data: _vm.sortObjectByKeys(_vm.debugData.basket),
-                          options: {
-                            rootObjectKey: "basket",
-                            link: true,
-                            maxDepth: 1
-                          }
-                        }
-                      })
-                    ],
-                    1
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.section === "customer" && _vm.debugData.session
-                ? _c(
-                    "div",
-                    { staticClass: "devtool-drawer-section section-customer" },
-                    [
-                      _c("tree-view", {
-                        staticClass: "outputTree",
-                        attrs: {
-                          data: _vm.sortObjectByKeys(
-                            _vm.debugData.session.customer
-                          ),
-                          options: {
-                            rootObjectKey: "customer",
-                            link: true,
-                            maxDepth: 1
-                          }
-                        }
-                      })
-                    ],
-                    1
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.section === "geolocation" && _vm.debugData.geolocation
-                ? _c(
-                    "div",
-                    {
-                      staticClass: "devtool-drawer-section section-geolocation"
-                    },
-                    [
-                      _c("tree-view", {
-                        staticClass: "outputTree",
-                        attrs: {
-                          data: _vm.sortObjectByKeys(_vm.debugData.geolocation),
-                          options: {
-                            rootObjectKey: "geolocation",
-                            link: true,
-                            maxDepth: 1
-                          }
-                        }
-                      })
-                    ],
-                    1
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.section === "messages"
-                ? _c(
-                    "div",
-                    { staticClass: "devtool-drawer-section section-messages" },
-                    [_vm._v("\n                    Messages\n                ")]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.section === "preferences" && _vm.debugData.preferences
-                ? _c(
-                    "div",
-                    {
-                      staticClass: "devtool-drawer-section section-preferences"
-                    },
-                    [
-                      _c("tree-view", {
-                        staticClass: "outputTree",
-                        attrs: {
-                          data: _vm.sortObjectByKeys(_vm.debugData.preferences),
-                          options: {
-                            rootObjectKey: "preferences",
-                            link: true,
-                            maxDepth: 1
-                          }
-                        }
-                      })
-                    ],
-                    1
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.section === "session" && _vm.debugData.session
-                ? _c(
-                    "div",
-                    { staticClass: "devtool-drawer-section section-session" },
-                    [
-                      _c("tree-view", {
-                        staticClass: "outputTree",
-                        attrs: {
-                          data: _vm.sortObjectByKeys(_vm.debugData.session),
-                          options: {
-                            rootObjectKey: "session",
-                            link: true,
-                            maxDepth: 1
-                          }
-                        }
-                      })
-                    ],
-                    1
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.section === "site" && _vm.debugData.site
-                ? _c(
-                    "div",
-                    { staticClass: "devtool-drawer-section section-site" },
-                    [
-                      _c("tree-view", {
-                        staticClass: "outputTree",
-                        attrs: {
-                          data: _vm.sortObjectByKeys(_vm.debugData.site),
-                          options: {
-                            rootObjectKey: "site",
-                            link: true,
-                            maxDepth: 1,
-                            limitRenderDepth: 2
-                          }
-                        }
-                      })
-                    ],
-                    1
-                  )
-                : _vm._e()
-            ])
+              ],
+              1
+            )
           : _vm._e()
       ]),
       _vm._v(" "),
