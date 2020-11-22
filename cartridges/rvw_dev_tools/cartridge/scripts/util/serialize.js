@@ -14,7 +14,7 @@ const storedUUIDs = new dw.util.HashSet();
 function serialize (original, maxDepth, depth, pojo) {
     // Set Max Depth if not defined
     if (!maxDepth) {
-        maxDepth = 3;
+        maxDepth = 5;
     }
 
     // Set Current depth if not defined
@@ -30,7 +30,7 @@ function serialize (original, maxDepth, depth, pojo) {
     // Prevent the cyclic loop caused by e.g. a customer has a profile, and a profile has a customer - around and around we go
     if ('UUID' in original) {
         if (storedUUIDs.contains(original.UUID)) {
-            return '{already returned}';
+            // return '{already returned}';
         }
 
         storedUUIDs.add(original.UUID, pojo || {});
@@ -102,6 +102,11 @@ function serializeObject (object, maxDepth, depth, pojo) {
         }
 
         if (object instanceof dw.catalog.ProductActiveData && prop === 'custom') {
+            continue;
+        }
+
+        // ignore debugger content
+        if (prop === 'RVW_Debugger') {
             continue;
         }
 

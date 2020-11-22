@@ -161,23 +161,7 @@ function console() {
  */
 function drawer() {
     var ISML = require('dw/template/ISML');
-
-    // Get Basket Info
-    var BasketMgr = require('dw/order/BasketMgr');
-    var basket = BasketMgr.getCurrentBasket();
-
-    // Get Preferences
-    var Site = require('dw/system/Site');
-    var currentSite = Site.getCurrent();
-    var preferences = Site.getCurrent().getPreferences();
-
-    ISML.renderTemplate('rvw/devtools/drawer', {
-        Debugger: session.custom.RVW_Debugger,
-        basket: serialize(basket),
-        preferences: serialize(preferences),
-        session: serialize(session),
-        site: serialize(currentSite)
-    });
+    ISML.renderTemplate('rvw/devtools/drawer');
 }
 
 // Export Functions

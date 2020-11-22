@@ -16,7 +16,7 @@
             }
 
             .devtool-drawer-section {
-                width: calc(100% - $drawer-sidebar-width-mobile);
+                width: calc(100% - #{$drawer-sidebar-width-mobile});
                 left: $drawer-sidebar-width-mobile;
             }
         }

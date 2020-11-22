@@ -2,7 +2,7 @@
     <div id="rvw_dev_tools">
         <!-- Drawer -->
         <transition name="fade">
-            <div class="devtool-drawer" v-if="drawerOpen">
+            <div class="devtool-drawer" v-if="drawerOpen && mounted && debugData">
                 <button class="devtool-close-drawer" @click.prevent="closeDrawer()" data-devtool>
                     <svg role="img"><use href="#devtool-close"/></svg>
                 </button>
@@ -14,6 +14,12 @@
                                 <svg role="img"><use href="#devtool-basket"/></svg>
                                 <span>Basket</span>
                                 <span class="count" v-if="basketCount > 0">{{ basketCount }}</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button data-devtool @click.prevent="openDrawer('customer', '')" :class="{ 'active': section === 'customer' }">
+                                <svg role="img"><use href="#devtool-customer"/></svg>
+                                <span>Customer</span>
                             </button>
                         </li>
                         <li>
@@ -47,26 +53,36 @@
                                 <span>Site</span>
                             </button>
                         </li>
-                        <li>
-                            <button data-devtool @click.prevent="openDrawer('user', '')" :class="{ 'active': section === 'user' }">
-                                <svg role="img"><use href="#devtool-user"/></svg>
-                                <span>User</span>
-                            </button>
-                        </li>
                     </ul>
                 </div>
 
                 <!-- Basket Section -->
                 <transition name="fade">
-                    <div class="devtool-drawer-section section-basket" v-if="section === 'basket'">
-                        Basket
+                    <div class="devtool-drawer-section section-basket" v-if="section === 'basket' && debugData.basket">
+                        <tree-view class="outputTree"
+                            :data="sortObjectByKeys(debugData.basket)"
+                            :options="{ rootObjectKey: 'basket', link: true, maxDepth: 1 }"
+                        />
+                    </div>
+                </transition>
+
+                <!-- Customer Section -->
+                <transition name="fade">
+                    <div class="devtool-drawer-section section-customer" v-if="section === 'customer' && debugData.session">
+                        <tree-view class="outputTree"
+                            :data="sortObjectByKeys(debugData.session.customer)"
+                            :options="{ rootObjectKey: 'customer', link: true, maxDepth: 1 }"
+                        />
                     </div>
                 </transition>
 
                 <!-- Geolocation Section -->
                 <transition name="fade">
-                    <div class="devtool-drawer-section section-geolocation" v-if="section === 'geolocation'">
-                        Geolocation
+                    <div class="devtool-drawer-section section-geolocation" v-if="section === 'geolocation' && debugData.geolocation">
+                        <tree-view class="outputTree"
+                            :data="sortObjectByKeys(debugData.geolocation)"
+                            :options="{ rootObjectKey: 'geolocation', link: true, maxDepth: 1 }"
+                        />
                     </div>
                 </transition>
 
@@ -79,29 +95,31 @@
 
                 <!-- Preferences Section -->
                 <transition name="fade">
-                    <div class="devtool-drawer-section section-preferences" v-if="section === 'preferences'">
-                        Preferences
+                    <div class="devtool-drawer-section section-preferences" v-if="section === 'preferences' && debugData.preferences">
+                        <tree-view class="outputTree"
+                            :data="sortObjectByKeys(debugData.preferences)"
+                            :options="{ rootObjectKey: 'preferences', link: true, maxDepth: 1 }"
+                        />
                     </div>
                 </transition>
 
                 <!-- Session Section -->
                 <transition name="fade">
-                    <div class="devtool-drawer-section section-session" v-if="section === 'session'">
-                        Session
+                    <div class="devtool-drawer-section section-session" v-if="section === 'session' && debugData.session">
+                        <tree-view class="outputTree"
+                            :data="sortObjectByKeys(debugData.session)"
+                            :options="{ rootObjectKey: 'session', link: true, maxDepth: 1 }"
+                        />
                     </div>
                 </transition>
 
                 <!-- Site Section -->
                 <transition name="fade">
-                    <div class="devtool-drawer-section section-site" v-if="section === 'site'">
-                        Site
-                    </div>
-                </transition>
-
-                <!-- User Section -->
-                <transition name="fade">
-                    <div class="devtool-drawer-section section-user" v-if="section === 'user'">
-                        User
+                    <div class="devtool-drawer-section section-site" v-if="section === 'site' && debugData.site">
+                        <tree-view class="outputTree"
+                            :data="sortObjectByKeys(debugData.site)"
+                            :options="{ rootObjectKey: 'site', link: true, maxDepth: 1, limitRenderDepth: 2 }"
+                        />
                     </div>
                 </transition>
             </div>
@@ -109,7 +127,7 @@
 
         <!-- Toolbar -->
         <transition name="fade">
-            <div class="devtool-toolbar" v-if="toolbarShown && !drawerOpen" @click.self="resetToolbar()">
+            <div class="devtool-toolbar" v-if="toolbarShown && !drawerOpen && mounted && debugData" @click.self="resetToolbar()">
                 <!-- Basket -->
                 <div class="toolbar-button-wrapper">
                     <!-- Basket Popover -->
@@ -127,6 +145,25 @@
                     >
                         <span v-if="basketCount > 0">{{ basketCount }}</span>
                         <svg role="img"><use href="#devtool-basket"/></svg>
+                    </button>
+                </div>
+
+                <!-- Customer -->
+                <div class="toolbar-button-wrapper">
+                    <!-- Customer Popover -->
+                    <transition name="fade">
+                        <div class="devtool-popover customer" id="popoverUser" ref="popoverUser" role="tooltip" v-if="popovers.customer">
+                            <div class="table"></div>
+                        </div>
+                    </transition>
+
+                    <!-- Customer Button -->
+                    <button class="toolbar-button customer no-count" id="popoverButtonUser" ref="popoverButtonUser" aria-describedby="popoverUser" data-devtool
+                        @click.prevent="togglePopover('customer')"
+                        v-tooltip="{ content: 'Customer', classes: popovers.customer ? 'devtool-tooltip-disabled' : 'devtool-tooltip', delay: { show: tooltipDelay } }"
+                        :class="{ 'active': popovers.customer }"
+                    >
+                        <svg role="img"><use href="#devtool-customer"/></svg>
                     </button>
                 </div>
 
@@ -275,27 +312,8 @@
                     </button>
                 </div>
 
-                <!-- User -->
-                <div class="toolbar-button-wrapper">
-                    <!-- User Popover -->
-                    <transition name="fade">
-                        <div class="devtool-popover user" id="popoverUser" ref="popoverUser" role="tooltip" v-if="popovers.user">
-                            <div class="table"></div>
-                        </div>
-                    </transition>
-
-                    <!-- User Button -->
-                    <button class="toolbar-button user no-count" id="popoverButtonUser" ref="popoverButtonUser" aria-describedby="popoverUser" data-devtool
-                        @click.prevent="togglePopover('user')"
-                        v-tooltip="{ content: 'User', classes: popovers.user ? 'devtool-tooltip-disabled' : 'devtool-tooltip', delay: { show: tooltipDelay } }"
-                        :class="{ 'active': popovers.user }"
-                    >
-                        <svg role="img"><use href="#devtool-user"/></svg>
-                    </button>
-                </div>
-
                 <!-- Close Toolbar -->
-                <button class="hide-toolbar" @click="closeToolbar()" v-tooltip="{ content: 'Hide Toolbar', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }" data-devtool>
+                <button class="hide-toolbar" @click="closeToolbar()" v-tooltip="{ content: 'Close SFCC Toolbar', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }" data-devtool>
                     <svg role="img"><use href="#devtool-close"/></svg>
                 </button>
             </div>
@@ -304,10 +322,12 @@
         <!-- Show Toolbar -->
         <transition name="fade">
             <button class="devtool-show-toolbar" data-devtool
-                v-if="!toolbarShown && !drawerOpen"
+                v-if="!toolbarShown && !drawerOpen && mounted"
                 @click="openToolbar()"
-                v-tooltip="{ content: 'Show Toolbar', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }"
-            ></button>
+                v-tooltip="{ content: 'Open SFCC Toolbar', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }"
+            >
+                <svg role="img"><use href="#devtool-salesforce"/></svg>
+            </button>
         </transition>
 
         <!-- SVG Sprites -->
@@ -324,6 +344,12 @@
             <symbol id="devtool-close" viewBox="0 0 33.84 33.67">
                 <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-miterlimit="10" stroke-width="4">
                     <path d="M2 2l29.84 29.67M31.84 2L2 31.67"/>
+                </g>
+            </symbol>
+            <symbol id="devtool-customer" viewBox="0 0 44 46.99">
+                <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-miterlimit="10" stroke-width="4">
+                    <circle cx="22" cy="13" r="11"/>
+                    <path d="M42 36.74v6.07c0 .58-.2 2.18-.78 2.18H3.28C2.71 45 2 43.39 2 42.81v-6.57c0-6.63 9-12 20-12s20 5.37 20 12z"/>
                 </g>
             </symbol>
             <symbol id="devtool-geolocation" viewBox="0 0 36 46">
@@ -343,6 +369,9 @@
                     <path d="M2 6h8M10 2h12v8H10zM22 6h22M44 22h-8M36 26H24v-8h12zM24 22H2M2 38h8M10 34h12v8H10zM22 38h22"/>
                 </g>
             </symbol>
+            <symbol id="devtool-salesforce" viewBox="0 0 32 32">
+                <path d="M10 6c-3.9 0-7 3.1-7 7 0 .4.1.8.1 1.2-.7 1-1.1 2.2-1.1 3.5 0 3.4 2.8 6.2 6.2 6.3 1.3 1.2 2.9 2 4.8 2s3.6-.9 4.9-2.1h.1c1.6 0 2.9-.9 3.8-2.1.4.1.8.2 1.2.2 3.9 0 7-3.1 7-7s-3.1-7-7-7c-.7 0-1.3.2-2 .4-1.1-.9-2.5-1.4-4-1.4-.9 0-1.8.3-2.6.7C13.2 6.7 11.7 6 10 6zm0 2c1.4 0 2.6.5 3.5 1.4l.5.5.6-.3c.8-.4 1.5-.6 2.4-.6 1.2 0 2.3.4 3.2 1.2l.5.4.6-.2c.6-.2 1.2-.3 1.8-.3 2.8 0 5 2.2 5 5s-2.2 5-5 5c-.4 0-.9-.1-1.3-.2l-.8-.2-.4.7c-.5.9-1.4 1.6-2.6 1.6h-.3l-.5-.1-.3.4c-1 1-2.4 1.7-3.9 1.7s-2.8-.7-3.7-1.7l-.4-.3h-.7C5.9 22 4 20.1 4 17.7c0-1 .4-1.9 1-2.7l.3-.4-.1-.5c-.1-.3-.2-.7-.2-1.1 0-2.8 2.2-5 5-5z"/>
+            </symbol>
             <symbol id="devtool-session" viewBox="0 0 41.92 41.92">
                 <g fill="none" stroke="#FFFFFF" stroke-linecap="round">
                     <circle cx="20.96" cy="20.96" r="19" stroke-miterlimit="10" stroke-width="3.92"/>
@@ -354,12 +383,6 @@
                     <path d="M13 44H2.88a.78.78 0 01-.88-.74V18M38 19v24.26a.78.78 0 01-.88.74H26"/>
                     <path stroke-linecap="round" d="M38 18.89L20 2 2 18.43"/>
                     <path d="M14 46V31h12v15"/>
-                </g>
-            </symbol>
-            <symbol id="devtool-user" viewBox="0 0 44 46.99">
-                <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-miterlimit="10" stroke-width="4">
-                    <circle cx="22" cy="13" r="11"/>
-                    <path d="M42 36.74v6.07c0 .58-.2 2.18-.78 2.18H3.28C2.71 45 2 43.39 2 42.81v-6.57c0-6.63 9-12 20-12s20 5.37 20 12z"/>
                 </g>
             </symbol>
         </svg>
@@ -376,6 +399,7 @@ export default {
             debugData: null,
             debugTimout: null,
             drawerOpen: false,
+            mounted: false,
             messageCount: {
                 debug: 0,
                 error: 0,
@@ -424,9 +448,10 @@ export default {
         }
 
         if (this.drawerOpen || this.toolbarShown) {
-            this.fetchData();
             this.eventListener();
         }
+
+        this.mounted = true;
     },
     computed: {
         messageClass() {
@@ -448,6 +473,14 @@ export default {
         },
     },
     methods: {
+        cleanDrawerOutput() {
+            setTimeout(() => {
+                document.querySelectorAll('span.tree-view-item-key').forEach((elm) => {
+                    let text = elm.innerText;
+                    elm.innerText = text.replace(/"/g, '');
+                });
+            }, 10);
+        },
         closeDrawer() {
             this.drawerOpen = false;
             this.section = null;
@@ -468,14 +501,19 @@ export default {
         },
         eventListener() {
             if (!this.drawerOpen && !this.toolbarShown && this.listeningForClicks) {
+                // Nothing is open that we can render to, so kill event listeners
                 clearTimeout(this.debugTimout);
                 document.removeEventListener('click', this.eventHandler, { passive: true });
                 document.removeEventListener('change', this.eventHandler, { passive: true });
                 this.listeningForClicks = false;
             } else if (!this.listeningForClicks) {
+                // We just opened the Drawer or Toolbar so let's listen for events
                 document.addEventListener('click', this.eventHandler, { passive: true });
                 document.addEventListener('change', this.eventHandler, { passive: true });
                 this.listeningForClicks = true;
+
+                // Let's go ahead and fetch the latest data too
+                this.fetchData();
             }
         },
         async fetchData() {
@@ -495,6 +533,8 @@ export default {
                     this.messageCount.warn = msg.warn.length;
                     this.messageCount.total = (msg.debug.length + msg.error.length + msg.fatal.length + msg.info.length + msg.log.length + msg.warn.length);
                 }
+
+                this.cleanDrawerOutput();
             }
         },
         openDrawer(section, subsection) {
@@ -513,6 +553,40 @@ export default {
                 }
             });
         },
+        sortObjectByKeys(obj) {
+            if (!obj) {
+                return obj;
+            }
+
+            const isArray = obj instanceof Array;
+            let sortedObj = {};
+
+            if (isArray) {
+                sortedObj = obj.map((item) => this.sortObjectByKeys(item));
+            } else {
+                let keys = Object.keys(obj);
+                keys.sort(function(key1, key2) {
+                    key1 = key1.toLowerCase();
+                    key2 = key2.toLowerCase();
+
+                    if (key1 < key2) { return -1; }
+                    if (key1 > key2) { return 1; }
+
+                    return 0;
+                });
+
+                for (let index in keys) {
+                    let key = keys[index];
+                    if (typeof obj[key] === 'object') {
+                        sortedObj[key] = this.sortObjectByKeys(obj[key]);
+                    } else {
+                        sortedObj[key] = obj[key];
+                    }
+                }
+            }
+
+            return sortedObj;
+        },
         togglePopover(id) {
             this.resetToolbar(id);
             this.popovers[id] = !this.popovers[id];
@@ -528,11 +602,13 @@ export default {
         section: {
             handler() {
                 localStorage.setItem('RVW_DrawerSection', this.section);
+                this.cleanDrawerOutput();
             }
         },
         subsection: {
             handler() {
                 localStorage.setItem('RVW_DrawerSubsection', this.subsection);
+                this.cleanDrawerOutput();
             }
         },
         toolbarShown: {

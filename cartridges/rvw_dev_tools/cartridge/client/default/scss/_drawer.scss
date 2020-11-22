@@ -1,6 +1,7 @@
 #rvw_dev_tools {
     .devtool-drawer {
         background: #222;
+        border-top: 2px solid #666;
         bottom: 0;
         color: #fff;
         height: 50vh;
@@ -149,7 +150,7 @@
         }
 
         .devtool-drawer-section {
-            width: calc(100% - $drawer-sidebar-width);
+            width: calc(100% - #{$drawer-sidebar-width});
             position: absolute;
             top: 0;
             left: $drawer-sidebar-width;

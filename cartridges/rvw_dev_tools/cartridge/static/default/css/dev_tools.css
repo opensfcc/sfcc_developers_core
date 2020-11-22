@@ -1,3 +1,4 @@
+@import url(https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500&display=swap);
 #rvw_dev_tools {
   line-height: 1;
   box-sizing: border-box;
@@ -8,6 +9,7 @@
 
 #rvw_dev_tools .devtool-drawer {
   background: #222;
+  border-top: 2px solid #666;
   bottom: 0;
   color: #fff;
   height: 50vh;
@@ -117,7 +119,7 @@
       opacity: 1;
       outline: none; }
   #rvw_dev_tools .devtool-drawer .devtool-drawer-section {
-    width: calc(100% - $drawer-sidebar-width);
+    width: calc(100% - 160px);
     position: absolute;
     top: 0;
     left: 160px;
@@ -135,7 +137,7 @@
     #rvw_dev_tools .devtool-drawer .devtool-menu button svg {
       margin-right: 0; }
   #rvw_dev_tools .devtool-drawer .devtool-drawer-section {
-    width: calc(100% - $drawer-sidebar-width-mobile);
+    width: calc(100% - 50px);
     left: 50px; } }
 
 @media only screen and (max-width: 480px) {
@@ -227,23 +229,31 @@
             color: #BBB; }
 
 #rvw_dev_tools .devtool-show-toolbar {
-  position: fixed;
-  bottom: 0;
-  right: 14px;
-  width: 44px;
-  height: 34px;
-  display: block;
-  z-index: 9999;
-  border-radius: 8px 8px 0 0;
-  padding: 0;
-  margin: 0;
-  border: 0;
-  background: url("data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.086 18.61l5.996-14.004a1 1 0 011.878.678l-.04.11-5.996 14.004a1 1 0 01-1.878-.677l.04-.11 5.996-14.005-5.996 14.005zm-5.793-7.317l4-4a1 1 0 011.497 1.32l-.083.094L4.414 12l3.293 3.293a1 1 0 01-1.32 1.497l-.094-.083-4-4a1 1 0 01-.083-1.32l.083-.094 4-4-4 4zm14-4.001a1 1 0 011.32-.083l.093.083 4.001 4a1 1 0 01.083 1.321l-.083.095-4.001 3.995a1 1 0 01-1.497-1.32l.084-.095 3.292-3.289-3.293-3.293a1 1 0 010-1.414z' fill='%23FFFFFF' fill-rule='nonzero'/%3E%3C/svg%3E") no-repeat center center #222;
+  background: #222;
+  border-radius: 0;
   border: 2px solid #666;
-  border-bottom: none; }
+  border-bottom: 0;
+  border-left: 0;
+  bottom: 0;
+  display: block;
+  height: 40px;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  transition: all 0.25s;
+  width: 40px;
+  z-index: 999999; }
+  #rvw_dev_tools .devtool-show-toolbar svg {
+    width: 24px;
+    height: 24px;
+    fill: #FFF; }
+  #rvw_dev_tools .devtool-show-toolbar:hover {
+    background-color: #000; }
 
 #rvw_dev_tools .devtool-toolbar {
   background: #222;
+  border-top: 2px solid #666;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -413,6 +423,52 @@
 #rvw_dev_tools .fade-enter, #rvw_dev_tools .fade-leave-to {
   opacity: 0; }
 
+#rvw_dev_tools .tree-view-wrapper {
+  min-height: 100%; }
+
+#rvw_dev_tools .tree-view-item-key {
+  color: #fff;
+  font-weight: 300; }
+
+#rvw_dev_tools .tree-view-item-hint {
+  color: #a2a2a3;
+  font-weight: 300 !important; }
+
+#rvw_dev_tools .tree-view-item, #rvw_dev_tools .tree-view-item *, #rvw_dev_tools pre {
+  font-family: 'Roboto Mono', monospace;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px; }
+
+#rvw_dev_tools .tree-view-item-key-with-chevron {
+  left: -14px;
+  position: relative; }
+
+#rvw_dev_tools .tree-view-item-key-with-chevron::before,
+#rvw_dev_tools .tree-view-item-key-with-chevron.opened::before {
+  color: #fff;
+  top: 0 !important; }
+
+#rvw_dev_tools .tree-view-item-value {
+  font-weight: 500; }
+  #rvw_dev_tools .tree-view-item-value.tree-view-item-value-string, #rvw_dev_tools .tree-view-item-value.tree-view-item-value-string a {
+    color: #ea7e52;
+    white-space: pre-wrap; }
+  #rvw_dev_tools .tree-view-item-value.tree-view-item-value-boolean {
+    color: #3495e6; }
+  #rvw_dev_tools .tree-view-item-value.tree-view-item-value-number {
+    color: #abde91; }
+  #rvw_dev_tools .tree-view-item-value.tree-view-item-value-null {
+    color: #3495e6; }
+  #rvw_dev_tools .tree-view-item-value.tree-view-item-value-string a {
+    text-decoration: none; }
+    #rvw_dev_tools .tree-view-item-value.tree-view-item-value-string a:hover {
+      text-decoration: underline; }
+
+#rvw_dev_tools .tree-view-wrapper > .tree-view-item > .tree-view-item-leaf > .tree-view-item-node:first-of-type {
+  pointer-events: none;
+  opacity: 0.5; }
+
 @media only screen and (max-width: 768px) {
   #rvw_dev_tools .devtool-drawer .devtool-menu {
     width: 50px; }
@@ -421,7 +477,7 @@
     #rvw_dev_tools .devtool-drawer .devtool-menu button svg {
       margin-right: 0; }
   #rvw_dev_tools .devtool-drawer .devtool-drawer-section {
-    width: calc(100% - $drawer-sidebar-width-mobile);
+    width: calc(100% - 50px);
     left: 50px; } }
 
 @media only screen and (max-width: 480px) {
