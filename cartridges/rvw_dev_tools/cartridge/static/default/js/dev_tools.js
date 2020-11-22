@@ -26698,7 +26698,8 @@ var render = function() {
                     ? _c(
                         "div",
                         {
-                          staticClass: "devtool-drawer-section section-basket"
+                          staticClass:
+                            "devtool-drawer-section section-basket tree-view"
                         },
                         [
                           _c("tree-view", {
@@ -26723,7 +26724,8 @@ var render = function() {
                     ? _c(
                         "div",
                         {
-                          staticClass: "devtool-drawer-section section-customer"
+                          staticClass:
+                            "devtool-drawer-section section-customer tree-view"
                         },
                         [
                           _c("tree-view", {
@@ -26751,7 +26753,7 @@ var render = function() {
                         "div",
                         {
                           staticClass:
-                            "devtool-drawer-section section-geolocation"
+                            "devtool-drawer-section section-geolocation tree-view"
                         },
                         [
                           _c("tree-view", {
@@ -26778,7 +26780,8 @@ var render = function() {
                     ? _c(
                         "div",
                         {
-                          staticClass: "devtool-drawer-section section-messages"
+                          staticClass:
+                            "devtool-drawer-section section-messages log-view"
                         },
                         [
                           _vm._v(
@@ -26795,7 +26798,7 @@ var render = function() {
                         "div",
                         {
                           staticClass:
-                            "devtool-drawer-section section-preferences"
+                            "devtool-drawer-section section-preferences tree-view"
                         },
                         [
                           _c("tree-view", {
@@ -26822,7 +26825,8 @@ var render = function() {
                     ? _c(
                         "div",
                         {
-                          staticClass: "devtool-drawer-section section-session"
+                          staticClass:
+                            "devtool-drawer-section section-session tree-view"
                         },
                         [
                           _c("tree-view", {
@@ -26846,7 +26850,10 @@ var render = function() {
                   _vm.section === "site" && _vm.debugData.site
                     ? _c(
                         "div",
-                        { staticClass: "devtool-drawer-section section-site" },
+                        {
+                          staticClass:
+                            "devtool-drawer-section section-site tree-view"
+                        },
                         [
                           _c("tree-view", {
                             staticClass: "outputTree",

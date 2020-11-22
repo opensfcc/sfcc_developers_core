@@ -58,7 +58,7 @@
 
                 <!-- Basket Section -->
                 <transition name="fade">
-                    <div class="devtool-drawer-section section-basket" v-if="section === 'basket' && debugData.basket">
+                    <div class="devtool-drawer-section section-basket tree-view" v-if="section === 'basket' && debugData.basket">
                         <tree-view class="outputTree"
                             :data="sortObjectByKeys(debugData.basket)"
                             :options="{ rootObjectKey: 'basket', link: true, maxDepth: 1 }"
@@ -68,7 +68,7 @@
 
                 <!-- Customer Section -->
                 <transition name="fade">
-                    <div class="devtool-drawer-section section-customer" v-if="section === 'customer' && debugData.session">
+                    <div class="devtool-drawer-section section-customer tree-view" v-if="section === 'customer' && debugData.session">
                         <tree-view class="outputTree"
                             :data="sortObjectByKeys(debugData.session.customer)"
                             :options="{ rootObjectKey: 'customer', link: true, maxDepth: 1 }"
@@ -78,7 +78,7 @@
 
                 <!-- Geolocation Section -->
                 <transition name="fade">
-                    <div class="devtool-drawer-section section-geolocation" v-if="section === 'geolocation' && debugData.geolocation">
+                    <div class="devtool-drawer-section section-geolocation tree-view" v-if="section === 'geolocation' && debugData.geolocation">
                         <tree-view class="outputTree"
                             :data="sortObjectByKeys(debugData.geolocation)"
                             :options="{ rootObjectKey: 'geolocation', link: true, maxDepth: 1 }"
@@ -88,14 +88,14 @@
 
                 <!-- Messages Section -->
                 <transition name="fade">
-                    <div class="devtool-drawer-section section-messages" v-if="section === 'messages'">
+                    <div class="devtool-drawer-section section-messages log-view" v-if="section === 'messages'">
                         Messages
                     </div>
                 </transition>
 
                 <!-- Preferences Section -->
                 <transition name="fade">
-                    <div class="devtool-drawer-section section-preferences" v-if="section === 'preferences' && debugData.preferences">
+                    <div class="devtool-drawer-section section-preferences tree-view" v-if="section === 'preferences' && debugData.preferences">
                         <tree-view class="outputTree"
                             :data="sortObjectByKeys(debugData.preferences)"
                             :options="{ rootObjectKey: 'preferences', link: true, maxDepth: 1 }"
@@ -105,7 +105,7 @@
 
                 <!-- Session Section -->
                 <transition name="fade">
-                    <div class="devtool-drawer-section section-session" v-if="section === 'session' && debugData.session">
+                    <div class="devtool-drawer-section section-session tree-view" v-if="section === 'session' && debugData.session">
                         <tree-view class="outputTree"
                             :data="sortObjectByKeys(debugData.session)"
                             :options="{ rootObjectKey: 'session', link: true, maxDepth: 1 }"
@@ -115,7 +115,7 @@
 
                 <!-- Site Section -->
                 <transition name="fade">
-                    <div class="devtool-drawer-section section-site" v-if="section === 'site' && debugData.site">
+                    <div class="devtool-drawer-section section-site tree-view" v-if="section === 'site' && debugData.site">
                         <tree-view class="outputTree"
                             :data="sortObjectByKeys(debugData.site)"
                             :options="{ rootObjectKey: 'site', link: true, maxDepth: 1, limitRenderDepth: 2 }"

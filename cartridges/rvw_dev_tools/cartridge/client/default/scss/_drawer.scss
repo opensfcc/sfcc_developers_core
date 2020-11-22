@@ -159,6 +159,10 @@
             padding: 20px;
             font-size: 16px;
             color: #FFF;
+
+            &.tree-view {
+                padding: 20px 0 20px 5px;
+            }
         }
     }
 }

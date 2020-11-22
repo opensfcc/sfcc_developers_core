@@ -128,6 +128,8 @@
     padding: 20px;
     font-size: 16px;
     color: #FFF; }
+    #rvw_dev_tools .devtool-drawer .devtool-drawer-section.tree-view {
+      padding: 20px 0 20px 5px; }
 
 @media only screen and (max-width: 768px) {
   #rvw_dev_tools .devtool-drawer .devtool-menu {
@@ -447,7 +449,8 @@
 #rvw_dev_tools .tree-view-item-key-with-chevron::before,
 #rvw_dev_tools .tree-view-item-key-with-chevron.opened::before {
   color: #fff;
-  top: 0 !important; }
+  top: 0 !important;
+  opacity: 0.25; }
 
 #rvw_dev_tools .tree-view-item-value {
   font-weight: 500; }
@@ -466,8 +469,7 @@
       text-decoration: underline; }
 
 #rvw_dev_tools .tree-view-wrapper > .tree-view-item > .tree-view-item-leaf > .tree-view-item-node:first-of-type {
-  pointer-events: none;
-  opacity: 0.5; }
+  display: none; }
 
 @media only screen and (max-width: 768px) {
   #rvw_dev_tools .devtool-drawer .devtool-menu {

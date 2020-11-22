@@ -17,7 +17,7 @@
         font-family: 'Roboto Mono', monospace;
         font-weight: normal;
         font-size: 14px;
-        line-height: 20px;
+        line-height: 22px;
     }
 
     .tree-view-item-key-with-chevron {
@@ -29,6 +29,7 @@
     .tree-view-item-key-with-chevron.opened::before {
         color: #fff;
         top: 0 !important;
+        opacity: 0.25;
     }
 
     .tree-view-item-value {
@@ -57,7 +58,6 @@
     }
 
     .tree-view-wrapper > .tree-view-item > .tree-view-item-leaf > .tree-view-item-node:first-of-type {
-        pointer-events: none;
-        opacity: 0.5;
+        display: none;
     }
 }
