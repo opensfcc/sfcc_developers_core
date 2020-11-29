@@ -1,7 +1,10 @@
 .devtool-tooltip {
     z-index: 99999;
 
-    .tooltip-inner {
+    .tooltip-inner,
+    .tooltip-inner:not([class*='background--']),
+    .tooltip-inner:not([class*='text--']),
+    .tooltip-inner:not([class*='font-size--']) {
         background: black;
         color: white;
         border-radius: 4px;

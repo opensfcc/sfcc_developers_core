@@ -25,8 +25,6 @@ function GetData() {
     response.setHttpHeader(Response.CONTENT_SECURITY_POLICY, 'frame-ancestors \'self\'');
     response.setHttpHeader(Response.X_CONTENT_TYPE_OPTIONS, 'nosniff');
 
-    const timestamp = request.getHttpParameterMap().get('timestamp').getDoubleValue(0);
-    const isConsole = request.getHttpParameterMap().get('console').getBooleanValue(false);
     const location = request.getGeolocation();
 
     if (System.getInstanceType() === System.PRODUCTION_SYSTEM) {
@@ -47,72 +45,14 @@ function GetData() {
     var currentSite = Site.getCurrent();
     var preferences = Site.getCurrent().getPreferences();
 
-    var messages = session.custom.RVW_Debugger;
-
-    if (timestamp !== 0) {
-        messages = {
-            debug: [],
-            error: [],
-            fatal: [],
-            info: [],
-            log: [],
-            warn: []
-        };
-
-        session.custom.RVW_Debugger.debug.forEach(function(msg){
-            if (msg.timestamp >= timestamp) {
-                messages.debug.push(msg)
-            }
-        });
-
-        session.custom.RVW_Debugger.error.forEach(function(msg){
-            if (msg.timestamp >= timestamp) {
-                messages.error.push(msg)
-            }
-        });
-
-        session.custom.RVW_Debugger.fatal.forEach(function(msg){
-            if (msg.timestamp >= timestamp) {
-                messages.fatal.push(msg)
-            }
-        });
-
-        session.custom.RVW_Debugger.info.forEach(function(msg){
-            if (msg.timestamp >= timestamp) {
-                messages.info.push(msg)
-            }
-        });
-
-        session.custom.RVW_Debugger.log.forEach(function(msg){
-            if (msg.timestamp >= timestamp) {
-                messages.log.push(msg)
-            }
-        });
-
-        session.custom.RVW_Debugger.warn.forEach(function(msg){
-            if (msg.timestamp >= timestamp) {
-                messages.warn.push(msg)
-            }
-        });
-    }
-
     // Send Content then Clear Logs
-    if (isConsole) {
-        sendJSON({
-            messages: messages,
-            timestamp: new Date().getTime()
-        });
-    } else {
-        sendJSON({
-            basket: serialize(basket),
-            geolocation: serialize(location),
-            messages: messages,
-            preferences: serialize(preferences),
-            session: serialize(session),
-            site: serialize(currentSite),
-            timestamp: new Date().getTime()
-        })
-    }
+    sendJSON({
+        basket: serialize(basket),
+        geolocation: serialize(location),
+        preferences: serialize(preferences),
+        session: serialize(session),
+        site: serialize(currentSite)
+    })
 }
 
 /**

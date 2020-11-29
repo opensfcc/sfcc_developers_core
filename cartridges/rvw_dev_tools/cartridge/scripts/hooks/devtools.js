@@ -1,10 +1,11 @@
 'use strict';
 
-var serialize = require('./serialize');
+var serialize = require('../util/serialize');
 
-var requestID = !empty(request.requestID) ? request.requestID.toString() : null;
-var isAJAX = (request.httpParameterMap.format.stringValue === 'ajax');
-var defaultMessages = {
+/**
+ * Placeholder to store Server Side Debugger Messages
+ */
+var Debugger = {
     debug: [],
     error: [],
     fatal: [],
@@ -12,17 +13,6 @@ var defaultMessages = {
     log: [],
     warn: []
 };
-
-// Placeholder to store Server Side Debugger Messages
-session.custom.RVW_Debugger = session.custom.RVW_Debugger || defaultMessages;
-
-// If this is not AJAX, and this is a brand new request ID, reset debugger
-if (!isAJAX && !empty(requestID) && !empty(session.custom.RVW_Debugger.requestID) && session.custom.RVW_Debugger.requestID !== requestID) {
-    session.custom.RVW_Debugger = defaultMessages;
-}
-
-// Track Current Debug Request Session ID
-session.custom.RVW_Debugger.requestID = requestID;
 
 /**
  * Generate Stack Trace for Better Debugging
@@ -32,8 +22,8 @@ var stackTrace = function() {
     var trace = {
         fileName: null,
         lineNumber: null,
-        requestID: requestID,
-        requestType: (isAJAX) ? 'ajax' : 'http',
+        requestID: request.requestID,
+        requestType: (request.httpParameterMap.format.stringValue === 'ajax') ? 'ajax' : 'http',
         requestURL: request.httpURL.toString(),
         stack: null,
         timestamp: new Date().getTime()
@@ -74,7 +64,7 @@ var stackTrace = function() {
 var addMessages = function (method, messages, trace) {
     for (i in messages) {
         trace.message = serialize(messages[i]);
-        session.custom.RVW_Debugger[method].push(trace);
+        Debugger[method].push(trace);
     }
 };
 
@@ -87,7 +77,7 @@ function debug() {
         var messages = Array.prototype.slice.call(arguments, 0) || [];
         addMessages('debug', messages, stackTrace());
     } catch (err) {
-        session.custom.RVW_Debugger.fatal.push(trace);
+        Debugger.fatal.push(err);
     }
 }
 
@@ -100,7 +90,7 @@ function error() {
         var messages = Array.prototype.slice.call(arguments, 0) || [];
         addMessages('error', messages, stackTrace());
     } catch (err) {
-        session.custom.RVW_Debugger.fatal.push(trace);
+        Debugger.fatal.push(err);
     }
 }
 
@@ -113,7 +103,7 @@ function info() {
         var messages = Array.prototype.slice.call(arguments, 0) || [];
         addMessages('info', messages, stackTrace());
     } catch (err) {
-        session.custom.RVW_Debugger.fatal.push(trace);
+        Debugger.fatal.push(err);
     }
 }
 
@@ -127,7 +117,7 @@ function log() {
         var messages = Array.prototype.slice.call(arguments, 0) || [];
         addMessages('log', messages, stackTrace());
     } catch (err) {
-        session.custom.RVW_Debugger.fatal.push(trace);
+        Debugger.fatal.push(err);
     }
 }
 
@@ -140,7 +130,7 @@ function warn() {
         var messages = Array.prototype.slice.call(arguments, 0) || [];
         addMessages('warn', messages, stackTrace());
     } catch (err) {
-        session.custom.RVW_Debugger.fatal.push(trace);
+        Debugger.fatal.push(err);
     }
 }
 
@@ -151,7 +141,7 @@ function warn() {
 function console() {
     var ISML = require('dw/template/ISML');
     ISML.renderTemplate('rvw/devtools/console', {
-        Debugger: session.custom.RVW_Debugger
+        Debugger: Debugger
     });
 }
 
@@ -161,7 +151,29 @@ function console() {
  */
 function drawer() {
     var ISML = require('dw/template/ISML');
-    ISML.renderTemplate('rvw/devtools/drawer');
+
+    // Get Basket Info
+    var BasketMgr = require('dw/order/BasketMgr');
+    var basket = BasketMgr.getCurrentBasket();
+
+    // Get Preferences
+    var Site = require('dw/system/Site');
+    var currentSite = Site.getCurrent();
+    var preferences = Site.getCurrent().getPreferences();
+
+    // GeoLocation Data
+    var location = request.getGeolocation() || {};
+
+    ISML.renderTemplate('rvw/devtools/drawer', {
+        Debugger: {
+            basket: serialize(basket),
+            geolocation: serialize(location),
+            messages: Debugger,
+            preferences: serialize(preferences),
+            session: serialize(session),
+            site: serialize(currentSite)
+        }
+    });
 }
 
 // Export Functions

@@ -10,45 +10,45 @@
                 <div class="devtool-menu">
                     <ul>
                         <li>
-                            <button data-devtool @click.prevent="openDrawer('basket', '')" :class="{ 'active': section === 'basket' }">
+                            <button data-devtool @click.prevent="openDrawer('basket')" :class="{ 'active': section === 'basket' }">
                                 <svg role="img"><use href="#devtool-basket"/></svg>
                                 <span>Basket</span>
                                 <span class="count" v-if="basketCount > 0">{{ basketCount }}</span>
                             </button>
                         </li>
                         <li>
-                            <button data-devtool @click.prevent="openDrawer('customer', '')" :class="{ 'active': section === 'customer' }">
+                            <button data-devtool @click.prevent="openDrawer('customer')" :class="{ 'active': section === 'customer' }">
                                 <svg role="img"><use href="#devtool-customer"/></svg>
                                 <span>Customer</span>
                             </button>
                         </li>
                         <li>
-                            <button data-devtool @click.prevent="openDrawer('geolocation', '')" :class="{ 'active': section === 'geolocation' }">
+                            <button data-devtool @click.prevent="openDrawer('geolocation')" :class="{ 'active': section === 'geolocation' }">
                                 <svg role="img"><use href="#devtool-geolocation"/></svg>
                                 <span>Geolocation</span>
                             </button>
                         </li>
                         <li>
-                            <button data-devtool @click.prevent="openDrawer('messages', '')" :class="{ 'active': section === 'messages' }">
+                            <button data-devtool @click.prevent="openDrawer('messages', messageClass.replace('notice-', ''))" :class="{ 'active': section === 'messages' }">
                                 <svg role="img"><use href="#devtool-messages"/></svg>
                                 <span>Messages</span>
                                 <span class="count" :class="messageClass" v-if="messageCount.total > 0">{{ messageCount.total }}</span>
                             </button>
                         </li>
                         <li>
-                            <button data-devtool @click.prevent="openDrawer('preferences', '')" :class="{ 'active': section === 'preferences' }">
+                            <button data-devtool @click.prevent="openDrawer('preferences')" :class="{ 'active': section === 'preferences' }">
                                 <svg role="img"><use href="#devtool-preferences"/></svg>
                                 <span>Preferences</span>
                             </button>
                         </li>
                         <li>
-                            <button data-devtool @click.prevent="openDrawer('session', '')" :class="{ 'active': section === 'session' }">
+                            <button data-devtool @click.prevent="openDrawer('session')" :class="{ 'active': section === 'session' }">
                                 <svg role="img"><use href="#devtool-session"/></svg>
                                 <span>Session</span>
                             </button>
                         </li>
                         <li>
-                            <button data-devtool @click.prevent="openDrawer('site', '')" :class="{ 'active': section === 'site' }">
+                            <button data-devtool @click.prevent="openDrawer('site')" :class="{ 'active': section === 'site' }">
                                 <svg role="img"><use href="#devtool-site"/></svg>
                                 <span>Site</span>
                             </button>
@@ -58,68 +58,130 @@
 
                 <!-- Basket Section -->
                 <transition name="fade">
-                    <div class="devtool-drawer-section section-basket tree-view" v-if="section === 'basket' && debugData.basket">
+                    <div class="devtool-drawer-section section-basket tree-view" v-if="section === 'basket'">
                         <tree-view class="outputTree"
+                            v-if="debugData.basket"
                             :data="sortObjectByKeys(debugData.basket)"
                             :options="{ rootObjectKey: 'basket', link: true, maxDepth: 1 }"
                         />
+                        <span class="no-results" v-if="!debugData.basket">No Basket</span>
                     </div>
                 </transition>
 
                 <!-- Customer Section -->
                 <transition name="fade">
-                    <div class="devtool-drawer-section section-customer tree-view" v-if="section === 'customer' && debugData.session">
+                    <div class="devtool-drawer-section section-customer tree-view" v-if="section === 'customer'">
                         <tree-view class="outputTree"
+                            v-if="debugData.session.customer"
                             :data="sortObjectByKeys(debugData.session.customer)"
                             :options="{ rootObjectKey: 'customer', link: true, maxDepth: 1 }"
                         />
+                        <span class="no-results" v-if="!debugData.session.customer">No Customer</span>
                     </div>
                 </transition>
 
                 <!-- Geolocation Section -->
                 <transition name="fade">
-                    <div class="devtool-drawer-section section-geolocation tree-view" v-if="section === 'geolocation' && debugData.geolocation">
+                    <div class="devtool-drawer-section section-geolocation tree-view" v-if="section === 'geolocation'">
                         <tree-view class="outputTree"
+                            v-if="debugData.geolocation"
                             :data="sortObjectByKeys(debugData.geolocation)"
                             :options="{ rootObjectKey: 'geolocation', link: true, maxDepth: 1 }"
                         />
+                        <span class="no-results" v-if="!debugData.geolocation">No Geolocation</span>
                     </div>
                 </transition>
 
                 <!-- Messages Section -->
                 <transition name="fade">
                     <div class="devtool-drawer-section section-messages log-view" v-if="section === 'messages'">
-                        Messages
+                        <div class="button-wrapper">
+                            <button data-devtool
+                                @click.prevent="openDrawer('messages', 'debug')"
+                                :class="{ 'empty': messageCount.debug === 0 }"
+                            >
+                                <span class="label">Debug</span>
+                                <span class="count notice-debug">{{ messageCount.debug }}</span>
+                            </button>
+                            <button data-devtool
+                                @click.prevent="openDrawer('messages', 'error')"
+                                :class="{ 'empty': messageCount.error === 0 }"
+                            >
+                                <span class="label">Error</span>
+                                <span class="count notice-error">{{ messageCount.error }}</span>
+                            </button>
+                            <button data-devtool
+                                @click.prevent="openDrawer('messages', 'fatal')"
+                                :class="{ 'empty': messageCount.fatal === 0 }"
+                            >
+                                <span class="label">Fatal</span>
+                                <span class="count notice-fatal">{{ messageCount.fatal }}</span>
+                            </button>
+                            <button data-devtool
+                                @click.prevent="openDrawer('messages', 'info')"
+                                :class="{ 'empty': messageCount.info === 0 }"
+                            >
+                                <span class="label">Info</span>
+                                <span class="count notice-info">{{ messageCount.info }}</span>
+                            </button>
+                            <button data-devtool
+                                @click.prevent="openDrawer('messages', 'log')"
+                                :class="{ 'empty': messageCount.log === 0 }"
+                            >
+                                <span class="label">Log</span>
+                                <span class="count notice-log">{{ messageCount.log }}</span>
+                            </button>
+                            <button data-devtool
+                                @click.prevent="openDrawer('messages', 'warn')"
+                                :class="{ 'empty': messageCount.warn === 0 }"
+                            >
+                                <span class="label">Warn</span>
+                                <span class="count notice-warn">{{ messageCount.warn }}</span>
+                            </button>
+                        </div>
+
+                        <div class="subsection" v-if="subsection === 'debug'">debug</div>
+                        <div class="subsection" v-if="subsection === 'error'">error</div>
+                        <div class="subsection" v-if="subsection === 'fatal'">fatal</div>
+                        <div class="subsection" v-if="subsection === 'info'">info</div>
+                        <div class="subsection" v-if="subsection === 'log'">log</div>
+                        <div class="subsection" v-if="subsection === 'warn'">warn</div>
                     </div>
                 </transition>
 
                 <!-- Preferences Section -->
                 <transition name="fade">
-                    <div class="devtool-drawer-section section-preferences tree-view" v-if="section === 'preferences' && debugData.preferences">
+                    <div class="devtool-drawer-section section-preferences tree-view" v-if="section === 'preferences'">
                         <tree-view class="outputTree"
+                            v-if="debugData.preferences"
                             :data="sortObjectByKeys(debugData.preferences)"
                             :options="{ rootObjectKey: 'preferences', link: true, maxDepth: 1 }"
                         />
+                        <span class="no-results" v-if="!debugData.preferences">No Preferences</span>
                     </div>
                 </transition>
 
                 <!-- Session Section -->
                 <transition name="fade">
-                    <div class="devtool-drawer-section section-session tree-view" v-if="section === 'session' && debugData.session">
+                    <div class="devtool-drawer-section section-session tree-view" v-if="section === 'session'">
                         <tree-view class="outputTree"
+                            v-if="debugData.session"
                             :data="sortObjectByKeys(debugData.session)"
                             :options="{ rootObjectKey: 'session', link: true, maxDepth: 1 }"
                         />
+                        <span class="no-results" v-if="!debugData.session">No Session</span>
                     </div>
                 </transition>
 
                 <!-- Site Section -->
                 <transition name="fade">
-                    <div class="devtool-drawer-section section-site tree-view" v-if="section === 'site' && debugData.site">
+                    <div class="devtool-drawer-section section-site tree-view" v-if="section === 'site'">
                         <tree-view class="outputTree"
+                            v-if="debugData.site"
                             :data="sortObjectByKeys(debugData.site)"
                             :options="{ rootObjectKey: 'site', link: true, maxDepth: 1, limitRenderDepth: 2 }"
                         />
+                        <span class="no-results" v-if="!debugData.site">No Site</span>
                     </div>
                 </transition>
             </div>
@@ -133,7 +195,24 @@
                     <!-- Basket Popover -->
                     <transition name="fade">
                         <div class="devtool-popover basket" id="popoverBasket" ref="popoverBasket" role="tooltip" v-if="popovers.basket">
-                            <div class="table"></div>
+                            <div class="table">
+                                <button data-devtool
+                                    @click.prevent="openDrawer('basket')"
+                                    :class="{ 'empty': !debugData.basket }"
+                                    v-tooltip.right="{ content: basketCount > 0 ? 'View Full Basket Details' : 'Basket Empty', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }"
+                                >
+                                    <span class="label">Items</span>
+                                    <span class="count notice-default">{{ basketCount }}</span>
+                                </button>
+                                <button data-devtool
+                                    @click.prevent="openDrawer('basket')"
+                                    :class="{ 'empty': !debugData.basket }"
+                                    v-tooltip.right="{ content: debugData.basket.shipments.length > 0 ? 'View Full Basket Details' : 'Basket Empty', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }"
+                                >
+                                    <span class="label">Shipments</span>
+                                    <span class="count notice-default">{{ debugData.basket.shipments.length || 0 }}</span>
+                                </button>
+                            </div>
                         </div>
                     </transition>
 
@@ -141,7 +220,7 @@
                     <button class="toolbar-button basket" id="popoverButtonBasket" ref="popoverButtonBasket" aria-describedby="popoverBasket" data-devtool
                         @click.prevent="togglePopover('basket')"
                         v-tooltip="{ content: 'Basket', classes: popovers.basket ? 'devtool-tooltip-disabled' : 'devtool-tooltip', delay: { show: tooltipDelay } }"
-                        :class="{ 'active': popovers.basket, 'no-count': basketCount === 0 }"
+                        :class="{ 'active': popovers.basket, 'no-count': basketCount === 0, 'notice-good': basketCount === 0 }"
                     >
                         <span v-if="basketCount > 0">{{ basketCount }}</span>
                         <svg role="img"><use href="#devtool-basket"/></svg>
@@ -152,13 +231,46 @@
                 <div class="toolbar-button-wrapper">
                     <!-- Customer Popover -->
                     <transition name="fade">
-                        <div class="devtool-popover customer" id="popoverUser" ref="popoverUser" role="tooltip" v-if="popovers.customer">
-                            <div class="table"></div>
+                        <div class="devtool-popover customer" id="popoverCustomer" ref="popoverCustomer" role="tooltip" v-if="popovers.customer">
+                            <div class="table">
+                                <button data-devtool
+                                    @click.prevent="openDrawer('customer')"
+                                    v-tooltip.right="{ content: 'View Full Customer Details', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }">
+                                    <span class="label">Anonymous</span>
+                                    <span class="count notice-default">
+                                        {{ debugData.session.customer.anonymous ? '✓' : ' ' }}
+                                    </span>
+                                </button>
+                                <button data-devtool
+                                    @click.prevent="openDrawer('customer')"
+                                    v-tooltip.right="{ content: 'View Full Customer Details', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }">
+                                    <span class="label">Authenticated</span>
+                                    <span class="count notice-default">
+                                        {{ debugData.session.customer.authenticated ? '✓' : ' ' }}
+                                    </span>
+                                </button>
+                                <button data-devtool
+                                    @click.prevent="openDrawer('customer')"
+                                    v-tooltip.right="{ content: 'View Full Customer Details', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }">
+                                    <span class="label">External</span>
+                                    <span class="count notice-default">
+                                        {{ debugData.session.customer.externallyAuthenticated ? '✓' : ' ' }}
+                                    </span>
+                                </button>
+                                <button data-devtool
+                                    @click.prevent="openDrawer('customer')"
+                                    v-tooltip.right="{ content: 'View Full Customer Details', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }">
+                                    <span class="label">Registered</span>
+                                    <span class="count notice-default">
+                                        {{ debugData.session.customer.registered ? '✓' : ' ' }}
+                                    </span>
+                                </button>
+                            </div>
                         </div>
                     </transition>
 
                     <!-- Customer Button -->
-                    <button class="toolbar-button customer no-count" id="popoverButtonUser" ref="popoverButtonUser" aria-describedby="popoverUser" data-devtool
+                    <button class="toolbar-button customer no-count" id="popoverButtonCustomer" ref="popoverButtonCustomer" aria-describedby="popoverCustomer" data-devtool
                         @click.prevent="togglePopover('customer')"
                         v-tooltip="{ content: 'Customer', classes: popovers.customer ? 'devtool-tooltip-disabled' : 'devtool-tooltip', delay: { show: tooltipDelay } }"
                         :class="{ 'active': popovers.customer }"
@@ -172,7 +284,33 @@
                     <!-- Geolocation Popover -->
                     <transition name="fade">
                         <div class="devtool-popover geolocation" id="popoverGeolocation" ref="popoverGeolocation" role="tooltip" v-if="popovers.geolocation">
-                            <div class="table"></div>
+                            <div class="table">
+                                <button data-devtool
+                                    @click.prevent="openDrawer('geolocation')"
+                                    v-tooltip.right="{ content: 'View Full Geolocation Details', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }">
+                                    <span class="label" v-if="debugData.geolocation.city && debugData.geolocation.regionCode">
+                                        {{ debugData.geolocation.city }},
+                                        {{ debugData.geolocation.regionCode }}
+                                        {{ debugData.geolocation.postalCode || '' }}
+                                    </span>
+                                    <span class="label" v-else-if="debugData.geolocation.city">
+                                        {{ debugData.geolocation.city }}
+                                    </span>
+                                    <span class="label" v-else-if="debugData.geolocation.postalCode">
+                                        {{ debugData.geolocation.postalCode }}
+                                    </span>
+                                    <span class="label" v-else-if="debugData.geolocation.countryCode">
+                                        {{ debugData.geolocation.countryCode }}
+                                    </span>
+                                    <span class="label" v-else-if="debugData.geolocation.latitude && debugData.geolocation.longitude">
+                                        {{ debugData.geolocation.latitude }}
+                                        {{ debugData.geolocation.longitude }}
+                                    </span>
+                                    <span class="label" v-else>
+                                        No Location Data
+                                    </span>
+                                </button>
+                            </div>
                         </div>
                     </transition>
 
@@ -257,16 +395,9 @@
 
                 <!-- Preferences -->
                 <div class="toolbar-button-wrapper">
-                    <!-- Preferences Popover -->
-                    <transition name="fade">
-                        <div class="devtool-popover preferences" id="popoverPreferences" ref="popoverPreferences" role="tooltip" v-if="popovers.preferences">
-                            <div class="table"></div>
-                        </div>
-                    </transition>
-
                     <!-- Preferences Button -->
                     <button class="toolbar-button preferences no-count" id="popoverButtonPreferences" ref="popoverButtonPreferences" aria-describedby="popoverPreferences" data-devtool
-                        @click.prevent="togglePopover('preferences')"
+                        @click.prevent="openDrawer('preferences')"
                         v-tooltip="{ content: 'Preferences', classes: popovers.preferences ? 'devtool-tooltip-disabled' : 'devtool-tooltip', delay: { show: tooltipDelay } }"
                         :class="{ 'active': popovers.preferences }"
                     >
@@ -276,16 +407,9 @@
 
                 <!-- Session -->
                 <div class="toolbar-button-wrapper">
-                    <!-- Session Popover -->
-                    <transition name="fade">
-                        <div class="devtool-popover session" id="popoverSession" ref="popoverSession" role="tooltip" v-if="popovers.session">
-                            <div class="table"></div>
-                        </div>
-                    </transition>
-
                     <!-- Session Button -->
                     <button class="toolbar-button session no-count" id="popoverButtonSession" ref="popoverButtonSession" aria-describedby="popoverSession" data-devtool
-                        @click.prevent="togglePopover('session')"
+                        @click.prevent="openDrawer('session')"
                         v-tooltip="{ content: 'Session', classes: popovers.session ? 'devtool-tooltip-disabled' : 'devtool-tooltip', delay: { show: tooltipDelay } }"
                         :class="{ 'active': popovers.session }"
                     >
@@ -295,22 +419,20 @@
 
                 <!-- Site -->
                 <div class="toolbar-button-wrapper">
-                    <!-- Site Popover -->
-                    <transition name="fade">
-                        <div class="devtool-popover site" id="popoverSite" ref="popoverSite" role="tooltip" v-if="popovers.site">
-                            <div class="table"></div>
-                        </div>
-                    </transition>
-
                     <!-- Site Button -->
                     <button class="toolbar-button site no-count" id="popoverButtonSite" ref="popoverButtonSite" aria-describedby="popoverSite" data-devtool
-                        @click.prevent="togglePopover('site')"
+                        @click.prevent="openDrawer('site')"
                         v-tooltip="{ content: 'Site', classes: popovers.site ? 'devtool-tooltip-disabled' : 'devtool-tooltip', delay: { show: tooltipDelay } }"
                         :class="{ 'active': popovers.site }"
                     >
                         <svg role="img"><use href="#devtool-site"/></svg>
                     </button>
                 </div>
+
+                <!-- Open Console -->
+                <a :href="consoleURL" v-if="consoleURL" target="devtool-console" class="open-console" v-tooltip="{ content: 'Open SFCC Console', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }" data-devtool>
+                    <svg role="img"><use href="#devtool-console"/></svg>
+                </a>
 
                 <!-- Close Toolbar -->
                 <button class="hide-toolbar" @click="closeToolbar()" v-tooltip="{ content: 'Close SFCC Toolbar', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }" data-devtool>
@@ -346,6 +468,11 @@
                     <path d="M2 2l29.84 29.67M31.84 2L2 31.67"/>
                 </g>
             </symbol>
+            <symbol id="devtool-console" viewBox="0 0 640 512">
+                <g fill="#FFFFFF" stroke-linecap="round">
+                    <path d="M257.981 272.971L63.638 467.314c-9.373 9.373-24.569 9.373-33.941 0L7.029 444.647c-9.357-9.357-9.375-24.522-.04-33.901L161.011 256 6.99 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L257.981 239.03c9.373 9.372 9.373 24.568 0 33.941zM640 456v-32c0-13.255-10.745-24-24-24H312c-13.255 0-24 10.745-24 24v32c0 13.255 10.745 24 24 24h304c13.255 0 24-10.745 24-24z"/>
+                </g>
+            </symbol>
             <symbol id="devtool-customer" viewBox="0 0 44 46.99">
                 <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-miterlimit="10" stroke-width="4">
                     <circle cx="22" cy="13" r="11"/>
@@ -370,7 +497,9 @@
                 </g>
             </symbol>
             <symbol id="devtool-salesforce" viewBox="0 0 32 32">
-                <path d="M10 6c-3.9 0-7 3.1-7 7 0 .4.1.8.1 1.2-.7 1-1.1 2.2-1.1 3.5 0 3.4 2.8 6.2 6.2 6.3 1.3 1.2 2.9 2 4.8 2s3.6-.9 4.9-2.1h.1c1.6 0 2.9-.9 3.8-2.1.4.1.8.2 1.2.2 3.9 0 7-3.1 7-7s-3.1-7-7-7c-.7 0-1.3.2-2 .4-1.1-.9-2.5-1.4-4-1.4-.9 0-1.8.3-2.6.7C13.2 6.7 11.7 6 10 6zm0 2c1.4 0 2.6.5 3.5 1.4l.5.5.6-.3c.8-.4 1.5-.6 2.4-.6 1.2 0 2.3.4 3.2 1.2l.5.4.6-.2c.6-.2 1.2-.3 1.8-.3 2.8 0 5 2.2 5 5s-2.2 5-5 5c-.4 0-.9-.1-1.3-.2l-.8-.2-.4.7c-.5.9-1.4 1.6-2.6 1.6h-.3l-.5-.1-.3.4c-1 1-2.4 1.7-3.9 1.7s-2.8-.7-3.7-1.7l-.4-.3h-.7C5.9 22 4 20.1 4 17.7c0-1 .4-1.9 1-2.7l.3-.4-.1-.5c-.1-.3-.2-.7-.2-1.1 0-2.8 2.2-5 5-5z"/>
+                <g fill="#FFFFFF" stroke-linecap="round">
+                    <path d="M10 6c-3.9 0-7 3.1-7 7 0 .4.1.8.1 1.2-.7 1-1.1 2.2-1.1 3.5 0 3.4 2.8 6.2 6.2 6.3 1.3 1.2 2.9 2 4.8 2s3.6-.9 4.9-2.1h.1c1.6 0 2.9-.9 3.8-2.1.4.1.8.2 1.2.2 3.9 0 7-3.1 7-7s-3.1-7-7-7c-.7 0-1.3.2-2 .4-1.1-.9-2.5-1.4-4-1.4-.9 0-1.8.3-2.6.7C13.2 6.7 11.7 6 10 6zm0 2c1.4 0 2.6.5 3.5 1.4l.5.5.6-.3c.8-.4 1.5-.6 2.4-.6 1.2 0 2.3.4 3.2 1.2l.5.4.6-.2c.6-.2 1.2-.3 1.8-.3 2.8 0 5 2.2 5 5s-2.2 5-5 5c-.4 0-.9-.1-1.3-.2l-.8-.2-.4.7c-.5.9-1.4 1.6-2.6 1.6h-.3l-.5-.1-.3.4c-1 1-2.4 1.7-3.9 1.7s-2.8-.7-3.7-1.7l-.4-.3h-.7C5.9 22 4 20.1 4 17.7c0-1 .4-1.9 1-2.7l.3-.4-.1-.5c-.1-.3-.2-.7-.2-1.1 0-2.8 2.2-5 5-5z"/>
+                </g>
             </symbol>
             <symbol id="devtool-session" viewBox="0 0 41.92 41.92">
                 <g fill="none" stroke="#FFFFFF" stroke-linecap="round">
@@ -396,9 +525,10 @@ export default {
     data() {
         return {
             basketCount: 0,
-            debugData: null,
-            debugTimout: null,
+            consoleURL: window.RVW_DevConsoleURL,
+            debugData: window.RVW_DevToolsDebugger,
             drawerOpen: false,
+            listeningForClicks: false,
             mounted: false,
             messageCount: {
                 debug: 0,
@@ -411,18 +541,17 @@ export default {
             },
             popovers: {
                 basket: false,
+                customer: false,
                 geolocation: false,
                 messages: false,
                 preferences: false,
                 session: false,
-                site: false,
-                user: false
+                site: false
             },
             section: null,
             subsection: null,
             toolbarShown: false,
-            tooltipDelay: 300,
-            listeningForClicks: false
+            tooltipDelay: 300
         };
     },
     mounted() {
@@ -447,11 +576,13 @@ export default {
             this.subsection = subsection;
         }
 
+        this.getTotals();
+
+        this.mounted = true;
+
         if (this.drawerOpen || this.toolbarShown) {
             this.eventListener();
         }
-
-        this.mounted = true;
     },
     computed: {
         messageClass() {
@@ -491,9 +622,8 @@ export default {
             this.toolbarShown = false;
         },
         eventHandler(evt) {
-            // Only pay attention to elements that are likely to trigger AJAX calls
+            // Only pay attention to elements that are likely to trigger AJAX calls and not part of this devtool
             const canTriggerAjax = ['A', 'BUTTON', 'INPUT', 'SELECT', 'TEXTAREA'];
-
             if (canTriggerAjax.indexOf(evt.target.tagName) > -1 && (!evt.target.hasAttribute || (evt.target.hasAttribute && !evt.target.hasAttribute('data-devtool')))) {
                 clearTimeout(this.debugTimout);
                 this.debugTimout = setTimeout(this.fetchData, 1000);
@@ -511,37 +641,61 @@ export default {
                 document.addEventListener('click', this.eventHandler, { passive: true });
                 document.addEventListener('change', this.eventHandler, { passive: true });
                 this.listeningForClicks = true;
-
                 // Let's go ahead and fetch the latest data too
                 this.fetchData();
+            }
+        },
+        getTotals() {
+            const msg = this.debugData.messages;
+
+            this.messageCount.debug = msg.debug.length;
+            this.messageCount.error = msg.error.length;
+            this.messageCount.fatal = msg.fatal.length;
+            this.messageCount.info = msg.info.length;
+            this.messageCount.log = msg.log.length;
+            this.messageCount.warn = msg.warn.length;
+            this.messageCount.total = (msg.debug.length + msg.error.length + msg.fatal.length + msg.info.length + msg.log.length + msg.warn.length);
+
+            if (typeof this.debugData.basket !== 'undefined' && typeof this.debugData.basket.productQuantityTotal !== 'undefined') {
+                this.basketCount = this.debugData.basket.productQuantityTotal;
             }
         },
         async fetchData() {
             const response = await this.axios.get(window.RVW_DevToolsURL);
 
             if (response && typeof response.data !== 'undefined') {
-                this.debugData = response.data;
+                if (typeof response.data.basket !== 'undefined') {
+                    this.debugData.basket = response.data.basket;
+                }
 
-                if (typeof response.data.messages !== 'undefined') {
-                    const msg = response.data.messages;
+                if (typeof response.data.geolocation !== 'undefined') {
+                    this.debugData.geolocation = response.data.geolocation;
+                }
 
-                    this.messageCount.debug = msg.debug.length;
-                    this.messageCount.error = msg.error.length;
-                    this.messageCount.fatal = msg.fatal.length;
-                    this.messageCount.info = msg.info.length;
-                    this.messageCount.log = msg.log.length;
-                    this.messageCount.warn = msg.warn.length;
-                    this.messageCount.total = (msg.debug.length + msg.error.length + msg.fatal.length + msg.info.length + msg.log.length + msg.warn.length);
+                if (typeof response.data.preferences !== 'undefined') {
+                    this.debugData.preferences = response.data.preferences;
+                }
+
+                if (typeof response.data.session !== 'undefined') {
+                    this.debugData.session = response.data.session;
+                }
+
+                if (typeof response.data.site !== 'undefined') {
+                    this.debugData.site = response.data.site;
                 }
 
                 this.cleanDrawerOutput();
+                this.getTotals();
             }
         },
         openDrawer(section, subsection) {
             this.resetToolbar();
-            this.section = section;
-            this.subsection = subsection;
-            this.drawerOpen = true;
+
+            setTimeout(() => {
+                this.section = section;
+                this.subsection = subsection;
+                this.drawerOpen = true;
+            }, 10);
         },
         openToolbar() {
             this.toolbarShown = true;

@@ -14,7 +14,7 @@ const storedUUIDs = new dw.util.HashSet();
 function serialize (original, maxDepth, depth, pojo) {
     // Set Max Depth if not defined
     if (!maxDepth) {
-        maxDepth = 5;
+        maxDepth = 3;
     }
 
     // Set Current depth if not defined

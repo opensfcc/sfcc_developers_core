@@ -2,7 +2,7 @@
     "hooks": [
         {
             "name": "rvw.util.devtools",
-            "script": "./util/devtools.js"
+            "script": "./hooks/devtools.js"
         }
     ]
 }

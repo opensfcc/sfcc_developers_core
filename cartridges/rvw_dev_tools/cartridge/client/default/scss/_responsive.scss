@@ -26,18 +26,22 @@
 @media only screen and (max-width: 480px) {
     #rvw_dev_tools {
         .devtool-toolbar {
-            button.toolbar-button {
-                padding: 0 8px;
+            .toolbar-button-wrapper {
+                & > button {
+                    &.toolbar-button {
+                        padding: 0 10px;
 
-                svg {
-                    margin-left: 4px;
-                }
+                        svg {
+                            margin-left: 4px;
+                        }
 
-                &.no-count {
-                    padding: 0 10px;
+                        &.no-count {
+                            padding: 0 10px;
 
-                    svg {
-                        margin-left: 0;
+                            svg {
+                                margin-left: 0;
+                            }
+                        }
                     }
                 }
             }

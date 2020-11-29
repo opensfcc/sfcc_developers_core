@@ -6,120 +6,44 @@
 <!-- Output RVW Dev Tools Debug Messages to `window.console` -->
 <script type="text/javascript">
 (function() {
-    var lastDebugTimeStamp = 0;
-    var debugTimeout = null;
-    function generateDebugOutput(messages) {
-        // Output Debug Messages if there are any
-        if (messages.debug.length > 0) {
-            console.groupCollapsed('SFCC: %cDebug %c(' + messages.debug.length + ')', 'color: #98C379; font-weight: bold;', 'color: #999; font-weight: lighter;');
+    var messages = <isprint value="${JSON.stringify(pdict.Debugger).replace(/</g, '&lt;')}" encoding="off" />;
 
-            for (msg of messages.debug) {
-                console.debug(msg.message);
-                console.groupCollapsed('%cSTACK TRACE', 'color: #999; font-weight: lighter;');
-                console.table(msg.stack);
+    // Check if we have Debug Messages
+    if (typeof messages !== 'undefined' && messages !== '') {
+        // Generate Messages to Console
+        var generateLogs = function(type) {
+            if (messages[type].length > 0) {
+                var label = type.charAt(0).toUpperCase() + type.slice(1);
+                var colors = {
+                    debug: ['color: #98C379; font-weight: bold;', 'color: #999; font-weight: lighter;'],
+                    error: ['color: #F44747; font-weight: bold;', 'color: #999; font-weight: lighter;'],
+                    fatal: ['color: #F44747; font-weight: bold;', 'color: #999; font-weight: lighter;'],
+                    info: ['color: #528BFF; font-weight: bold;', 'color: #999; font-weight: lighter;'],
+                    log: ['font-weight: bold;', 'color: #999; font-weight: lighter;'],
+                    warn: ['color: orange; font-weight: bold;', 'color: #999; font-weight: lighter;'],
+                };
+
+                console.groupCollapsed('SFCC: %c' + label + ' %c(' + messages[type].length + ')', colors[type][0], colors[type][1]);
+
+                for (msg of messages[type]) {
+                    console[type](msg.message);
+                    console.groupCollapsed('%cSTACK TRACE', 'color: #999; font-weight: lighter;');
+                    console.table(msg.stack);
+                    console.groupEnd();
+                }
+
                 console.groupEnd();
-            }
-
-            console.groupEnd();
-        }
-
-        // Output Error Messages if there are any
-        if (messages.error.length > 0) {
-            console.groupCollapsed('SFCC: %cError %c(' + messages.error.length + ')', 'color: #F44747; font-weight: bold;', 'color: #999; font-weight: lighter;');
-
-            for (msg of messages.error) {
-                console.error(msg.message);
-                console.groupCollapsed('%cSTACK TRACE', 'color: #999; font-weight: lighter;');
-                console.table(msg.stack);
-                console.groupEnd();
-            }
-
-            console.groupEnd();
-        }
-
-        // Output Fatal Messages if there are any ( These are Failed Debugger Attempts )
-        if (messages.fatal.length > 0) {
-            console.groupCollapsed('SFCC: %cFatal %c(' + messages.fatal.length + ')', 'color: #F44747; font-weight: bold;', 'color: #999; font-weight: lighter;');
-
-            for (msg of messages.fatal) {
-                console.error(msg.message);
-            }
-
-            console.groupEnd();
-        }
-
-        // Output Info Messages if there are any
-        if (messages.info.length > 0) {
-            console.groupCollapsed('SFCC: %cInfo %c(' + messages.info.length + ')', 'color: #528BFF; font-weight: bold;', 'color: #999; font-weight: lighter;');
-
-            for (msg of messages.info) {
-                console.info(msg.message);
-                console.groupCollapsed('%cSTACK TRACE', 'color: #999; font-weight: lighter;');
-                console.table(msg.stack);
-                console.groupEnd();
-            }
-
-            console.groupEnd();
-        }
-
-        // Output Log Messages if there are any
-        if (messages.log.length > 0) {
-            console.groupCollapsed('SFCC: %cLog %c(' + messages.log.length + ')', 'font-weight: bold;', 'color: #999; font-weight: lighter;');
-
-            for (msg of messages.log) {
-                console.log(msg.message);
-                console.groupCollapsed('%cSTACK TRACE', 'color: #999; font-weight: lighter;');
-                console.table(msg.stack);
-                console.groupEnd();
-            }
-
-            console.groupEnd();
-        }
-
-        // Output Warn Messages if there are any
-        if (messages.warn.length > 0) {
-            console.groupCollapsed('SFCC: %cWarn %c(' + messages.warn.length + ')', 'color: orange; font-weight: bold;', 'color: #999; font-weight: lighter;');
-
-            for (msg of messages.warn) {
-                console.warn(msg.message);
-                console.groupCollapsed('%cSTACK TRACE', 'color: #999; font-weight: lighter;');
-                console.table(msg.stack);
-                console.groupEnd();
-            }
-
-            console.groupEnd();
-        }
-    };
-
-    function getDebugMessages() {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', '${dw.web.URLUtils.url("DevTools-GetData").toString()}?console=true&timestamp=' + lastDebugTimeStamp);
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                var response = JSON.parse(xhr.responseText);
-                lastDebugTimeStamp = response.timestamp;
-                generateDebugOutput(response.messages);
             }
         };
-        xhr.send();
-    };
 
-    function eventHandler(evt) {
-        // Only pay attention to elements that are likely to trigger AJAX calls
-        var canTriggerAjax = ['A', 'BUTTON', 'INPUT', 'SELECT', 'TEXTAREA'];
+        // Get Log Types
+        var types = Object.keys(messages);
 
-        if (canTriggerAjax.indexOf(evt.target.tagName) > -1 && (!evt.target.hasAttribute || (evt.target.hasAttribute && !evt.target.hasAttribute('data-devtool')))) {
-            clearTimeout(debugTimeout);
-            debugTimeout = setTimeout(getDebugMessages, 1000);
-        }
-    };
-
-    // Get Initial Debug Messages
-    getDebugMessages();
-
-    // Add Event Listeners most likely to trigger new AJAX Debug Events
-    document.addEventListener('click', eventHandler, { passive: true });
-    document.addEventListener('change', eventHandler, { passive: true });
+        // Output Log Messages by Type
+        types.forEach(function(type){
+            generateLogs(type);
+        });
+    }
 })();
 </script>
 
