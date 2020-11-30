@@ -3,6 +3,10 @@
         {
             "name": "rvw.util.devtools",
             "script": "./hooks/devtools.js"
+        },
+        {
+            "name": "app.template.afterFooter",
+            "script": "./hooks/devtools.js"
         }
     ]
 }

@@ -176,6 +176,11 @@ function drawer() {
     });
 }
 
+function afterFooter() {
+    var velocity = require('dw/template/Velocity');
+    velocity.render('$velocity.remoteInclude(\'DevTools-AfterFooter\')', { velocity: velocity });
+}
+
 // Export Functions
 exports.debug = debug;
 exports.error = error;
@@ -186,3 +191,5 @@ exports.warn = warn;
 // Export Templates
 exports.console = console;
 exports.drawer = drawer;
+
+exports.afterFooter = afterFooter;

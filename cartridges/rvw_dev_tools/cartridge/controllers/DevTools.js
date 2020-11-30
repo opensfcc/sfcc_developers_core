@@ -6,6 +6,8 @@
  * @module controllers/DevTools
  */
 
+var server = require('server');
+var gtmHelpers = require('*/cartridge/scripts/gtm/gtmHelpers');
 var serialize = require('../scripts/util/serialize');
 
 /**
@@ -67,5 +69,15 @@ function sendJSON(content, status) {
     response.getWriter().print(JSON.stringify(content));
 }
 
+// render helpers for velocity template use from hooks
+server.get('AfterFooter', server.middleware.include, function (req, res, next) {
+    res.render('rvw/devtools/drawer', {
+        id: gtmHelpers.gtmContainer
+    });
+
+    next();
+});
+
+module.exports = server.exports();
 module.exports.GetData = GetData;
 module.exports.GetData.public = true;

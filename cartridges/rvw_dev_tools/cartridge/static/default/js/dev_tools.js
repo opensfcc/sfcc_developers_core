@@ -2466,6 +2466,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'DevTools',
   components: {},
@@ -2660,6 +2686,17 @@ __webpack_require__.r(__webpack_exports__);
         this.subsection = subsection;
         this.drawerOpen = true;
       }, 10);
+    },
+
+    async openIDE(url) {
+      // Fire Off Ajax call to Open IDE
+      const response = await this.axios.get(url);
+
+      if (response) {
+        console.log('response', response);
+      } else {
+        window.open(url, 'ide');
+      }
     },
 
     openToolbar() {
@@ -27154,15 +27191,95 @@ var render = function() {
                             ? _c("div", { staticClass: "subsection" }, [
                                 _c(
                                   "ul",
-                                  _vm._l(_vm.debugData.messages.error, function(
-                                    msg,
-                                    index
+                                  _vm._l(_vm.debugData.messages.debug, function(
+                                    msg
                                   ) {
-                                    return _c("li", { key: index }, [
-                                      _vm._v(
-                                        "\n                                " +
-                                          _vm._s(JSON.stringify(msg)) +
-                                          "\n                            "
+                                    return _c("li", { key: msg }, [
+                                      typeof msg.message === "string"
+                                        ? _c(
+                                            "div",
+                                            { staticClass: "message" },
+                                            [
+                                              _vm._v(
+                                                "\n                                    " +
+                                                  _vm._s(msg.message) +
+                                                  "\n                                "
+                                              )
+                                            ]
+                                          )
+                                        : _c(
+                                            "div",
+                                            { staticClass: "message" },
+                                            [
+                                              _c("tree-view", {
+                                                staticClass: "outputTree",
+                                                attrs: {
+                                                  data: msg.message,
+                                                  options: {
+                                                    rootObjectKey: "debug",
+                                                    link: true,
+                                                    maxDepth: 1
+                                                  }
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                      _vm._v(" "),
+                                      _c("div", { staticClass: "file" }, [
+                                        _c(
+                                          "a",
+                                          {
+                                            attrs: {
+                                              href: msg.ide,
+                                              target: "_blank"
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                $event.preventDefault()
+                                                return _vm.openIDE(msg.ide)
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(msg.fileName) +
+                                                ":" +
+                                                _vm._s(msg.lineNumber) +
+                                                "\n                                    "
+                                            )
+                                          ]
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        { staticClass: "stack-trace" },
+                                        [
+                                          _c("button", [
+                                            _vm._v(
+                                              "\n                                        Show Stack Trace\n                                    "
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c(
+                                            "ul",
+                                            _vm._l(msg.stack, function(
+                                              trace,
+                                              index
+                                            ) {
+                                              return _c("li", { key: index }, [
+                                                _vm._v(
+                                                  "\n                                            " +
+                                                    _vm._s(trace) +
+                                                    "\n                                        "
+                                                )
+                                              ])
+                                            }),
+                                            0
+                                          )
+                                        ]
                                       )
                                     ])
                                   }),

@@ -142,19 +142,33 @@
 
                         <div class="subsection" v-if="subsection === 'debug'">
                             <ul>
-                                <li v-for="(msg, index) in debugData.messages.error" :key="index">
+                                <li v-for="msg in debugData.messages.debug" :key="msg">
                                     <div class="message" v-if="typeof msg.message === 'string'">
                                         {{ msg.message }}
                                     </div>
                                     <div class="message" v-else>
                                         <tree-view class="outputTree"
                                             :data="msg.message"
-                                            :options="{ rootObjectKey: 'debug', link: true, maxDepth: 1 }"
+                                            :options="{ rootObjectKey: 'message', link: true, maxDepth: 1 }"
                                         />
                                     </div>
 
                                     <div class="file">
-                                        <a :href="msg.ide" target="_blank" @click.prevent="openIDE(msg.ide)"></a>
+                                        <a :href="msg.ide" target="_blank" @click.prevent="openIDE(msg.ide)">
+                                            {{ msg.fileName }}:{{ msg.lineNumber }}
+                                        </a>
+                                    </div>
+
+                                    <div class="stack-trace">
+                                        <button>
+                                            Show Stack Trace
+                                        </button>
+
+                                        <ul>
+                                            <li v-for="(trace, index) in msg.stack" :key="index">
+                                                {{ trace }}
+                                            </li>
+                                        </ul>
                                     </div>
                                 </li>
                             </ul>
