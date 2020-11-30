@@ -64,7 +64,7 @@
                             :data="sortObjectByKeys(debugData.basket)"
                             :options="{ rootObjectKey: 'basket', link: true, maxDepth: 1 }"
                         />
-                        <span class="no-results" v-if="!debugData.basket">No Basket</span>
+                        <span class="no-results" v-if="!debugData.basket">Basket is Empty</span>
                     </div>
                 </transition>
 
@@ -96,51 +96,69 @@
                 <transition name="fade">
                     <div class="devtool-drawer-section section-messages log-view" v-if="section === 'messages'">
                         <div class="button-wrapper">
-                            <button data-devtool
+                            <button class="notice-debug" data-devtool
                                 @click.prevent="openDrawer('messages', 'debug')"
-                                :class="{ 'empty': messageCount.debug === 0 }"
+                                :class="{ 'empty': messageCount.debug === 0, 'active': subsection === 'debug' }"
                             >
                                 <span class="label">Debug</span>
                                 <span class="count notice-debug">{{ messageCount.debug }}</span>
                             </button>
-                            <button data-devtool
+                            <button class="notice-error" data-devtool
                                 @click.prevent="openDrawer('messages', 'error')"
-                                :class="{ 'empty': messageCount.error === 0 }"
+                                :class="{ 'empty': messageCount.error === 0, 'active': subsection === 'error' }"
                             >
                                 <span class="label">Error</span>
                                 <span class="count notice-error">{{ messageCount.error }}</span>
                             </button>
-                            <button data-devtool
+                            <button class="notice-fatal" data-devtool
                                 @click.prevent="openDrawer('messages', 'fatal')"
-                                :class="{ 'empty': messageCount.fatal === 0 }"
+                                :class="{ 'empty': messageCount.fatal === 0, 'active': subsection === 'fatal' }"
                             >
                                 <span class="label">Fatal</span>
                                 <span class="count notice-fatal">{{ messageCount.fatal }}</span>
                             </button>
-                            <button data-devtool
+                            <button class="notice-info" data-devtool
                                 @click.prevent="openDrawer('messages', 'info')"
-                                :class="{ 'empty': messageCount.info === 0 }"
+                                :class="{ 'empty': messageCount.info === 0, 'active': subsection === 'info' }"
                             >
                                 <span class="label">Info</span>
                                 <span class="count notice-info">{{ messageCount.info }}</span>
                             </button>
-                            <button data-devtool
+                            <button class="notice-log" data-devtool
                                 @click.prevent="openDrawer('messages', 'log')"
-                                :class="{ 'empty': messageCount.log === 0 }"
+                                :class="{ 'empty': messageCount.log === 0, 'active': subsection === 'log' }"
                             >
                                 <span class="label">Log</span>
                                 <span class="count notice-log">{{ messageCount.log }}</span>
                             </button>
-                            <button data-devtool
+                            <button class="notice-warn" data-devtool
                                 @click.prevent="openDrawer('messages', 'warn')"
-                                :class="{ 'empty': messageCount.warn === 0 }"
+                                :class="{ 'empty': messageCount.warn === 0, 'active': subsection === 'warn' }"
                             >
                                 <span class="label">Warn</span>
                                 <span class="count notice-warn">{{ messageCount.warn }}</span>
                             </button>
                         </div>
 
-                        <div class="subsection" v-if="subsection === 'debug'">debug</div>
+                        <div class="subsection" v-if="subsection === 'debug'">
+                            <ul>
+                                <li v-for="(msg, index) in debugData.messages.error" :key="index">
+                                    <div class="message" v-if="typeof msg.message === 'string'">
+                                        {{ msg.message }}
+                                    </div>
+                                    <div class="message" v-else>
+                                        <tree-view class="outputTree"
+                                            :data="msg.message"
+                                            :options="{ rootObjectKey: 'debug', link: true, maxDepth: 1 }"
+                                        />
+                                    </div>
+
+                                    <div class="file">
+                                        <a :href="msg.ide" target="_blank" @click.prevent="openIDE(msg.ide)"></a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                         <div class="subsection" v-if="subsection === 'error'">error</div>
                         <div class="subsection" v-if="subsection === 'fatal'">fatal</div>
                         <div class="subsection" v-if="subsection === 'info'">info</div>
@@ -207,10 +225,10 @@
                                 <button data-devtool
                                     @click.prevent="openDrawer('basket')"
                                     :class="{ 'empty': !debugData.basket }"
-                                    v-tooltip.right="{ content: debugData.basket.shipments.length > 0 ? 'View Full Basket Details' : 'Basket Empty', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }"
+                                    v-tooltip.right="{ content: debugData.basket && debugData.basket.shipments && debugData.basket.shipments.length > 0 ? 'View Full Basket Details' : 'Basket Empty', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }"
                                 >
                                     <span class="label">Shipments</span>
-                                    <span class="count notice-default">{{ debugData.basket.shipments.length || 0 }}</span>
+                                    <span class="count notice-default">{{ debugData.basket && debugData.basket.shipments && debugData.basket.shipments.length ? debugData.basket.shipments.length : 0 }}</span>
                                 </button>
                             </div>
                         </div>
@@ -220,7 +238,7 @@
                     <button class="toolbar-button basket" id="popoverButtonBasket" ref="popoverButtonBasket" aria-describedby="popoverBasket" data-devtool
                         @click.prevent="togglePopover('basket')"
                         v-tooltip="{ content: 'Basket', classes: popovers.basket ? 'devtool-tooltip-disabled' : 'devtool-tooltip', delay: { show: tooltipDelay } }"
-                        :class="{ 'active': popovers.basket, 'no-count': basketCount === 0, 'notice-good': basketCount === 0 }"
+                        :class="{ 'active': popovers.basket, 'no-count': basketCount === 0, 'notice-good': basketCount > 0 }"
                     >
                         <span v-if="basketCount > 0">{{ basketCount }}</span>
                         <svg role="img"><use href="#devtool-basket"/></svg>
@@ -656,7 +674,7 @@ export default {
             this.messageCount.warn = msg.warn.length;
             this.messageCount.total = (msg.debug.length + msg.error.length + msg.fatal.length + msg.info.length + msg.log.length + msg.warn.length);
 
-            if (typeof this.debugData.basket !== 'undefined' && typeof this.debugData.basket.productQuantityTotal !== 'undefined') {
+            if (this.debugData.basket && typeof this.debugData.basket.productQuantityTotal !== 'undefined') {
                 this.basketCount = this.debugData.basket.productQuantityTotal;
             }
         },
@@ -696,6 +714,16 @@ export default {
                 this.subsection = subsection;
                 this.drawerOpen = true;
             }, 10);
+        },
+        async openIDE(url) {
+            // Fire Off Ajax call to Open IDE
+            const response = await this.axios.get(url);
+
+            if (response) {
+                console.log('response', response);
+            } else {
+                window.open(url, 'ide');
+            }
         },
         openToolbar() {
             this.toolbarShown = true;

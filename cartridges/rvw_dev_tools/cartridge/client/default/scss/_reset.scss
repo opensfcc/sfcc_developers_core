@@ -11,4 +11,9 @@
     svg {
         vertical-align: unset;
     }
+
+    a:active, a:focus, button:active, button:focus {
+        outline: 2px auto #FFF;
+        outline-offset: 3px;
+    }
 }

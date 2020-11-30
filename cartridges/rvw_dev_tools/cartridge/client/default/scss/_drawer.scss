@@ -125,27 +125,30 @@
         }
 
         .devtool-close-drawer {
-            background: transparent;
+            background: #222222;
             border: none;
             height: 40px;
             margin: 0;
-            opacity: 0.33;
             padding: 0;
             position: absolute;
             right: 10px;
             top: 10px;
-            transition: opacity 0.25s;
             width: 40px;
             z-index: 10000;
 
             svg {
                 width: 16px;
                 height: 16px;
+                opacity: 0.33;
+                transition: opacity 0.25s;
             }
 
             &:hover, &:focus, &:active {
                 opacity: 1;
-                outline: none;
+
+                svg {
+                    opacity: 0.33;
+                }
             }
         }
 
@@ -197,6 +200,75 @@
                 font-weight: 300;
                 padding: 6px 10px;
                 text-transform: uppercase;
+            }
+
+            .button-wrapper {
+                white-space: nowrap;
+
+                button {
+                    background: #000;
+                    color: #FFF;
+                    text-transform: uppercase;
+                    font-size: 12px;
+                    padding: 8px 12px;
+                    margin-right: 4px;
+                    transition: opacity 0.25s;
+
+                    span.count {
+                        display: inline-block;
+                        margin-left: 4px;
+                        opacity: 0.33;
+                    }
+
+                    span.label {
+                        opacity: 0.5;
+                    }
+
+                    &.active {
+                        background: #CCC;
+                        color: #000;
+                        opacity: 1;
+                        font-weight: 600;
+
+                        span.count, span.label {
+                            opacity: 1;
+                        }
+                    }
+
+                    &.notice-debug.active:not(.empty) {
+                        background: $toolbar-color-debug;
+                        color: #FFF;
+                    }
+
+                    &.notice-error.active:not(.empty) {
+                        background: $toolbar-color-error;
+                        color: #FFF;
+                    }
+
+                    &.notice-fatal.active:not(.empty) {
+                        background: $toolbar-color-fatal;
+                        color: #FFF;
+                    }
+
+                    &.notice-info.active:not(.empty) {
+                        background: $toolbar-color-info;
+                        color: #FFF;
+                    }
+
+                    &.notice-log.active:not(.empty) {
+                        background: $toolbar-color-log;
+                        color: #FFF;
+                    }
+
+                    &.notice-warn.active:not(.empty) {
+                        background: $toolbar-color-warn;
+                        color: #FFF;
+                    }
+                }
+            }
+
+            .subsection {
+                margin-top: 16px;
             }
         }
     }

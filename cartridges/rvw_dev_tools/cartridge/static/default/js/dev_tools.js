@@ -2499,8 +2499,7 @@ __webpack_require__.r(__webpack_exports__);
       section: null,
       subsection: null,
       toolbarShown: false,
-      tooltipDelay: 300,
-      listeningForClicks: false
+      tooltipDelay: 300
     };
   },
 
@@ -2620,7 +2619,7 @@ __webpack_require__.r(__webpack_exports__);
       this.messageCount.warn = msg.warn.length;
       this.messageCount.total = msg.debug.length + msg.error.length + msg.fatal.length + msg.info.length + msg.log.length + msg.warn.length;
 
-      if (typeof this.debugData.basket !== 'undfined' && typeof this.debugData.basket.productQuantityTotal !== 'undfined') {
+      if (this.debugData.basket && typeof this.debugData.basket.productQuantityTotal !== 'undefined') {
         this.basketCount = this.debugData.basket.productQuantityTotal;
       }
     },
@@ -26885,7 +26884,7 @@ var render = function() {
                           _vm._v(" "),
                           !_vm.debugData.basket
                             ? _c("span", { staticClass: "no-results" }, [
-                                _vm._v("No Basket")
+                                _vm._v("Basket is Empty")
                               ])
                             : _vm._e()
                         ],
@@ -26979,24 +26978,11 @@ var render = function() {
                             _c(
                               "button",
                               {
-                                directives: [
-                                  {
-                                    name: "tooltip",
-                                    rawName: "v-tooltip.right",
-                                    value: {
-                                      content:
-                                        _vm.messageCount.debug > 0
-                                          ? "View Debug Messages"
-                                          : "No Debug Messages",
-                                      classes: "devtool-tooltip",
-                                      delay: { show: _vm.tooltipDelay }
-                                    },
-                                    expression:
-                                      "{ content: messageCount.debug > 0 ? 'View Debug Messages' : 'No Debug Messages', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }",
-                                    modifiers: { right: true }
-                                  }
-                                ],
-                                class: { empty: _vm.messageCount.debug === 0 },
+                                staticClass: "notice-debug",
+                                class: {
+                                  empty: _vm.messageCount.debug === 0,
+                                  active: _vm.subsection === "debug"
+                                },
                                 attrs: { "data-devtool": "" },
                                 on: {
                                   click: function($event) {
@@ -27021,24 +27007,11 @@ var render = function() {
                             _c(
                               "button",
                               {
-                                directives: [
-                                  {
-                                    name: "tooltip",
-                                    rawName: "v-tooltip.right",
-                                    value: {
-                                      content:
-                                        _vm.messageCount.error > 0
-                                          ? "View Error Messages"
-                                          : "No Error Messages",
-                                      classes: "devtool-tooltip",
-                                      delay: { show: _vm.tooltipDelay }
-                                    },
-                                    expression:
-                                      "{ content: messageCount.error > 0 ? 'View Error Messages' : 'No Error Messages', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }",
-                                    modifiers: { right: true }
-                                  }
-                                ],
-                                class: { empty: _vm.messageCount.error === 0 },
+                                staticClass: "notice-error",
+                                class: {
+                                  empty: _vm.messageCount.error === 0,
+                                  active: _vm.subsection === "error"
+                                },
                                 attrs: { "data-devtool": "" },
                                 on: {
                                   click: function($event) {
@@ -27063,24 +27036,11 @@ var render = function() {
                             _c(
                               "button",
                               {
-                                directives: [
-                                  {
-                                    name: "tooltip",
-                                    rawName: "v-tooltip.right",
-                                    value: {
-                                      content:
-                                        _vm.messageCount.fatal > 0
-                                          ? "View Fatal Messages"
-                                          : "No Fatal Messages",
-                                      classes: "devtool-tooltip",
-                                      delay: { show: _vm.tooltipDelay }
-                                    },
-                                    expression:
-                                      "{ content: messageCount.fatal > 0 ? 'View Fatal Messages' : 'No Fatal Messages', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }",
-                                    modifiers: { right: true }
-                                  }
-                                ],
-                                class: { empty: _vm.messageCount.fatal === 0 },
+                                staticClass: "notice-fatal",
+                                class: {
+                                  empty: _vm.messageCount.fatal === 0,
+                                  active: _vm.subsection === "fatal"
+                                },
                                 attrs: { "data-devtool": "" },
                                 on: {
                                   click: function($event) {
@@ -27105,24 +27065,11 @@ var render = function() {
                             _c(
                               "button",
                               {
-                                directives: [
-                                  {
-                                    name: "tooltip",
-                                    rawName: "v-tooltip.right",
-                                    value: {
-                                      content:
-                                        _vm.messageCount.info > 0
-                                          ? "View Info Messages"
-                                          : "No Info Messages",
-                                      classes: "devtool-tooltip",
-                                      delay: { show: _vm.tooltipDelay }
-                                    },
-                                    expression:
-                                      "{ content: messageCount.info > 0 ? 'View Info Messages' : 'No Info Messages', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }",
-                                    modifiers: { right: true }
-                                  }
-                                ],
-                                class: { empty: _vm.messageCount.info === 0 },
+                                staticClass: "notice-info",
+                                class: {
+                                  empty: _vm.messageCount.info === 0,
+                                  active: _vm.subsection === "info"
+                                },
                                 attrs: { "data-devtool": "" },
                                 on: {
                                   click: function($event) {
@@ -27147,24 +27094,11 @@ var render = function() {
                             _c(
                               "button",
                               {
-                                directives: [
-                                  {
-                                    name: "tooltip",
-                                    rawName: "v-tooltip.right",
-                                    value: {
-                                      content:
-                                        _vm.messageCount.log > 0
-                                          ? "View Log Messages"
-                                          : "No Log Messages",
-                                      classes: "devtool-tooltip",
-                                      delay: { show: _vm.tooltipDelay }
-                                    },
-                                    expression:
-                                      "{ content: messageCount.log > 0 ? 'View Log Messages' : 'No Log Messages', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }",
-                                    modifiers: { right: true }
-                                  }
-                                ],
-                                class: { empty: _vm.messageCount.log === 0 },
+                                staticClass: "notice-log",
+                                class: {
+                                  empty: _vm.messageCount.log === 0,
+                                  active: _vm.subsection === "log"
+                                },
                                 attrs: { "data-devtool": "" },
                                 on: {
                                   click: function($event) {
@@ -27189,24 +27123,11 @@ var render = function() {
                             _c(
                               "button",
                               {
-                                directives: [
-                                  {
-                                    name: "tooltip",
-                                    rawName: "v-tooltip.right",
-                                    value: {
-                                      content:
-                                        _vm.messageCount.warn > 0
-                                          ? "View Warn Messages"
-                                          : "No Warn Messages",
-                                      classes: "devtool-tooltip",
-                                      delay: { show: _vm.tooltipDelay }
-                                    },
-                                    expression:
-                                      "{ content: messageCount.warn > 0 ? 'View Warn Messages' : 'No Warn Messages', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }",
-                                    modifiers: { right: true }
-                                  }
-                                ],
-                                class: { empty: _vm.messageCount.warn === 0 },
+                                staticClass: "notice-warn",
+                                class: {
+                                  empty: _vm.messageCount.warn === 0,
+                                  active: _vm.subsection === "warn"
+                                },
                                 attrs: { "data-devtool": "" },
                                 on: {
                                   click: function($event) {
@@ -27231,7 +27152,22 @@ var render = function() {
                           _vm._v(" "),
                           _vm.subsection === "debug"
                             ? _c("div", { staticClass: "subsection" }, [
-                                _vm._v("debug")
+                                _c(
+                                  "ul",
+                                  _vm._l(_vm.debugData.messages.error, function(
+                                    msg,
+                                    index
+                                  ) {
+                                    return _c("li", { key: index }, [
+                                      _vm._v(
+                                        "\n                                " +
+                                          _vm._s(JSON.stringify(msg)) +
+                                          "\n                            "
+                                      )
+                                    ])
+                                  }),
+                                  0
+                                )
                               ])
                             : _vm._e(),
                           _vm._v(" "),
@@ -27465,6 +27401,8 @@ var render = function() {
                                         rawName: "v-tooltip.right",
                                         value: {
                                           content:
+                                            _vm.debugData.basket &&
+                                            _vm.debugData.basket.shipments &&
                                             _vm.debugData.basket.shipments
                                               .length > 0
                                               ? "View Full Basket Details"
@@ -27473,7 +27411,7 @@ var render = function() {
                                           delay: { show: _vm.tooltipDelay }
                                         },
                                         expression:
-                                          "{ content: debugData.basket.shipments.length > 0 ? 'View Full Basket Details' : 'Basket Empty', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }",
+                                          "{ content: debugData.basket && debugData.basket.shipments && debugData.basket.shipments.length > 0 ? 'View Full Basket Details' : 'Basket Empty', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }",
                                         modifiers: { right: true }
                                       }
                                     ],
@@ -27497,8 +27435,13 @@ var render = function() {
                                       [
                                         _vm._v(
                                           _vm._s(
-                                            _vm.debugData.basket.shipments
-                                              .length || 0
+                                            _vm.debugData.basket &&
+                                              _vm.debugData.basket.shipments &&
+                                              _vm.debugData.basket.shipments
+                                                .length
+                                              ? _vm.debugData.basket.shipments
+                                                  .length
+                                              : 0
                                           )
                                         )
                                       ]
@@ -27534,7 +27477,7 @@ var render = function() {
                         class: {
                           active: _vm.popovers.basket,
                           "no-count": _vm.basketCount === 0,
-                          "notice-good": _vm.basketCount === 0
+                          "notice-good": _vm.basketCount > 0
                         },
                         attrs: {
                           id: "popoverButtonBasket",

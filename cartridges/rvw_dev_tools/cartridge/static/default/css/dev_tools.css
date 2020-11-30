@@ -8,6 +8,9 @@
     box-sizing: inherit; }
   #rvw_dev_tools svg {
     vertical-align: unset; }
+  #rvw_dev_tools a:active, #rvw_dev_tools a:focus, #rvw_dev_tools button:active, #rvw_dev_tools button:focus {
+    outline: 2px auto #FFF;
+    outline-offset: 3px; }
 
 @keyframes devtools_loading {
   to {
@@ -106,24 +109,25 @@
             #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover svg, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus svg, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active svg, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active svg {
               opacity: 1; }
   #rvw_dev_tools .devtool-drawer .devtool-close-drawer {
-    background: transparent;
+    background: #222222;
     border: none;
     height: 40px;
     margin: 0;
-    opacity: 0.33;
     padding: 0;
     position: absolute;
     right: 10px;
     top: 10px;
-    transition: opacity 0.25s;
     width: 40px;
     z-index: 10000; }
     #rvw_dev_tools .devtool-drawer .devtool-close-drawer svg {
       width: 16px;
-      height: 16px; }
+      height: 16px;
+      opacity: 0.33;
+      transition: opacity 0.25s; }
     #rvw_dev_tools .devtool-drawer .devtool-close-drawer:hover, #rvw_dev_tools .devtool-drawer .devtool-close-drawer:focus, #rvw_dev_tools .devtool-drawer .devtool-close-drawer:active {
-      opacity: 1;
-      outline: none; }
+      opacity: 1; }
+      #rvw_dev_tools .devtool-drawer .devtool-close-drawer:hover svg, #rvw_dev_tools .devtool-drawer .devtool-close-drawer:focus svg, #rvw_dev_tools .devtool-drawer .devtool-close-drawer:active svg {
+        opacity: 0.33; }
   #rvw_dev_tools .devtool-drawer .devtool-drawer-section {
     color: #FFF;
     font-size: 16px;
@@ -163,6 +167,49 @@
       font-weight: 300;
       padding: 6px 10px;
       text-transform: uppercase; }
+    #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper {
+      white-space: nowrap; }
+      #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button {
+        background: #000;
+        color: #FFF;
+        text-transform: uppercase;
+        font-size: 12px;
+        padding: 8px 12px;
+        margin-right: 4px;
+        transition: opacity 0.25s; }
+        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button span.count {
+          display: inline-block;
+          margin-left: 4px;
+          opacity: 0.33; }
+        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button span.label {
+          opacity: 0.5; }
+        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.active {
+          background: #CCC;
+          color: #000;
+          opacity: 1;
+          font-weight: 600; }
+          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.active span.count, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.active span.label {
+            opacity: 1; }
+        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.notice-debug.active:not(.empty) {
+          background: #6d980a;
+          color: #FFF; }
+        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.notice-error.active:not(.empty) {
+          background: #d70000;
+          color: #FFF; }
+        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.notice-fatal.active:not(.empty) {
+          background: #990000;
+          color: #FFF; }
+        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.notice-info.active:not(.empty) {
+          background: #286981;
+          color: #FFF; }
+        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.notice-log.active:not(.empty) {
+          background: #444444;
+          color: #FFF; }
+        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.notice-warn.active:not(.empty) {
+          background: #d65507;
+          color: #FFF; }
+    #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection {
+      margin-top: 16px; }
 
 @media only screen and (max-width: 768px) {
   #rvw_dev_tools .devtool-drawer .devtool-menu {
@@ -183,7 +230,18 @@
     #rvw_dev_tools .devtool-toolbar .toolbar-button-wrapper > button.toolbar-button.no-count {
       padding: 0 10px; }
       #rvw_dev_tools .devtool-toolbar .toolbar-button-wrapper > button.toolbar-button.no-count svg {
-        margin-left: 0; } }
+        margin-left: 0; }
+  #rvw_dev_tools .devtool-drawer .devtool-close-drawer {
+    top: 3px;
+    right: 0; }
+  #rvw_dev_tools .devtool-drawer .devtool-drawer-section {
+    padding: 10px; }
+    #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button {
+      font-size: 10px;
+      padding: 6px 4px;
+      margin-right: 0px; }
+      #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button span.count {
+        display: none; } }
 
 #rvw_dev_tools .devtool-popover {
   background: #000;
@@ -590,7 +648,18 @@
     #rvw_dev_tools .devtool-toolbar .toolbar-button-wrapper > button.toolbar-button.no-count {
       padding: 0 10px; }
       #rvw_dev_tools .devtool-toolbar .toolbar-button-wrapper > button.toolbar-button.no-count svg {
-        margin-left: 0; } }
+        margin-left: 0; }
+  #rvw_dev_tools .devtool-drawer .devtool-close-drawer {
+    top: 3px;
+    right: 0; }
+  #rvw_dev_tools .devtool-drawer .devtool-drawer-section {
+    padding: 10px; }
+    #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button {
+      font-size: 10px;
+      padding: 6px 4px;
+      margin-right: 0px; }
+      #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button span.count {
+        display: none; } }
 
 
 /*# sourceMappingURL=dev_tools.css.map*/
