@@ -60,4 +60,10 @@
     .tree-view-wrapper > .tree-view-item > .tree-view-item-leaf > .tree-view-item-node:first-of-type {
         display: none;
     }
+
+    .subsection {
+        .tree-view-wrapper {
+            min-height: unset;
+        }
+    }
 }

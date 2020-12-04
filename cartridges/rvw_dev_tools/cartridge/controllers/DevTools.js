@@ -6,12 +6,57 @@
  * @module controllers/DevTools
  */
 
-var server = require('server');
-var gtmHelpers = require('*/cartridge/scripts/gtm/gtmHelpers');
 var serialize = require('../scripts/util/serialize');
 
+function AfterFooter() {
+    const System = require('dw/system/System');
+    const Response = require('dw/system/Response');
+
+    if (request.httpMethod !== 'GET' || System.getInstanceType() === System.PRODUCTION_SYSTEM) {
+        return;
+    }
+
+    response.setHttpHeader(Response.CONTENT_SECURITY_POLICY, 'frame-ancestors \'self\'');
+    response.setHttpHeader(Response.X_CONTENT_TYPE_OPTIONS, 'nosniff');
+
+    var ISML = require('dw/template/ISML');
+
+    // Get Basket Info
+    var BasketMgr = require('dw/order/BasketMgr');
+    var basket = BasketMgr.getCurrentBasket();
+
+    // Get Preferences
+    var Site = require('dw/system/Site');
+    var currentSite = Site.getCurrent();
+    var preferences = Site.getCurrent().getPreferences();
+
+    // GeoLocation Data
+    var location = request.getGeolocation() || {};
+
+    // Get Dev Tools Cache
+    var cache = dw.system.CacheMgr.getCache('DevToolsCache');
+
+    ISML.renderTemplate('rvw/devtools', {
+        Debugger: {
+            basket: serialize(basket),
+            geolocation: serialize(location),
+            messages: {
+                debug: cache.get('debug'),
+                error: cache.get('error'),
+                fatal: cache.get('fatal'),
+                info: cache.get('info'),
+                log: cache.get('log'),
+                warn: cache.get('warn')
+            },
+            preferences: serialize(preferences),
+            session: serialize(session),
+            site: serialize(currentSite)
+        }
+    });
+}
+
 /**
- * Fetch Data for Dev Drawer
+ * Fetch Server Data for Dev Drawer
  */
 function GetData() {
     if (request.httpMethod !== 'GET') {
@@ -47,10 +92,21 @@ function GetData() {
     var currentSite = Site.getCurrent();
     var preferences = Site.getCurrent().getPreferences();
 
+    // Get Dev Tools Cache
+    var cache = dw.system.CacheMgr.getCache('DevToolsCache');
+
     // Send Content then Clear Logs
     sendJSON({
         basket: serialize(basket),
         geolocation: serialize(location),
+        messages: {
+            debug: cache.get('debug'),
+            error: cache.get('error'),
+            fatal: cache.get('fatal'),
+            info: cache.get('info'),
+            log: cache.get('log'),
+            warn: cache.get('warn')
+        },
         preferences: serialize(preferences),
         session: serialize(session),
         site: serialize(currentSite)
@@ -69,15 +125,8 @@ function sendJSON(content, status) {
     response.getWriter().print(JSON.stringify(content));
 }
 
-// render helpers for velocity template use from hooks
-server.get('AfterFooter', server.middleware.include, function (req, res, next) {
-    res.render('rvw/devtools/drawer', {
-        id: gtmHelpers.gtmContainer
-    });
+module.exports.AfterFooter = AfterFooter;
+module.exports.AfterFooter.public = true;
 
-    next();
-});
-
-module.exports = server.exports();
 module.exports.GetData = GetData;
 module.exports.GetData.public = true;

@@ -26,7 +26,8 @@ var stackTrace = function() {
         requestType: (request.httpParameterMap.format.stringValue === 'ajax') ? 'ajax' : 'http',
         requestURL: request.httpURL.toString(),
         stack: null,
-        timestamp: new Date().getTime()
+        timestamp: new Date().getTime(),
+        uid: 'id' + Math.random().toString(36).substring(9)
     };
 
     try {
@@ -112,7 +113,6 @@ function info() {
  * @example: dw.system.HookMgr.callHook('rvw.util.devtools', 'log', myObject);
  */
 function log() {
-
     try {
         var messages = Array.prototype.slice.call(arguments, 0) || [];
         addMessages('log', messages, stackTrace());
@@ -135,21 +135,32 @@ function warn() {
 }
 
 /**
- * Renders Console Output to Browser
- * @example: dw.system.HookMgr.callHook('rvw.util.devtools', 'console');
+ * Support zero setup using `app.template.afterFooter` hook in SFRA
  */
-function console() {
-    var ISML = require('dw/template/ISML');
-    ISML.renderTemplate('rvw/devtools/console', {
-        Debugger: Debugger
+function afterFooter() {
+    // Get Cartridge Cache
+    var cache = dw.system.CacheMgr.getCache('DevToolsCache');
+
+    // Write log types to their own cache key ( 128KB max per key )
+    cache.put('debug', Debugger.debug);
+    cache.put('error', Debugger.error);
+    cache.put('fatal', Debugger.fatal);
+    cache.put('info', Debugger.info);
+    cache.put('log', Debugger.log);
+    cache.put('warn', Debugger.warn);
+
+    // Render Remote Include to Prevent ISML Bug
+    var velocity = require('dw/template/Velocity');
+    velocity.render('$velocity.remoteInclude(\'DevTools-AfterFooter\')', {
+        velocity: velocity
     });
 }
 
 /**
- * Renders Debug Drawer in Browser
- * @example: dw.system.HookMgr.callHook('rvw.util.devtools', 'drawer');
+ * Support Dev Tool Rendering for SFSG Sites
+ * @example: dw.system.HookMgr.callHook('rvw.util.devtools', 'render');
  */
-function drawer() {
+function render() {
     var ISML = require('dw/template/ISML');
 
     // Get Basket Info
@@ -164,7 +175,7 @@ function drawer() {
     // GeoLocation Data
     var location = request.getGeolocation() || {};
 
-    ISML.renderTemplate('rvw/devtools/drawer', {
+    ISML.renderTemplate('rvw/devtools', {
         Debugger: {
             basket: serialize(basket),
             geolocation: serialize(location),
@@ -176,11 +187,6 @@ function drawer() {
     });
 }
 
-function afterFooter() {
-    var velocity = require('dw/template/Velocity');
-    velocity.render('$velocity.remoteInclude(\'DevTools-AfterFooter\')', { velocity: velocity });
-}
-
 // Export Functions
 exports.debug = debug;
 exports.error = error;
@@ -189,7 +195,5 @@ exports.log = log;
 exports.warn = warn;
 
 // Export Templates
-exports.console = console;
-exports.drawer = drawer;
-
 exports.afterFooter = afterFooter;
+exports.render = render;

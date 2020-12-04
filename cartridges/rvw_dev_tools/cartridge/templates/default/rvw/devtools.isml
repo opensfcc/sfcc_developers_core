@@ -3,16 +3,21 @@
 <iscomment> Make sure this is NOT Production </iscomment>
 <isif condition="${dw.system.System.getInstanceType() !== dw.system.System.PRODUCTION_SYSTEM}">
 
-<!-- Output RVW Dev Tools Debug Messages to `window.console` -->
+<!-- RVW Dev Tools: Drawer Element -->
+<div id="rvw_dev_tools"></div>
+
+<!-- RVW Dev Tools: Custom Script -->
 <script type="text/javascript">
 (function() {
-    var messages = <isprint value="${JSON.stringify(pdict.Debugger).replace(/</g, '&lt;')}" encoding="off" />;
+    window.RVW_DevToolsURL = '${dw.web.URLUtils.url("DevTools-GetData").toString()}';
+    window.RVW_DevConsoleURL = '${dw.web.URLUtils.url("Console-Show").toString()}';
+    window.RVW_DevToolsDebugger = <isprint value="${JSON.stringify(pdict.Debugger).replace(/</g, '&lt;')}" encoding="off" />;
 
     // Check if we have Debug Messages
-    if (typeof messages !== 'undefined' && messages !== '') {
+    if (typeof window.RVW_DevToolsDebugger.messages !== 'undefined' && window.RVW_DevToolsDebugger.messages !== '') {
         // Generate Messages to Console
         var generateLogs = function(type) {
-            if (messages[type].length > 0) {
+            if (window.RVW_DevToolsDebugger.messages[type].length > 0) {
                 var label = type.charAt(0).toUpperCase() + type.slice(1);
                 var colors = {
                     debug: ['color: #98C379; font-weight: bold;', 'color: #999; font-weight: lighter;'],
@@ -23,9 +28,9 @@
                     warn: ['color: orange; font-weight: bold;', 'color: #999; font-weight: lighter;'],
                 };
 
-                console.groupCollapsed('SFCC: %c' + label + ' %c(' + messages[type].length + ')', colors[type][0], colors[type][1]);
+                console.groupCollapsed('SFCC: %c' + label + ' %c(' + window.RVW_DevToolsDebugger.messages[type].length + ')', colors[type][0], colors[type][1]);
 
-                for (msg of messages[type]) {
+                for (msg of window.RVW_DevToolsDebugger.messages[type]) {
                     console[type](msg.message);
                     console.groupCollapsed('%cSTACK TRACE', 'color: #999; font-weight: lighter;');
                     console.table(msg.stack);
@@ -37,7 +42,7 @@
         };
 
         // Get Log Types
-        var types = Object.keys(messages);
+        var types = Object.keys(window.RVW_DevToolsDebugger.messages);
 
         // Output Log Messages by Type
         types.forEach(function(type){
@@ -46,5 +51,9 @@
     }
 })();
 </script>
+
+<!-- RVW Dev Tools: Static Assets -->
+<link href="${URLUtils.staticURL('/css/dev_tools.css')}" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="${URLUtils.staticURL('/js/dev_tools.js')}"></script>
 
 </isif>

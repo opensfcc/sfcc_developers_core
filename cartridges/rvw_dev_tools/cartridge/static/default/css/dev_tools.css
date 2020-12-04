@@ -5,7 +5,8 @@
   padding: 0;
   margin: 0; }
   #rvw_dev_tools *, #rvw_dev_tools *:before, #rvw_dev_tools *:after {
-    box-sizing: inherit; }
+    box-sizing: inherit;
+    letter-spacing: initial; }
   #rvw_dev_tools svg {
     vertical-align: unset; }
   #rvw_dev_tools a:active, #rvw_dev_tools a:focus, #rvw_dev_tools button:active, #rvw_dev_tools button:focus {
@@ -45,7 +46,8 @@
       #rvw_dev_tools .devtool-drawer .devtool-menu ul li {
         display: block;
         width: 100%;
-        text-align: left; }
+        text-align: left;
+        white-space: nowrap; }
         #rvw_dev_tools .devtool-drawer .devtool-menu ul li button {
           background: transparent;
           border: none;
@@ -134,7 +136,6 @@
     height: 100%;
     left: 160px;
     overflow: auto;
-    padding: 20px;
     position: absolute;
     top: 0;
     width: calc(100% - 160px); }
@@ -168,7 +169,9 @@
       padding: 6px 10px;
       text-transform: uppercase; }
     #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper {
-      white-space: nowrap; }
+      white-space: nowrap;
+      margin-top: 18px;
+      margin-left: 18px; }
       #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button {
         background: #000;
         color: #FFF;
@@ -176,7 +179,9 @@
         font-size: 12px;
         padding: 8px 12px;
         margin-right: 4px;
-        transition: opacity 0.25s; }
+        transition: opacity 0.25s;
+        width: 80px;
+        text-align: center; }
         #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button span.count {
           display: inline-block;
           margin-left: 4px;
@@ -209,7 +214,102 @@
           background: #d65507;
           color: #FFF; }
     #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection {
-      margin-top: 16px; }
+      -webkit-overflow-scrolling: touch;
+      height: calc(100% - 62px);
+      overflow: auto;
+      position: relative;
+      top: 16px;
+      width: 100%;
+      padding-bottom: 20px; }
+      #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection span.no-results {
+        display: block;
+        margin-left: 18px;
+        padding: 0; }
+      #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul {
+        margin: 0;
+        padding: 0; }
+        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li {
+          list-style: none;
+          margin: 0;
+          padding: 0; }
+          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file {
+            margin-left: 18px; }
+            #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a {
+              color: #999;
+              text-decoration: none;
+              font-size: 12px;
+              transition: opacity 0.25s;
+              position: relative; }
+              #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a span, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a strong {
+                transition: opacity 0.25s;
+                opacity: 0.75; }
+              #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a:hover, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a:focus {
+                color: #FFF; }
+                #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a:hover span, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a:hover strong, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a:focus span, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a:focus strong {
+                  opacity: 1; }
+              #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a.loading::after {
+                content: '';
+                border: 1px solid rgba(125, 125, 125, 0.5);
+                border-top-color: #FFF;
+                border-radius: 50%;
+                box-sizing: border-box;
+                height: 14px;
+                position: absolute;
+                right: -20px;
+                top: 0;
+                width: 14px;
+                animation: devtools_loading .6s linear infinite; }
+              #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a.success::after {
+                content: '';
+                border-bottom: 1px solid #FFF;
+                border-right: 1px solid #FFF;
+                box-sizing: border-box;
+                height: 14px;
+                position: absolute;
+                right: -17px;
+                top: 0;
+                transform: rotate(45deg);
+                width: 7px; }
+          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .message {
+            margin-top: 12px;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 22px; }
+            #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .message.string {
+              margin-left: 18px; }
+          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .divider-line {
+            width: calc(100% - 40px);
+            height: 1px;
+            margin: 30px 0 30px 20px;
+            background: rgba(255, 255, 255, 0.1); }
+          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace {
+            margin-left: 18px; }
+            #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace button {
+              color: #999;
+              text-transform: uppercase;
+              font-size: 10px;
+              background: #000;
+              padding: 8px 10px;
+              font-weight: 600;
+              margin-top: 12px;
+              transition: color 0.25s; }
+              #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace button:hover, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace button:focus {
+                color: #FFF; }
+            #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace ul {
+              font-size: 12px;
+              line-height: 18px;
+              margin-top: 12px; }
+              #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace ul.hidden-trace {
+                display: none; }
+              #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace ul span {
+                display: inline-block;
+                text-align: right;
+                width: 20px;
+                margin-right: 4px;
+                opacity: 0.5; }
+          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li:last-child .divider-line {
+            display: none; }
 
 @media only screen and (max-width: 768px) {
   #rvw_dev_tools .devtool-drawer .devtool-menu {
@@ -628,6 +728,9 @@
 
 #rvw_dev_tools .tree-view-wrapper > .tree-view-item > .tree-view-item-leaf > .tree-view-item-node:first-of-type {
   display: none; }
+
+#rvw_dev_tools .subsection .tree-view-wrapper {
+  min-height: unset; }
 
 @media only screen and (max-width: 768px) {
   #rvw_dev_tools .devtool-drawer .devtool-menu {

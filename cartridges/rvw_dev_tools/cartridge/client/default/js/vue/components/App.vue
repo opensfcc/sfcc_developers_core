@@ -140,44 +140,35 @@
                             </button>
                         </div>
 
+                        <!-- Debug Messages -->
                         <div class="subsection" v-if="subsection === 'debug'">
-                            <ul>
-                                <li v-for="msg in debugData.messages.debug" :key="msg">
-                                    <div class="message" v-if="typeof msg.message === 'string'">
-                                        {{ msg.message }}
-                                    </div>
-                                    <div class="message" v-else>
-                                        <tree-view class="outputTree"
-                                            :data="msg.message"
-                                            :options="{ rootObjectKey: 'message', link: true, maxDepth: 1 }"
-                                        />
-                                    </div>
-
-                                    <div class="file">
-                                        <a :href="msg.ide" target="_blank" @click.prevent="openIDE(msg.ide)">
-                                            {{ msg.fileName }}:{{ msg.lineNumber }}
-                                        </a>
-                                    </div>
-
-                                    <div class="stack-trace">
-                                        <button>
-                                            Show Stack Trace
-                                        </button>
-
-                                        <ul>
-                                            <li v-for="(trace, index) in msg.stack" :key="index">
-                                                {{ trace }}
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                            </ul>
+                            <messages :list.sync="debugData.messages.debug" />
                         </div>
-                        <div class="subsection" v-if="subsection === 'error'">error</div>
-                        <div class="subsection" v-if="subsection === 'fatal'">fatal</div>
-                        <div class="subsection" v-if="subsection === 'info'">info</div>
-                        <div class="subsection" v-if="subsection === 'log'">log</div>
-                        <div class="subsection" v-if="subsection === 'warn'">warn</div>
+
+                        <!-- Error Messages -->
+                        <div class="subsection" v-if="subsection === 'error'">
+                            <messages :list.sync="debugData.messages.error" />
+                        </div>
+
+                        <!-- Fatal Messages -->
+                        <div class="subsection" v-if="subsection === 'fatal'">
+                            <messages :list.sync="debugData.messages.fatal" />
+                        </div>
+
+                        <!-- Info Messages -->
+                        <div class="subsection" v-if="subsection === 'info'">
+                            <messages :list.sync="debugData.messages.info" />
+                        </div>
+
+                        <!-- Log Messages -->
+                        <div class="subsection" v-if="subsection === 'log'">
+                            <messages :list.sync="debugData.messages.log" />
+                        </div>
+
+                        <!-- Warn Messages -->
+                        <div class="subsection" v-if="subsection === 'warn'">
+                            <messages :list.sync="debugData.messages.warn" />
+                        </div>
                     </div>
                 </transition>
 
@@ -551,9 +542,13 @@
 </template>
 
 <script>
+import Messages from './Messages'
+
 export default {
     name: 'DevTools',
-    components: {},
+    components: {
+        Messages
+    },
     data() {
         return {
             basketCount: 0,
@@ -728,16 +723,6 @@ export default {
                 this.subsection = subsection;
                 this.drawerOpen = true;
             }, 10);
-        },
-        async openIDE(url) {
-            // Fire Off Ajax call to Open IDE
-            const response = await this.axios.get(url);
-
-            if (response) {
-                console.log('response', response);
-            } else {
-                window.open(url, 'ide');
-            }
         },
         openToolbar() {
             this.toolbarShown = true;

@@ -105,11 +105,6 @@ function serializeObject (object, maxDepth, depth, pojo) {
             continue;
         }
 
-        // ignore debugger content
-        if (prop === 'RVW_Debugger') {
-            continue;
-        }
-
         pojo[prop] = serialize(k, maxDepth, depth + 1, {});
     }
 

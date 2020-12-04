@@ -1935,11 +1935,12 @@ new vue__WEBPACK_IMPORTED_MODULE_5__.default({
 /*! namespace exports */
 /*! export default [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_exports__, __webpack_require__.r, __webpack_require__.* */
+/*! runtime requirements: __webpack_require__, __webpack_exports__, __webpack_require__.r, __webpack_require__.* */
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Messages__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Messages */ "./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/Messages.vue");
 //
 //
 //
@@ -2483,18 +2484,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'DevTools',
-  components: {},
+  components: {
+    Messages: _Messages__WEBPACK_IMPORTED_MODULE_0__.default
+  },
 
   data() {
     return {
@@ -2688,17 +2683,6 @@ __webpack_require__.r(__webpack_exports__);
       }, 10);
     },
 
-    async openIDE(url) {
-      // Fire Off Ajax call to Open IDE
-      const response = await this.axios.get(url);
-
-      if (response) {
-        console.log('response', response);
-      } else {
-        window.open(url, 'ide');
-      }
-    },
-
     openToolbar() {
       this.toolbarShown = true;
     },
@@ -2787,6 +2771,88 @@ __webpack_require__.r(__webpack_exports__);
       }
 
     }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/Messages.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/Messages.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************************************************/
+/*! namespace exports */
+/*! export default [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_exports__, __webpack_require__.r, __webpack_require__.* */
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'Messages',
+  props: {
+    list: {
+      type: Array,
+      default: function () {
+        return [];
+      }
+    }
+  },
+  methods: {
+    openIDE(url, ref) {
+      var $elm = this.$refs[ref][0];
+      $elm.classList.add('loading');
+      this.axios.get(url);
+      setTimeout(() => {
+        $elm.classList.remove('loading');
+        $elm.classList.remove('success');
+      }, 3000);
+    },
+
+    showTrace(ref) {
+      this.$refs[ref][0].classList.toggle('hidden-trace');
+    }
+
   }
 });
 
@@ -26616,6 +26682,46 @@ component.options.__file = "cartridges/rvw_dev_tools/cartridge/client/default/js
 
 /***/ }),
 
+/***/ "./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/Messages.vue":
+/*!******************************************************************************************!*\
+  !*** ./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/Messages.vue ***!
+  \******************************************************************************************/
+/*! namespace exports */
+/*! export default [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__, __webpack_exports__, __webpack_require__.r, __webpack_require__.* */
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Messages_vue_vue_type_template_id_707f603e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Messages.vue?vue&type=template&id=707f603e& */ "./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/Messages.vue?vue&type=template&id=707f603e&");
+/* harmony import */ var _Messages_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Messages.vue?vue&type=script&lang=js& */ "./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/Messages.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _Messages_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _Messages_vue_vue_type_template_id_707f603e___WEBPACK_IMPORTED_MODULE_0__.render,
+  _Messages_vue_vue_type_template_id_707f603e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/Messages.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
 /***/ "./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/App.vue?vue&type=script&lang=js&":
 /*!**************************************************************************************************************!*\
   !*** ./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/App.vue?vue&type=script&lang=js& ***!
@@ -26630,6 +26736,23 @@ component.options.__file = "cartridges/rvw_dev_tools/cartridge/client/default/js
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../../node_modules/babel-loader/lib/index.js!../../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./App.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/App.vue?vue&type=script&lang=js&");
  /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
+/***/ "./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/Messages.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************!*\
+  !*** ./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/Messages.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************/
+/*! namespace exports */
+/*! export default [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__, __webpack_exports__, __webpack_require__.r, __webpack_require__.* */
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Messages_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../../node_modules/babel-loader/lib/index.js!../../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Messages.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/Messages.vue?vue&type=script&lang=js&");
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Messages_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
 
 /***/ }),
 
@@ -26651,6 +26774,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": function() { return /* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_template_id_36b6081c___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns; }
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_template_id_36b6081c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./App.vue?vue&type=template&id=36b6081c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/App.vue?vue&type=template&id=36b6081c&");
+
+
+/***/ }),
+
+/***/ "./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/Messages.vue?vue&type=template&id=707f603e&":
+/*!*************************************************************************************************************************!*\
+  !*** ./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/Messages.vue?vue&type=template&id=707f603e& ***!
+  \*************************************************************************************************************************/
+/*! namespace exports */
+/*! export render [provided] [no usage info] [missing usage info prevents renaming] -> ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/Messages.vue?vue&type=template&id=707f603e& .render */
+/*! export staticRenderFns [provided] [no usage info] [missing usage info prevents renaming] -> ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/Messages.vue?vue&type=template&id=707f603e& .staticRenderFns */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__, __webpack_exports__, __webpack_require__.d, __webpack_require__.r, __webpack_require__.* */
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": function() { return /* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Messages_vue_vue_type_template_id_707f603e___WEBPACK_IMPORTED_MODULE_0__.render; },
+/* harmony export */   "staticRenderFns": function() { return /* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Messages_vue_vue_type_template_id_707f603e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns; }
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Messages_vue_vue_type_template_id_707f603e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Messages.vue?vue&type=template&id=707f603e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/Messages.vue?vue&type=template&id=707f603e&");
 
 
 /***/ }),
@@ -27188,134 +27333,145 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _vm.subsection === "debug"
-                            ? _c("div", { staticClass: "subsection" }, [
-                                _c(
-                                  "ul",
-                                  _vm._l(_vm.debugData.messages.debug, function(
-                                    msg
-                                  ) {
-                                    return _c("li", { key: msg }, [
-                                      typeof msg.message === "string"
-                                        ? _c(
-                                            "div",
-                                            { staticClass: "message" },
-                                            [
-                                              _vm._v(
-                                                "\n                                    " +
-                                                  _vm._s(msg.message) +
-                                                  "\n                                "
-                                              )
-                                            ]
-                                          )
-                                        : _c(
-                                            "div",
-                                            { staticClass: "message" },
-                                            [
-                                              _c("tree-view", {
-                                                staticClass: "outputTree",
-                                                attrs: {
-                                                  data: msg.message,
-                                                  options: {
-                                                    rootObjectKey: "debug",
-                                                    link: true,
-                                                    maxDepth: 1
-                                                  }
-                                                }
-                                              })
-                                            ],
-                                            1
-                                          ),
-                                      _vm._v(" "),
-                                      _c("div", { staticClass: "file" }, [
-                                        _c(
-                                          "a",
-                                          {
-                                            attrs: {
-                                              href: msg.ide,
-                                              target: "_blank"
-                                            },
-                                            on: {
-                                              click: function($event) {
-                                                $event.preventDefault()
-                                                return _vm.openIDE(msg.ide)
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _vm._v(
-                                              "\n                                        " +
-                                                _vm._s(msg.fileName) +
-                                                ":" +
-                                                _vm._s(msg.lineNumber) +
-                                                "\n                                    "
-                                            )
-                                          ]
+                            ? _c(
+                                "div",
+                                { staticClass: "subsection" },
+                                [
+                                  _c("messages", {
+                                    attrs: {
+                                      list: _vm.debugData.messages.debug
+                                    },
+                                    on: {
+                                      "update:list": function($event) {
+                                        return _vm.$set(
+                                          _vm.debugData.messages,
+                                          "debug",
+                                          $event
                                         )
-                                      ]),
-                                      _vm._v(" "),
-                                      _c(
-                                        "div",
-                                        { staticClass: "stack-trace" },
-                                        [
-                                          _c("button", [
-                                            _vm._v(
-                                              "\n                                        Show Stack Trace\n                                    "
-                                            )
-                                          ]),
-                                          _vm._v(" "),
-                                          _c(
-                                            "ul",
-                                            _vm._l(msg.stack, function(
-                                              trace,
-                                              index
-                                            ) {
-                                              return _c("li", { key: index }, [
-                                                _vm._v(
-                                                  "\n                                            " +
-                                                    _vm._s(trace) +
-                                                    "\n                                        "
-                                                )
-                                              ])
-                                            }),
-                                            0
-                                          )
-                                        ]
-                                      )
-                                    ])
-                                  }),
-                                  0
-                                )
-                              ])
+                                      }
+                                    }
+                                  })
+                                ],
+                                1
+                              )
                             : _vm._e(),
                           _vm._v(" "),
                           _vm.subsection === "error"
-                            ? _c("div", { staticClass: "subsection" }, [
-                                _vm._v("error")
-                              ])
+                            ? _c(
+                                "div",
+                                { staticClass: "subsection" },
+                                [
+                                  _c("messages", {
+                                    attrs: {
+                                      list: _vm.debugData.messages.error
+                                    },
+                                    on: {
+                                      "update:list": function($event) {
+                                        return _vm.$set(
+                                          _vm.debugData.messages,
+                                          "error",
+                                          $event
+                                        )
+                                      }
+                                    }
+                                  })
+                                ],
+                                1
+                              )
                             : _vm._e(),
                           _vm._v(" "),
                           _vm.subsection === "fatal"
-                            ? _c("div", { staticClass: "subsection" }, [
-                                _vm._v("fatal")
-                              ])
+                            ? _c(
+                                "div",
+                                { staticClass: "subsection" },
+                                [
+                                  _c("messages", {
+                                    attrs: {
+                                      list: _vm.debugData.messages.fatal
+                                    },
+                                    on: {
+                                      "update:list": function($event) {
+                                        return _vm.$set(
+                                          _vm.debugData.messages,
+                                          "fatal",
+                                          $event
+                                        )
+                                      }
+                                    }
+                                  })
+                                ],
+                                1
+                              )
                             : _vm._e(),
                           _vm._v(" "),
                           _vm.subsection === "info"
-                            ? _c("div", { staticClass: "subsection" }, [
-                                _vm._v("info")
-                              ])
+                            ? _c(
+                                "div",
+                                { staticClass: "subsection" },
+                                [
+                                  _c("messages", {
+                                    attrs: {
+                                      list: _vm.debugData.messages.info
+                                    },
+                                    on: {
+                                      "update:list": function($event) {
+                                        return _vm.$set(
+                                          _vm.debugData.messages,
+                                          "info",
+                                          $event
+                                        )
+                                      }
+                                    }
+                                  })
+                                ],
+                                1
+                              )
                             : _vm._e(),
                           _vm._v(" "),
                           _vm.subsection === "log"
-                            ? _c("div", { staticClass: "subsection" }, [
-                                _vm._v("log")
-                              ])
+                            ? _c(
+                                "div",
+                                { staticClass: "subsection" },
+                                [
+                                  _c("messages", {
+                                    attrs: { list: _vm.debugData.messages.log },
+                                    on: {
+                                      "update:list": function($event) {
+                                        return _vm.$set(
+                                          _vm.debugData.messages,
+                                          "log",
+                                          $event
+                                        )
+                                      }
+                                    }
+                                  })
+                                ],
+                                1
+                              )
                             : _vm._e(),
                           _vm._v(" "),
                           _vm.subsection === "warn"
-                            ? _c("div", { staticClass: "subsection" }, [
-                                _vm._v("warn")
-                              ])
+                            ? _c(
+                                "div",
+                                { staticClass: "subsection" },
+                                [
+                                  _c("messages", {
+                                    attrs: {
+                                      list: _vm.debugData.messages.warn
+                                    },
+                                    on: {
+                                      "update:list": function($event) {
+                                        return _vm.$set(
+                                          _vm.debugData.messages,
+                                          "warn",
+                                          $event
+                                        )
+                                      }
+                                    }
+                                  })
+                                ],
+                                1
+                              )
                             : _vm._e()
                         ]
                       )
@@ -28934,6 +29090,128 @@ var render = function() {
     ],
     1
   )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/Messages.vue?vue&type=template&id=707f603e&":
+/*!****************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./cartridges/rvw_dev_tools/cartridge/client/default/js/vue/components/Messages.vue?vue&type=template&id=707f603e& ***!
+  \****************************************************************************************************************************************************************************************************************************************************************/
+/*! namespace exports */
+/*! export render [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export staticRenderFns [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": function() { return /* binding */ render; },
+/* harmony export */   "staticRenderFns": function() { return /* binding */ staticRenderFns; }
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.list && _vm.list.length > 0
+    ? _c(
+        "ul",
+        _vm._l(_vm.list, function(msg) {
+          return _c("li", { key: msg.uid }, [
+            _c("div", { staticClass: "file" }, [
+              _c(
+                "a",
+                {
+                  ref: "ide-link-" + msg.uid,
+                  refInFor: true,
+                  staticClass: "ide-file-link",
+                  attrs: {
+                    target: "_blank",
+                    "data-devtool": "",
+                    href: msg.ide
+                  },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.openIDE(msg.ide, "ide-link-" + msg.uid)
+                    }
+                  }
+                },
+                [
+                  _c("strong", [_vm._v("FILE:")]),
+                  _vm._v("  " + _vm._s(msg.fileName)),
+                  _c("span", [_vm._v(":" + _vm._s(msg.lineNumber))])
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            typeof msg.message !== "object"
+              ? _c("div", { staticClass: "message string" }, [
+                  _vm._v("\n            " + _vm._s(msg.message) + "\n        ")
+                ])
+              : _c(
+                  "div",
+                  { staticClass: "message tree" },
+                  [
+                    _c("tree-view", {
+                      staticClass: "outputTree",
+                      attrs: {
+                        data: msg.message,
+                        options: {
+                          rootObjectKey: "message",
+                          link: true,
+                          maxDepth: 1
+                        }
+                      }
+                    })
+                  ],
+                  1
+                ),
+            _vm._v(" "),
+            _c("div", { staticClass: "stack-trace" }, [
+              _c(
+                "button",
+                {
+                  attrs: { "data-devtool": "" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.showTrace("trace-list-" + msg.uid)
+                    }
+                  }
+                },
+                [_vm._v("\n                Stack Trace\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "ul",
+                {
+                  ref: "trace-list-" + msg.uid,
+                  refInFor: true,
+                  staticClass: "hidden-trace"
+                },
+                _vm._l(msg.stack, function(trace, index) {
+                  return _c("li", { key: index }, [
+                    _c("span", [_vm._v(_vm._s(index + 1) + ".")]),
+                    _vm._v(" " + _vm._s(trace) + "\n                ")
+                  ])
+                }),
+                0
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "divider-line" })
+          ])
+        }),
+        0
+      )
+    : _c("span", { staticClass: "no-results" }, [_vm._v("No Messages")])
 }
 var staticRenderFns = []
 render._withStripped = true
