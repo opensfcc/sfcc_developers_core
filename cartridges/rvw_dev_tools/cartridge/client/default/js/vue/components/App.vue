@@ -453,7 +453,7 @@
                 </div>
 
                 <!-- Open Console -->
-                <a :href="consoleURL" v-if="consoleURL" target="devtool-console" class="open-console" v-tooltip="{ content: 'Open SFCC Console', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }" data-devtool>
+                <a :href="consoleURL" v-if="consoleURL && consoleURL !== ''" target="devtool-console" class="open-console" v-tooltip="{ content: 'Open SFCC Console', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }" data-devtool>
                     <svg role="img"><use href="#devtool-console"/></svg>
                 </a>
 

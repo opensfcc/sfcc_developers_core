@@ -5,7 +5,7 @@ SFCC Dev Tools Cartridge
 
 > A Salesforce Commerce Cloud (Demandware) Cartridge for Developers.
 
-![Screenshot](https://via.placeholder.com/720x430.png?text=ANIMATED+GIF "Screenshot")
+![Screenshot](https://red-van-workshop.s3.us-east-1.amazonaws.com/rvw_devtools_drawer.gif "Screenshot")
 
 ## Features
 
@@ -22,40 +22,26 @@ Installation
 2. Add `rvw_dev_tools` to Business Manager Storefront `Cartridges` Path
 3. Add the [Dev Tools Drawer](#dev-tools-drawer) and/or [Dev Tools Console](#dev-tools-console) to your Storefront
 
-> **NOTE:** We designed this cartridge so you can drop it in without having to do a lot of setup in Business Manager.  No Site Preferences or Imports are required.
+#### SFRA
 
-> **PRO TIP:** Make sure to use the `hasHook` conditional logic shown in the examples if there is a chance your debug code could end up on another instance that might not have the `rvw_dev_tools` cartridge installed.
+> You do not need to do any extra setup for SFRA.  Our cartridge takes advantage of the `app.template.afterFooter` template hook baked into SFRA.
 
-#### Dev Tools Drawer
+#### Site Genesis
 
-![Screenshot](https://via.placeholder.com/720x430.png?text=SCREENSHOT "Screenshot")
-
-> To render the Dev Tools Drawer, stick this code snippet in an ISML template near the footer of your website.
+> To render the Dev Tools on Site Genesis, stick this code snippet in an ISML template near the footer of your website as close to the closing `</body>` tag as possible.
 
 ```html
 <isif condition="${dw.system.HookMgr.hasHook('rvw.util.devtools')}">
     <isscript>
-        dw.system.HookMgr.callHook('rvw.util.devtools', 'drawer');
-    </isscript>
-</isif>
-```
-
-#### Dev Tools Console
-
-![Screenshot](https://red-van-workshop.s3.us-east-1.amazonaws.com/rvw-devtools-console.png "Screenshot")
-
-> If you just want to see your debug output in your browsers Dev Tools Console and not render a Drawer, stick this code snippet in an ISML template near the footer of your website.
-
-```html
-<isif condition="${dw.system.HookMgr.hasHook('rvw.util.devtools')}">
-    <isscript>
-        dw.system.HookMgr.callHook('rvw.util.devtools', 'console');
+        dw.system.HookMgr.callHook('rvw.util.devtools', 'render');
     </isscript>
 </isif>
 ```
 
 Usage
 ---
+
+> **PRO TIP:** Make sure to use the `hasHook` conditional logic shown in the examples if there is a chance your debug code could end up on another instance that might not have the `rvw_dev_tools` cartridge installed.
 
 #### Debug in ISML Files
 
