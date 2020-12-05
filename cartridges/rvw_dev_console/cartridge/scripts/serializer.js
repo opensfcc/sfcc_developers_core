@@ -63,6 +63,14 @@ function serialize (original, maxDepth, depth, pojo) {
         return original.toXMLString();
     }
 
+    if (Array.isArray(original)) {
+        return original;
+    }
+
+    if (original instanceof dw.util.List) {
+        return original.toArray();
+    }
+
     // what we have left is an object (hopefully)
     // convert and return the object
     return serializeObject(original, maxDepth, depth, pojo || {});
