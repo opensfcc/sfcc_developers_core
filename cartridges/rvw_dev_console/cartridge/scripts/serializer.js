@@ -63,12 +63,14 @@ function serialize (original, maxDepth, depth, pojo) {
         return original.toXMLString();
     }
 
-    if (Array.isArray(original)) {
-        return original;
+    if (original instanceof dw.util.List) {
+        original = original.toArray();
     }
 
-    if (original instanceof dw.util.List) {
-        return original.toArray();
+    if (Array.isArray(original)) {
+        return original.map(function (entry) {
+            return serialize(entry, maxDepth, depth, pojo || {});
+        });
     }
 
     // what we have left is an object (hopefully)
