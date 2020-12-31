@@ -30,7 +30,7 @@ Installation
     * `Business Manager Modules`
     *  Assign rights here
 
-Once installed, you can access the Dev Console on your sandbox at `/on/demandware.store/YOUR_SITE_ID/default/Console-Show` ( change `YOUR_SITE_ID` to your Site ID, e.g. `Sites-Site` ).
+Once installed, you can access the Dev Console on your sandbox at `/on/demandware.store/YOUR_SITE_ID/default/Console-Show` ( change `YOUR_SITE_ID` to your Site ID, e.g. `Sites-Site` ). This will only work if you have assigned the module correctly in `Roles & Permissions`.
 
 **TROUBLESHOOTING:** Getting an error loading the console? You may need to temporarily switch Code Versions, then switch back to trigger the update in Business Manager.
 
