@@ -23,6 +23,12 @@ Installation
 3. Move `rvw_developers_core` into the root of your SFCC Project
 4. Add `rvw_developers_core` to project or global `.gitignore`
 5. Add `rvw_dev_console` to Business Manager Storefront `Cartridges` Path
+6. To automatically show the menu item `Developer Tools` in the Administration / Site menu go to:
+    * `Administration`
+    * `Roles & Permissions`
+    *  Click on your role
+    * `Business Manager Modules`
+    *  Assign rights here
 
 Once installed, you can access the Dev Console on your sandbox at `/on/demandware.store/YOUR_SITE_ID/default/Console-Show` ( change `YOUR_SITE_ID` to your Site ID, e.g. `Sites-Site` ).
 
