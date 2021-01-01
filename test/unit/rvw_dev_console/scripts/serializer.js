@@ -27,17 +27,17 @@ describe('Serializer', () => {
     const Serializer = require('rvw_dev_console/cartridge/scripts/serializer');
 
     it('Should serialize a simple object.', () => {
-        var simpleObject = {
+        const simpleObject = {
             key: 'value'
         };
 
-        var result = Serializer.serialize(simpleObject);
+        const result = Serializer.serialize(simpleObject);
 
         expect(result).to.deep.equal(simpleObject);
     });
 
     it('Should serialize a complex object until the max depth.', () => {
-        var complexObject = {
+        const complexObject = {
             level_1: {
                 level_2: {
                     level_3: {
@@ -52,7 +52,7 @@ describe('Serializer', () => {
             }
         };
 
-        var result = Serializer.serialize(complexObject, 3);
+        const result = Serializer.serialize(complexObject, 3);
 
         expect(result).to.not.deep.equal(complexObject);
         expect(result.level_1.level_2.level_3.level_4).to
@@ -60,9 +60,9 @@ describe('Serializer', () => {
     });
 
     it('Should serialize a cyclic loop correctly.', () => {
-        var cyclicalUUID = '1';
+        const cyclicalUUID = '1';
 
-        var databaseObject = {
+        const databaseObject = {
             UUID: cyclicalUUID,
             subObject: {
                 UUID: '2',
@@ -72,7 +72,7 @@ describe('Serializer', () => {
             }
         };
 
-        var result = Serializer.serialize(databaseObject);
+        const result = Serializer.serialize(databaseObject);
 
         expect(result).not.to.deep.equal(databaseObject);
         expect(result.subObject.cyclicalObject).to.equal('{already returned}');
