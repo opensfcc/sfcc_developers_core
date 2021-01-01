@@ -84,6 +84,19 @@ If you wish to lock down your sandbox, SFCC already provides a solution to prote
 
 Once this is set up, anytime you login to your storefront from a new browser, you will need to enter the username `storefront` and the password you just created. Your login info will be saved as long as you do not clear your browser's cookies. The Chrome plugin [Demandware with Ease](https://chrome.google.com/webstore/detail/demandware-with-ease/ffhabonelknmejmdnekedmijlhebpcio) provides the ability to automatically login with a Storefront Password.
 
+Use cases
+---
+### Storefront
+* Execute code using your storefront session
+* View objects from the current customer session
+* ... whatever you can imagine
+
+### Business Manager
+* Execute code using your Business Manager session
+* Execute code as if it is a Business Manager Page
+* Execute code in the same context as Jobs
+* ... whatever you can imagine
+
 Contributing
 ---
 
