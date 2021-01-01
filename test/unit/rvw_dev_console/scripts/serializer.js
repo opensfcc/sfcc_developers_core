@@ -36,7 +36,7 @@ describe('Serializer', () => {
         expect(result).to.deep.equal(simpleObject);
     });
 
-    it('Should serialize a complex object untill the max depth.', () => {
+    it('Should serialize a complex object until the max depth.', () => {
         var complexObject = {
             level_1: {
                 level_2: {
@@ -54,9 +54,27 @@ describe('Serializer', () => {
 
         var result = Serializer.serialize(complexObject, 3);
 
-        // Set the level that is to deep to a string
-        complexObject.level_1.level_2.level_3.level_4 =  complexObject.level_1.level_2.level_3.level_4.toString();
+        expect(result).to.not.deep.equal(complexObject);
+        expect(result.level_1.level_2.level_3.level_4).to
+            .equal(complexObject.level_1.level_2.level_3.level_4.toString());
+    });
 
-        expect(result).to.deep.equal(complexObject);
+    it('Should serialize a cyclic loop correctly.', () => {
+        var cyclicalUUID = '1';
+
+        var databaseObject = {
+            UUID: cyclicalUUID,
+            subObject: {
+                UUID: '2',
+                cyclicalObject: {
+                    UUID: cyclicalUUID
+                }
+            }
+        };
+
+        var result = Serializer.serialize(databaseObject);
+
+        expect(result).not.to.deep.equal(databaseObject);
+        expect(result.subObject.cyclicalObject).to.equal('{already returned}');
     });
 });
