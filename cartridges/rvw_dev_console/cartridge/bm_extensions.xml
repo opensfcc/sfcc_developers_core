@@ -22,9 +22,9 @@
         </description>
         <icon>icons/rvw.png</icon>
     </menuitem>
-    
+
     <menuaction id="rvw-console" menupath="developer-tools-admin" position="100" site="false">
-        <name xml:lang="x-default">Console</name>
+        <name xml:lang="x-default">Console (BM)</name>
         <short_description xml:lang="x-default">
             View console
         </short_description>
@@ -45,7 +45,7 @@
     </menuaction>
 
     <menuaction id="rvw-console-site" menupath="developer-tools-site" position="100" site="true">
-        <name xml:lang="x-default">Console</name>
+        <name xml:lang="x-default">Console (BM)</name>
         <short_description xml:lang="x-default">
             View console
         </short_description>
@@ -57,6 +57,25 @@
         <sub-pipelines>
             <pipeline name="Console-Show" />
             <pipeline name="Console-Run" />
+        </sub-pipelines>
+        <parameters>
+            <parameter name="menuname" value="Developer Tools - Console"/>
+            <parameter name="mainmenuname" value="Developer Tools"/>
+        </parameters>
+        <icon>icons/terminal-solid.svg</icon>
+    </menuaction>
+    <menuaction id="rvw-console-site-storefront" menupath="developer-tools-site" position="100" site="true">
+        <name xml:lang="x-default">Console (Storefront)</name>
+        <short_description xml:lang="x-default">
+            View console
+        </short_description>
+        <description xml:lang="x-default">
+            View development console in the storefront context.
+        </description>
+        <!-- no icon specified -->
+        <exec pipeline="Console" node="ShowStorefront"/>
+        <sub-pipelines>
+            <pipeline name="Console-ShowStorefront" />
         </sub-pipelines>
         <parameters>
             <parameter name="menuname" value="Developer Tools - Console"/>

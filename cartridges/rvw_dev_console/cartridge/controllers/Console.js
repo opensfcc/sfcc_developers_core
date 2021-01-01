@@ -32,6 +32,24 @@ module.exports.Show = Show;
 module.exports.Show.public = true;
 
 /**
+ * Display development console template in the storefront
+ */
+function ShowStorefront() {
+    var Site = require('dw/system/Site');
+    var URLUtils = require('dw/web/URLUtils');
+    var URLAction = require('dw/web/URLAction');
+
+    var currentSite = Site.getCurrent();
+
+    var storefrontAction = new URLAction('Console-Show', currentSite.getID());
+
+    response.redirect(URLUtils.abs(storefrontAction));
+}
+
+module.exports.ShowStorefront = ShowStorefront;
+module.exports.ShowStorefront.public = true;
+
+/**
  * Run the script and return the response
  */
 function Run() {
