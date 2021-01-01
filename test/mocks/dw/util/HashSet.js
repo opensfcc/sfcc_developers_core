@@ -1,4 +1,4 @@
-var HashSet = function () {
+const HashSet = function () {
     this.contents = {};
 };
 

@@ -1,4 +1,4 @@
-var Collection = function() {};
+const Collection = function() {};
 Collection.prototype.remove = function(obj) {};
 Collection.prototype.size = function() {};
 Collection.prototype.isEmpty = function(){};

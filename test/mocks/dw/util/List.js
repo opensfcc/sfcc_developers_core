@@ -1,6 +1,8 @@
-var _super = require('./Collection');
+const _super = require('./Collection');
 
-var List = function () { };
+const List = function (items) {
+    this.items = items || [];
+};
 List.prototype = new _super;
 List.prototype.addAt = function () { };
 List.prototype.concat = function () { };
@@ -24,6 +26,18 @@ List.prototype.sort = function () { };
 List.prototype.subList = function () { };
 List.prototype.swap = function () { };
 List.prototype.unshift = function () { };
+List.prototype.toArray = function() {
+    return this.items;
+}
+List.prototype.iterator = function() {
+    return this;
+}
+List.prototype.hasNext = function() {
+    return this.items.length > 0;
+}
+List.prototype.next = function() {
+    return this.items.shift();
+}
 
 module.exports = List;
 exports.EMPTY_LIST = function () { };

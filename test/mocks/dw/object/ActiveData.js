@@ -1,6 +1,6 @@
-var _super = require('./ExtensibleObject');
+const _super = require('./ExtensibleObject');
 
-var ActiveData = function(){};
+const ActiveData = function(){};
 
 ActiveData.prototype = new _super();
 

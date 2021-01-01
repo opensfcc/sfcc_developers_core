@@ -1,4 +1,4 @@
-var PersistentObject = function(){};
+const PersistentObject = function(){};
 
 PersistentObject.prototype.getLastModified = function(){};
 PersistentObject.prototype.getCreationDate = function(){};

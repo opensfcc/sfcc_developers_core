@@ -1,6 +1,6 @@
-var _super = require('../object/ActiveData');
+const _super = require('../object/ActiveData');
 
-var ProductActiveData = function(){};
+const ProductActiveData = function(){};
 
 ProductActiveData.prototype = new _super();
 

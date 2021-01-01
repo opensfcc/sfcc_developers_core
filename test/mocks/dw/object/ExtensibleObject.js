@@ -1,6 +1,6 @@
-var _super = require('./PersistentObject');
+const _super = require('./PersistentObject');
 
-var ExtensibleObject = function(){};
+const ExtensibleObject = function(){};
 
 ExtensibleObject.prototype = new _super();
 

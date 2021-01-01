@@ -77,4 +77,52 @@ describe('Serializer', () => {
         expect(result).not.to.deep.equal(databaseObject);
         expect(result.subObject.cyclicalObject).to.equal('{already returned}');
     });
+
+    it('Should serialize a Collection.', () => {
+        const items = [1, 2, 3];
+        const dwList = new dw.util.List([...items]);
+
+        const result = Serializer.serialize(dwList);
+
+        expect(result).to.deep.equal(items);
+    });
+
+    it('Should serialize a Map.', () => {
+        const dwMap = new dw.util.Map();
+        dwMap.put('1', 'test 1');
+        dwMap.put('2', 'test 2');
+        dwMap.put('3', 'test 3');
+
+        const result = Serializer.serialize(dwMap);
+
+        expect(result).to.deep.equal({
+            1: 'test 1',
+            2: 'test 2',
+            3: 'test 3'
+        });
+    });
+
+    it('Should serialize a Date.', () => {
+        const date = new Date();
+
+        const result = Serializer.serialize(date);
+
+        expect(result).to.equal(date.toString());
+    });
+
+    it('Should serialize a Decimal.', () => {
+        const decimal = new dw.util.Decimal(1.2);
+
+        const result = Serializer.serialize(decimal);
+
+        expect(result).to.equal(decimal.toString());
+    });
+
+    it('Should serialize an array.', () => {
+        const array = [1, 2, 3];
+
+        const result = Serializer.serialize(array);
+
+        expect(result).to.deep.equal(array);
+    });
 });
