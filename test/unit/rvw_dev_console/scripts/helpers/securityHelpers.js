@@ -1,3 +1,5 @@
+'use strict';
+
 const expect = require('chai').expect;
 
 require('app-module-path').addPath(process.cwd() + '/cartridges');
