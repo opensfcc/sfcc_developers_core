@@ -56,8 +56,7 @@
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.6.12",
     "webpack": "^5.3.2",
-    "webpack-cli": "^4.1.0",
-    "dw-api-mock": "git+ssh://bitbucket.org/demandware/dw-api-mock.git"
+    "webpack-cli": "^4.1.0"
   },
   "pre-commit": [
     "test",
