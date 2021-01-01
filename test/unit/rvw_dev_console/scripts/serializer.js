@@ -21,7 +21,13 @@ global.dw = {
     }
 }
 
-global.XML = function() {};
+global.XML = function(value) {
+    this.value = value;
+};
+
+global.XML.prototype.toXMLString = function() {
+    return this.value;
+}
 
 describe('Serializer', () => {
     const Serializer = require('rvw_dev_console/cartridge/scripts/serializer');
@@ -124,5 +130,13 @@ describe('Serializer', () => {
         const result = Serializer.serialize(array);
 
         expect(result).to.deep.equal(array);
+    });
+
+    it('Should serialize XML.', () => {
+        const xml = new XML('test');
+
+        const result = Serializer.serialize(xml);
+
+        expect(result).to.deep.equal('test');
     });
 });
