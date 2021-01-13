@@ -698,7 +698,7 @@ export default {
                 localStorage.setItem('lastRun', JSON.stringify(this.code));
 
                 try {
-                    const {data: response} = await this.axios.post(`${window.urlPath}/Console-Run`, data).catch((error) => {
+                    const {data: response} = await this.axios.post(`${window.urlPath}`, data).catch((error) => {
                         if (error.response) {
                             this.showMessage('error', `<strong>Error ${error.response.status}:</strong> ${error.response.data.message}`);
                         } else {

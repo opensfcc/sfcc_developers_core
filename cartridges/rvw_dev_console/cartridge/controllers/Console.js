@@ -23,7 +23,7 @@ function Show() {
     }
 
     ISML.renderTemplate('dev_console/index', {
-        urlPath: URLUtils.https('').toString() + '/default',
+        urlPath: URLUtils.https('Console-Run').toString(),
         staticPath: URLUtils.staticURL('/').toString(),
     });
 }
