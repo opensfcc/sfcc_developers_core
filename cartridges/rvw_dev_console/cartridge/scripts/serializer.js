@@ -129,11 +129,11 @@ function serializeObject (object, maxDepth, depth, pojo) {
  * @returns {[]}
  */
 function serializeCollection (collection, maxDepth, depth) {
-    const iterator = collection.iterator();
-    const items = [];
+    var iterator = collection.iterator();
+    var items = [];
 
     while (iterator.hasNext()) {
-        let item = iterator.next();
+        var item = iterator.next();
         items.push(serialize(item, maxDepth, depth, {}));
     }
 
@@ -142,13 +142,13 @@ function serializeCollection (collection, maxDepth, depth) {
 
 /**
  * Serializes a native SFCC map into a pojo
- * @param map
+ * @param {dw.util.Map} map
  * @param depth
  * @param maxDepth
  * @returns {string|*[]|*}
  */
 function serializeMap (map, depth, maxDepth) {
-    const obj = {};
+    var obj = {};
 
     map.keySet().toArray().forEach(function (item) {
         obj[item] = map.get(item);
