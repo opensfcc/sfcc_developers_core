@@ -75,7 +75,7 @@
         </template>
 
         <!-- Split Pane -->
-        <split-pane :min-percent="30" :default-percent="resizer" @resize="onResize" split="vertical" class="flex-grow-1">
+        <split-pane :min-percent="30" :default-percent=parseInt(resizer) @resize="onResize" split="vertical" class="flex-grow-1">
             <!-- Left Panel -->
             <div slot="paneL" class="d-flex flex-column flex-grow-1">
                 <!-- Action Buttons -->
