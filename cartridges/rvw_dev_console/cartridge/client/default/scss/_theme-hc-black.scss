@@ -60,6 +60,16 @@ html.hc-black {
         }
     }
 
+    .autosave {
+        border-color: #444;
+        color: #444;
+
+        &.active {
+            color: #ddd;
+            border-color: #ddd;
+        }
+    }
+
     .layout-selector {
         .layout-switch {
             svg path {

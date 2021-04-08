@@ -438,6 +438,23 @@ select {
   top: 16px;
   width: 200px; }
 
+.autosave {
+  position: absolute;
+  right: 365px;
+  height: 30px;
+  padding: 0 15px;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 4px;
+  background: transparent;
+  border: 2px solid #ccc;
+  color: #ccc;
+  cursor: pointer; }
+  .autosave.active {
+    color: #4f5051;
+    border-color: #4f5051; }
+
 .layout-selector {
   width: 120px;
   position: absolute;
@@ -526,6 +543,12 @@ html.hc-black {
   html.hc-black .files button.create-file {
     background: white;
     color: black; }
+  html.hc-black .autosave {
+    border-color: #444;
+    color: #444; }
+    html.hc-black .autosave.active {
+      color: #ddd;
+      border-color: #ddd; }
   html.hc-black .layout-selector .layout-switch svg path {
     fill: #444; }
   html.hc-black .layout-selector .layout-switch:hover svg path,
@@ -652,6 +675,12 @@ html.vs-dark {
       color: #FFF; }
       html.vs-dark .files a:hover {
         background: #1f1f1f; }
+  html.vs-dark .autosave {
+    border-color: #555;
+    color: #555; }
+    html.vs-dark .autosave.active {
+      color: #ddd;
+      border-color: #ddd; }
   html.vs-dark .layout-selector .layout-switch svg path {
     fill: #555; }
   html.vs-dark .layout-selector .layout-switch:hover svg path,
@@ -940,6 +969,10 @@ html.vs-dark {
     font-size: 12px; }
     .current-file button {
       font-size: 10px; }
+  .autosave {
+    right: 300px;
+    height: 24px;
+    padding: 0 10px; }
   .layout-selector {
     width: 100px;
     right: 180px; }
@@ -954,6 +987,10 @@ html.vs-dark {
     width: 170px; } }
 
 @media only screen and (max-width: 768px) {
+  header .autosave {
+    right: 205px;
+    height: 22px;
+    font-size: 12px; }
   header .layout-selector {
     width: 100px;
     right: 100px; }

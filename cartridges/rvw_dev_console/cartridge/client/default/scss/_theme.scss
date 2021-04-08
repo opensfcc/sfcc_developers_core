@@ -311,6 +311,26 @@ select {
     width: 200px;
 }
 
+.autosave {
+    position: absolute;
+    right: 365px;
+    height: 30px;
+    padding: 0 15px;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 4px;
+    background: transparent;
+    border: 2px solid #ccc;
+    color: #ccc;
+    cursor: pointer;
+
+    &.active {
+        color: #4f5051;
+        border-color: #4f5051;
+    }
+}
+
 .layout-selector {
     width: 120px;
     position: absolute;

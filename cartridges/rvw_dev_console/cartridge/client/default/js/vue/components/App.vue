@@ -8,6 +8,11 @@
                 <span>SFCC Dev Console</span>
             </a>
 
+            <!-- Autosave Button -->
+            <button class="autosave" :class="{ 'active': autosave === true }" @click="autoSaveInit(!autosave)" v-tooltip="{ content: 'Toggle Autosave', delay: { show: tooltipDelay } }">
+                Autosave
+            </button>
+
             <!-- Layout Selector -->
             <div class="layout-selector">
                 <!-- Left Panel Button -->
@@ -75,7 +80,7 @@
         </template>
 
         <!-- Split Pane -->
-        <split-pane :min-percent="30" :default-percent=parseInt(resizer) @resize="onResize" split="vertical" class="flex-grow-1">
+        <split-pane :min-percent="30" :default-percent="parseInt(resizer)" @resize="onResize" split="vertical" class="flex-grow-1">
             <!-- Left Panel -->
             <div slot="paneL" class="d-flex flex-column flex-grow-1">
                 <!-- Action Buttons -->
@@ -241,6 +246,8 @@ export default {
             fileModified: false,
             executionTime: null,
             layout: 'split',
+            autosave: false,
+            autosaveListener: false,
             maxDepth: 3,
             plainJSON: false,
             processing: false,
@@ -272,6 +279,7 @@ export default {
         const currentFile = localStorage.getItem('currentFile');
         const lastUpdateCheck = localStorage.getItem('lastUpdateCheck');
         const layout = localStorage.getItem('layout');
+        const autosave = localStorage.getItem('autosave');
         const maxDepth = localStorage.getItem('maxDepth');
         const plainJSON = localStorage.getItem('plainJSON');
         const resizer = localStorage.getItem('resizer');
@@ -308,6 +316,13 @@ export default {
         if (layout) {
             this.layout = layout;
             this.switchLayout(layout);
+        }
+
+        // Update Autosave if Changed
+        if (autosave === 'true') {
+            this.autosave = true;
+        } else {
+            this.autosave = false;
         }
 
         // Update Max Depth if Changed
@@ -534,6 +549,9 @@ export default {
                 }
             });
 
+            // Autosave
+            this.autoSaveInit(this.autosave);
+
             // Add Run Code Command to Editor
             editor.addAction({
                 id: 'dev-console-run',
@@ -731,6 +749,30 @@ export default {
             } else {
                 this.promptFile();
             }
+        },
+        autoSaveInit(autosave) {
+            this.autosave = autosave;
+
+            if (this.autosaveListener) {
+                this.autosaveListener.dispose();
+            }
+
+            if (autosave) {
+                this.saveFile();
+
+                var timeout;
+                var editor = this.editor;
+                var methods = this;
+
+                this.autosaveListener = editor.onDidChangeModelContent(function() {
+                    if (timeout) clearTimeout(timeout);
+                    timeout = setTimeout(function () {
+                        methods.saveFile();
+                    }, 1000);
+                });
+            }
+
+            localStorage.setItem('autosave', autosave);
         },
         showMessage(type, message, callback) {
             let icon = '';

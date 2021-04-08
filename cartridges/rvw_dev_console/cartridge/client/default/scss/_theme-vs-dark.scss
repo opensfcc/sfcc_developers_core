@@ -103,6 +103,16 @@ html.vs-dark {
         }
     }
 
+    .autosave {
+        border-color: #555;
+        color: #555;
+
+        &.active {
+            color: #ddd;
+            border-color: #ddd;
+        }
+    }
+
     .layout-selector {
         .layout-switch {
             svg path {
