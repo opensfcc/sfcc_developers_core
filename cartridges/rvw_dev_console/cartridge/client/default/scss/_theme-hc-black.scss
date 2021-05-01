@@ -61,12 +61,26 @@ html.hc-black {
     }
 
     .autosave {
-        border-color: #444;
-        color: #444;
+        svg {
+            path {
+                stroke: #444;
+            }
+    
+            .autosave-check {
+                fill: #444;
+            }
+        }
 
         &.active {
-            color: #ddd;
-            border-color: #ddd;
+            svg {
+                path {
+                    stroke: #ddd;
+                }
+        
+                .autosave-check {
+                    fill: #ddd;
+                }
+            }
         }
     }
 

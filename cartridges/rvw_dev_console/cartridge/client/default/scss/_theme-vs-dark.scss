@@ -104,12 +104,26 @@ html.vs-dark {
     }
 
     .autosave {
-        border-color: #555;
-        color: #555;
+        svg {
+            path {
+                stroke: #555;
+            }
+    
+            .autosave-check {
+                fill: #555;
+            }
+        }
 
         &.active {
-            color: #ddd;
-            border-color: #ddd;
+            svg {
+                path {
+                    stroke: #ddd;
+                }
+        
+                .autosave-check {
+                    fill: #ddd;
+                }
+            }
         }
     }
 
