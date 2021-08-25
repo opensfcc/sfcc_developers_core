@@ -4,6 +4,7 @@
   "description": "Red Van Workshop - Developers Core SFCC Cartridge",
   "scripts": {
     "test": "eslint \"**/client/**/*.{js,vue}\" --fix",
+    "test:unit": "mocha",
     "watch": "webpack --mode development --watch",
     "dev": "webpack --mode development",
     "build": "webpack --mode production"
@@ -20,8 +21,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "app-module-path": "^2.2.0",
     "axios": "^0.21.0",
+    "chai": "^4.2.0",
     "core-js": "^3.6.5",
+    "mocha": "^8.2.1",
     "regenerator-runtime": "^0.13.7",
     "v-tooltip": "^2.0.3",
     "vue": "^2.6.12",
@@ -55,6 +59,7 @@
     "webpack-cli": "^4.1.0"
   },
   "pre-commit": [
-    "test"
+    "test",
+    "test:unit"
   ]
 }

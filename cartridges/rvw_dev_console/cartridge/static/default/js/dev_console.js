@@ -2177,6 +2177,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2199,6 +2208,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       fileModified: false,
       executionTime: null,
       layout: 'split',
+      autosave: false,
+      autosaveListener: false,
       maxDepth: 3,
       plainJSON: false,
       processing: false,
@@ -2226,6 +2237,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     var currentFile = localStorage.getItem('currentFile');
     var lastUpdateCheck = localStorage.getItem('lastUpdateCheck');
     var layout = localStorage.getItem('layout');
+    var autosave = localStorage.getItem('autosave');
     var maxDepth = localStorage.getItem('maxDepth');
     var plainJSON = localStorage.getItem('plainJSON');
     var resizer = localStorage.getItem('resizer');
@@ -2265,6 +2277,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     if (layout) {
       this.layout = layout;
       this.switchLayout(layout);
+    } // Update Autosave if Changed
+
+
+    if (autosave === 'true') {
+      this.autosave = true;
+    } else {
+      this.autosave = false;
     } // Update Max Depth if Changed
 
 
@@ -2344,6 +2363,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         this.currentFile = null;
         this.fileModified = false;
         this.result = null;
+
+        if (this.autosaveListener) {
+          this.autosaveListener.dispose();
+        }
+
         localStorage.removeItem('lastRun');
         localStorage.removeItem('currentFile');
       }
@@ -2485,7 +2509,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
           return null;
         }
-      }); // Add Run Code Command to Editor
+      }); // Autosave
+
+      this.autoSaveInit(this.autosave); // Add Run Code Command to Editor
 
       editor.addAction({
         id: 'dev-console-run',
@@ -2625,6 +2651,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }
       }
 
+      this.autoSaveInit(this.autosave);
       localStorage.setItem('lastRun', JSON.stringify(this.code));
       localStorage.setItem('currentFile', file);
     },
@@ -2678,7 +2705,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 localStorage.setItem('lastRun', JSON.stringify(_this6.code));
                 _context2.prev = 7;
                 _context2.next = 10;
-                return _this6.axios.post("".concat(window.urlPath, "/Console-Run"), data).catch(function (error) {
+                return _this6.axios.post("".concat(window.urlPath), data).catch(function (error) {
                   if (error.response) {
                     _this6.showMessage('error', "<strong>Error ".concat(error.response.status, ":</strong> ").concat(error.response.data.message));
                   } else {
@@ -2727,6 +2754,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       } else {
         this.promptFile();
       }
+    },
+    autoSaveInit: function autoSaveInit(autosave) {
+      this.autosave = autosave;
+
+      if (this.autosaveListener) {
+        this.autosaveListener.dispose();
+      }
+
+      if (autosave) {
+        if (this.currentFile) {
+          this.saveFile();
+        }
+
+        var timeout;
+        var editor = this.editor;
+        var methods = this;
+        this.autosaveListener = editor.onDidChangeModelContent(function () {
+          if (timeout) clearTimeout(timeout);
+          timeout = setTimeout(function () {
+            if (methods.currentFile) {
+              methods.saveFile();
+            }
+          }, 1000);
+        });
+      }
+
+      localStorage.setItem('autosave', autosave);
     },
     showMessage: function showMessage(type, message, callback) {
       var icon = '';
@@ -26975,6 +27029,61 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
+        _c(
+          "button",
+          {
+            directives: [
+              {
+                name: "tooltip",
+                rawName: "v-tooltip",
+                value: {
+                  content: "Toggle Autosave",
+                  delay: { show: _vm.tooltipDelay }
+                },
+                expression:
+                  "{ content: 'Toggle Autosave', delay: { show: tooltipDelay } }"
+              }
+            ],
+            staticClass: "autosave",
+            class: { active: _vm.autosave === true },
+            on: {
+              click: function($event) {
+                return _vm.autoSaveInit(!_vm.autosave)
+              }
+            }
+          },
+          [
+            _c(
+              "svg",
+              {
+                attrs: {
+                  "enable-background": "new 0 0 100 100",
+                  version: "1.1",
+                  viewBox: "0 0 100 100",
+                  "xml:space": "preserve",
+                  xmlns: "http://www.w3.org/2000/svg"
+                }
+              },
+              [
+                _c("path", {
+                  attrs: {
+                    d:
+                      "m10.6 93.7h22.5c2.5 0 4.8-1.6 5.6-4l12.4-33.7c1.8-5.9 7.2-10 13.4-10h24.5c3.3 0 6-2.7 6-6v-15.2c0-3.1-2.5-5.6-5.6-5.6h-22.4l-10.7-10.6c-1.5-1.5-3.5-2.3-5.6-2.3h-40c-3.2 0-5.7 2.5-5.7 5.6v76.1c0 3.2 2.5 5.7 5.6 5.7z"
+                  }
+                }),
+                _vm._v(" "),
+                _c("path", {
+                  staticClass: "autosave-check",
+                  attrs: {
+                    d:
+                      "m88.4 56.8c-0.8-0.8-2-0.8-2.8 0l-17.1 18.1-6.1-6.1c-0.8-0.8-2-0.8-2.8 0l-6.1 6.1c-0.8 0.8-0.8 2 0 2.8l13.7 13.7c0.8 0.8 2 0.8 2.8 0l24.7-25.7c0.8-0.8 0.8-2 0-2.8l-6.3-6.1z"
+                  }
+                })
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
         _c("div", { staticClass: "layout-selector" }, [
           _c(
             "button",
@@ -27341,7 +27450,7 @@ var render = function() {
           staticClass: "flex-grow-1",
           attrs: {
             "min-percent": 30,
-            "default-percent": _vm.resizer,
+            "default-percent": parseInt(_vm.resizer),
             split: "vertical"
           },
           on: { resize: _vm.onResize }
