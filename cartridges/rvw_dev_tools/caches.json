@@ -1,0 +1,8 @@
+{
+    "caches": [
+        {
+            "id": "DevToolsCache",
+            "expireAfterSeconds": 300
+        }
+    ]
+}

@@ -1,3 +1,6 @@
+/*!********************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-3[0].rules[0].use[1]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-3[0].rules[0].use[2]!./cartridges/rvw_dev_console/cartridge/client/default/scss/dev_console.scss ***!
+  \********************************************************************************************************************************************************************************************************************************************/
 .tree-view-wrapper {
   height: 100%;
   overflow: unset !important; }
@@ -860,8 +863,7 @@ html.vs-dark {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   display: table;
-  transition: opacity 0.3s ease;
-  backdrop-filter: blur(3px); }
+  transition: opacity 0.3s ease; }
 
 #modal .modal-wrapper {
   display: table-cell;
