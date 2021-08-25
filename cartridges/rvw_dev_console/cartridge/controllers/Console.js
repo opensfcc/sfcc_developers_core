@@ -1,16 +1,16 @@
 'use strict';
 
+var SecurityHelpers = require('*/cartridge/scripts/helpers/securityHelpers');
+
 /**
  * Display development console template
  */
 function Show() {
     const ISML = require('dw/template/ISML');
-    const Response = require('dw/system/Response');
     const System = require('dw/system/System');
     const URLUtils = require('dw/web/URLUtils');
 
-    response.setHttpHeader(Response.CONTENT_SECURITY_POLICY, 'frame-ancestors \'self\'');
-    response.setHttpHeader(Response.X_CONTENT_TYPE_OPTIONS, 'nosniff');
+    SecurityHelpers.addSecurityHeaders();
 
     if (!request.isHttpSecure()) {
         response.redirect(URLUtils.https('Console-Show').toString());
@@ -23,13 +23,31 @@ function Show() {
     }
 
     ISML.renderTemplate('dev_console/index', {
-        urlPath: URLUtils.https('').toString() + '/default',
+        urlPath: URLUtils.https('Console-Run').toString(),
         staticPath: URLUtils.staticURL('/').toString(),
     });
 }
 
 module.exports.Show = Show;
 module.exports.Show.public = true;
+
+/**
+ * Display development console template in the storefront
+ */
+function ShowStorefront() {
+    var Site = require('dw/system/Site');
+    var URLUtils = require('dw/web/URLUtils');
+    var URLAction = require('dw/web/URLAction');
+
+    var currentSite = Site.getCurrent();
+
+    var storefrontAction = new URLAction('Console-Show', currentSite.getID());
+
+    response.redirect(URLUtils.abs(storefrontAction));
+}
+
+module.exports.ShowStorefront = ShowStorefront;
+module.exports.ShowStorefront.public = true;
 
 /**
  * Run the script and return the response
@@ -42,11 +60,9 @@ function Run() {
         }, 405);
     }
 
-    const System = require('dw/system/System');
-    const Response = require('dw/system/Response');
+    var System = require('dw/system/System');
 
-    response.setHttpHeader(Response.CONTENT_SECURITY_POLICY, 'frame-ancestors \'self\'');
-    response.setHttpHeader(Response.X_CONTENT_TYPE_OPTIONS, 'nosniff');
+    SecurityHelpers.addSecurityHeaders();
 
     if (System.getInstanceType() === System.PRODUCTION_SYSTEM) {
         sendJSON({
@@ -57,27 +73,27 @@ function Run() {
         return;
     }
 
-    const code = request.getHttpParameterMap().get('code').getStringValue('');
-    const maxDepth = request.getHttpParameterMap().get('maxDepth').getIntValue(3);
+    var code = request.getHttpParameterMap().get('code').getStringValue('');
+    var maxDepth = request.getHttpParameterMap().get('maxDepth').getIntValue(3);
 
     // if missing max depth or code return and do nothing, send no response
     if (!code || !maxDepth) {
         return;
     }
 
-    let result;
-    const startTime = new Date();
+    var result;
+    var startTime = new Date();
 
     try {
-        const myFunc = new Function('code', code);
+        var myFunc = new Function('code', code);
         result = myFunc();
     } catch (e) {
         result = e;
     }
 
-    const runtime = new Date().getTime() - startTime.getTime();
+    var runtime = new Date().getTime() - startTime.getTime();
 
-    const serializer = require('../scripts/serializer');
+    var serializer = require('../scripts/serializer');
     result = serializer.serialize(result, maxDepth);
 
     if (typeof result === 'string' || typeof result === 'boolean' || typeof result === 'number') {

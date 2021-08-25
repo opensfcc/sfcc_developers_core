@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<extensions xmlns="http://www.demandware.com/xml/bmmodules/2007-12-11"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.demandware.com/xml/bmmodules/2007-12-11 bmext.xsd">
+    <menuitem id="developer-tools-admin" position="1999" site="false">
+        <name xml:lang="x-default">Developer Tools</name>
+        <short_description xml:lang="x-default">
+            Developer Tools
+        </short_description>
+        <description xml:lang="x-default">
+            Tools that will help/speed up development.
+        </description>
+        <icon>icons/rvw.png</icon>
+    </menuitem>
+
+    <menuitem id="developer-tools-site" position="1999" site="true">
+        <name xml:lang="x-default">Developer Tools</name>
+        <short_description xml:lang="x-default">
+            Developer Tools
+        </short_description>
+        <description xml:lang="x-default">
+            Tools that will help/speed up development.
+        </description>
+        <icon>icons/rvw.png</icon>
+    </menuitem>
+
+    <menuaction id="rvw-console" menupath="developer-tools-admin" position="100" site="false">
+        <name xml:lang="x-default">Console (BM)</name>
+        <short_description xml:lang="x-default">
+            View console
+        </short_description>
+        <description xml:lang="x-default">
+            View development console
+        </description>
+        <!-- no icon specified -->
+        <exec pipeline="Console" node="Show"/>
+        <sub-pipelines>
+            <pipeline name="Console-Show" />
+            <pipeline name="Console-Run" />
+        </sub-pipelines>
+        <parameters>
+            <parameter name="menuname" value="Developer Tools - Console"/>
+            <parameter name="mainmenuname" value="Developer Tools"/>
+        </parameters>
+        <icon>icons/terminal-solid.svg</icon>
+    </menuaction>
+
+    <menuaction id="rvw-console-site" menupath="developer-tools-site" position="100" site="true">
+        <name xml:lang="x-default">Console (BM)</name>
+        <short_description xml:lang="x-default">
+            View console
+        </short_description>
+        <description xml:lang="x-default">
+            View development console
+        </description>
+        <!-- no icon specified -->
+        <exec pipeline="Console" node="Show"/>
+        <sub-pipelines>
+            <pipeline name="Console-Show" />
+            <pipeline name="Console-Run" />
+        </sub-pipelines>
+        <parameters>
+            <parameter name="menuname" value="Developer Tools - Console"/>
+            <parameter name="mainmenuname" value="Developer Tools"/>
+        </parameters>
+        <icon>icons/terminal-solid.svg</icon>
+    </menuaction>
+    <menuaction id="rvw-console-site-storefront" menupath="developer-tools-site" position="100" site="true">
+        <name xml:lang="x-default">Console (Storefront)</name>
+        <short_description xml:lang="x-default">
+            View console
+        </short_description>
+        <description xml:lang="x-default">
+            View development console in the storefront context.
+        </description>
+        <!-- no icon specified -->
+        <exec pipeline="Console" node="ShowStorefront"/>
+        <sub-pipelines>
+            <pipeline name="Console-ShowStorefront" />
+        </sub-pipelines>
+        <parameters>
+            <parameter name="menuname" value="Developer Tools - Console"/>
+            <parameter name="mainmenuname" value="Developer Tools"/>
+        </parameters>
+        <icon>icons/terminal-solid.svg</icon>
+    </menuaction>
+</extensions>

@@ -103,6 +103,30 @@ html.vs-dark {
         }
     }
 
+    .autosave {
+        svg {
+            path {
+                stroke: #555;
+            }
+    
+            .autosave-check {
+                fill: #555;
+            }
+        }
+
+        &.active {
+            svg {
+                path {
+                    stroke: #ddd;
+                }
+        
+                .autosave-check {
+                    fill: #ddd;
+                }
+            }
+        }
+    }
+
     .layout-selector {
         .layout-switch {
             svg path {

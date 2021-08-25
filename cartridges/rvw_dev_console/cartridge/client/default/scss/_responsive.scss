@@ -46,6 +46,11 @@
         }
     }
 
+    .autosave {  
+        right: 300px;
+        height: 24px;
+    }
+
     .layout-selector {
         width: 100px;
         right: 180px;
@@ -71,6 +76,11 @@
 
 @media only screen and (max-width: 768px) {
     header {
+        .autosave {  
+            right: 205px;
+            height: 22px;
+        }
+
         .layout-selector {
             width: 100px;
             right: 100px;
@@ -96,7 +106,7 @@
     }
 }
 
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 435px) {
     header {
         a {
             span {
