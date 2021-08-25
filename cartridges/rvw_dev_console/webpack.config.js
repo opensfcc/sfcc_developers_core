@@ -16,6 +16,10 @@ function getPlugins(mode, argv) {
         new CopyPlugin({
             patterns: [
                 {
+                    from: __dirname + '/cartridge/client/default/icons',
+                    to: __dirname + '/cartridge/static/default/icons'
+                },
+                {
                     from: __dirname + '/cartridge/client/default/img',
                     to: __dirname + '/cartridge/static/default/img'
                 }
