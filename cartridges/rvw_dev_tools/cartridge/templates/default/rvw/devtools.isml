@@ -1,6 +1,3 @@
-<iscontent type="text/html" charset="UTF-8" compact="true" />
-
-<iscomment> Make sure this is NOT Production </iscomment>
 <isif condition="${dw.system.System.getInstanceType() !== dw.system.System.PRODUCTION_SYSTEM}">
 
 <!-- RVW Dev Tools: Drawer Element -->
@@ -11,44 +8,54 @@
 (function() {
     window.RVW_DevToolsURL = '${dw.web.URLUtils.url("DevTools-GetData").toString()}';
     window.RVW_DevConsoleURL = '${dw.web.URLUtils.url("Console-Show").toString()}';
-    window.RVW_DevToolsDebugger = <isprint value="${JSON.stringify(pdict.Debugger).replace(/</g, '&lt;')}" encoding="off" />;
+    window.RVW_DevToolsDebugger = <isprint value="${JSON.stringify(pdict.Debugger.messages).replace(/</g, '&lt;')}" encoding="off" />;
 
-    // Check if we have Debug Messages
-    if (typeof window.RVW_DevToolsDebugger.messages !== 'undefined' && window.RVW_DevToolsDebugger.messages !== '') {
-        // Generate Messages to Console
-        var generateLogs = function(type) {
-            if (window.RVW_DevToolsDebugger.messages[type].length > 0) {
-                var label = type.charAt(0).toUpperCase() + type.slice(1);
-                var colors = {
-                    debug: ['color: #98C379; font-weight: bold;', 'color: #999; font-weight: lighter;'],
-                    error: ['color: #F44747; font-weight: bold;', 'color: #999; font-weight: lighter;'],
-                    fatal: ['color: #F44747; font-weight: bold;', 'color: #999; font-weight: lighter;'],
-                    info: ['color: #528BFF; font-weight: bold;', 'color: #999; font-weight: lighter;'],
-                    log: ['font-weight: bold;', 'color: #999; font-weight: lighter;'],
-                    warn: ['color: orange; font-weight: bold;', 'color: #999; font-weight: lighter;'],
-                };
+    // Generate Messages to Console
+    var generateLogs = function(type) {
+        var allowedTypes = ['debug', 'error', 'fatal', 'info', 'log', 'warn'];
 
-                console.groupCollapsed('SFCC: %c' + label + ' %c(' + window.RVW_DevToolsDebugger.messages[type].length + ')', colors[type][0], colors[type][1]);
+        if (allowedTypes.indexOf(type) > -1 && window.RVW_DevToolsDebugger && window.RVW_DevToolsDebugger.hasOwnProperty(type) && window.RVW_DevToolsDebugger[type].length > 0) {
+            var label = type.charAt(0).toUpperCase() + type.slice(1);
+            var colors = {
+                debug: ['color: #98C379; font-weight: bold;', 'color: #999; font-weight: lighter;'],
+                error: ['color: #F44747; font-weight: bold;', 'color: #999; font-weight: lighter;'],
+                fatal: ['color: #F44747; font-weight: bold;', 'color: #999; font-weight: lighter;'],
+                info: ['color: #528BFF; font-weight: bold;', 'color: #999; font-weight: lighter;'],
+                log: ['font-weight: bold;', 'color: #999; font-weight: lighter;'],
+                warn: ['color: orange; font-weight: bold;', 'color: #999; font-weight: lighter;'],
+            };
 
-                for (msg of window.RVW_DevToolsDebugger.messages[type]) {
-                    console[type](msg.message);
-                    console.groupCollapsed('%cSTACK TRACE', 'color: #999; font-weight: lighter;');
-                    console.table(msg.stack);
-                    console.groupEnd();
-                }
+            console.groupCollapsed('SFCC: %c' + label + ' %c(' + window.RVW_DevToolsDebugger[type].length + ')', colors[type][0], colors[type][1]);
 
+            for (msg of window.RVW_DevToolsDebugger[type]) {
+                console[type](msg.message);
+                console.groupCollapsed('%cSTACK TRACE', 'color: #999; font-weight: lighter;');
+                console.table(msg.stack);
                 console.groupEnd();
             }
-        };
 
-        // Get Log Types
-        var types = Object.keys(window.RVW_DevToolsDebugger.messages);
+            console.groupEnd();
+        }
+    };
 
-        // Output Log Messages by Type
-        types.forEach(function(type){
-            generateLogs(type);
-        });
-    }
+    var runDevTools = function() {
+        // Check if we have Debug Messages
+        if (typeof window.RVW_DevToolsDebugger !== 'undefined' && window.RVW_DevToolsDebugger !== '') {
+            // Get Log Types
+            var types = Object.keys(window.RVW_DevToolsDebugger);
+
+            // Output Log Messages by Type
+            types.forEach(function(type){
+                generateLogs(type);
+            });
+        }
+    };
+
+    // Listen for Updates from DevTools Drawer
+    document.addEventListener('devtools', function(evt) {
+        window.RVW_DevToolsDebugger = evt.detail;
+        runDevTools();
+    });
 })();
 </script>
 

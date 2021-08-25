@@ -2632,13 +2632,13 @@ __webpack_require__.r(__webpack_exports__);
 
     getTotals() {
       const msg = this.debugData.messages;
-      this.messageCount.debug = msg.debug.length;
-      this.messageCount.error = msg.error.length;
-      this.messageCount.fatal = msg.fatal.length;
-      this.messageCount.info = msg.info.length;
-      this.messageCount.log = msg.log.length;
-      this.messageCount.warn = msg.warn.length;
-      this.messageCount.total = msg.debug.length + msg.error.length + msg.fatal.length + msg.info.length + msg.log.length + msg.warn.length;
+      this.messageCount.debug = msg && typeof msg.debug !== 'undefined' ? msg.debug.length : 0;
+      this.messageCount.error = msg && typeof msg.error !== 'undefined' ? msg.error.length : 0;
+      this.messageCount.fatal = msg && typeof msg.fatal !== 'undefined' ? msg.fatal.length : 0;
+      this.messageCount.info = msg && typeof msg.info !== 'undefined' ? msg.info.length : 0;
+      this.messageCount.log = msg && typeof msg.log !== 'undefined' ? msg.log.length : 0;
+      this.messageCount.warn = msg && typeof msg.warn !== 'undefined' ? msg.warn.length : 0;
+      this.messageCount.total = Object.keys(this.messageCount).reduce((sum, key) => sum + parseInt(this.messageCount[key] || 0), 0);
 
       if (this.debugData.basket && typeof this.debugData.basket.productQuantityTotal !== 'undefined') {
         this.basketCount = this.debugData.basket.productQuantityTotal;
@@ -2646,6 +2646,7 @@ __webpack_require__.r(__webpack_exports__);
     },
 
     async fetchData() {
+      // TODO: Pass over timestamp from last call to fetch new messages only
       const response = await this.axios.get(window.RVW_DevToolsURL);
 
       if (response && typeof response.data !== 'undefined') {
@@ -2667,6 +2668,15 @@ __webpack_require__.r(__webpack_exports__);
 
         if (typeof response.data.site !== 'undefined') {
           this.debugData.site = response.data.site;
+        }
+
+        if (typeof response.data.messages !== 'undefined') {
+          this.debugData.messages = response.data.messages; // create and dispatch console event
+
+          const event = new CustomEvent('devtools', {
+            detail: response.data.messages
+          });
+          document.dispatchEvent(event);
         }
 
         this.cleanDrawerOutput();
@@ -27332,7 +27342,9 @@ var render = function() {
                             )
                           ]),
                           _vm._v(" "),
-                          _vm.subsection === "debug"
+                          _vm.subsection === "debug" &&
+                          _vm.debugData.messages &&
+                          typeof _vm.debugData.messages.debug !== "undefined"
                             ? _c(
                                 "div",
                                 { staticClass: "subsection" },
@@ -27340,15 +27352,6 @@ var render = function() {
                                   _c("messages", {
                                     attrs: {
                                       list: _vm.debugData.messages.debug
-                                    },
-                                    on: {
-                                      "update:list": function($event) {
-                                        return _vm.$set(
-                                          _vm.debugData.messages,
-                                          "debug",
-                                          $event
-                                        )
-                                      }
                                     }
                                   })
                                 ],
@@ -27356,7 +27359,9 @@ var render = function() {
                               )
                             : _vm._e(),
                           _vm._v(" "),
-                          _vm.subsection === "error"
+                          _vm.subsection === "error" &&
+                          _vm.debugData.messages &&
+                          typeof _vm.debugData.messages.error !== "undefined"
                             ? _c(
                                 "div",
                                 { staticClass: "subsection" },
@@ -27364,15 +27369,6 @@ var render = function() {
                                   _c("messages", {
                                     attrs: {
                                       list: _vm.debugData.messages.error
-                                    },
-                                    on: {
-                                      "update:list": function($event) {
-                                        return _vm.$set(
-                                          _vm.debugData.messages,
-                                          "error",
-                                          $event
-                                        )
-                                      }
                                     }
                                   })
                                 ],
@@ -27380,7 +27376,9 @@ var render = function() {
                               )
                             : _vm._e(),
                           _vm._v(" "),
-                          _vm.subsection === "fatal"
+                          _vm.subsection === "fatal" &&
+                          _vm.debugData.messages &&
+                          typeof _vm.debugData.messages.fatal !== "undefined"
                             ? _c(
                                 "div",
                                 { staticClass: "subsection" },
@@ -27388,15 +27386,6 @@ var render = function() {
                                   _c("messages", {
                                     attrs: {
                                       list: _vm.debugData.messages.fatal
-                                    },
-                                    on: {
-                                      "update:list": function($event) {
-                                        return _vm.$set(
-                                          _vm.debugData.messages,
-                                          "fatal",
-                                          $event
-                                        )
-                                      }
                                     }
                                   })
                                 ],
@@ -27404,70 +27393,45 @@ var render = function() {
                               )
                             : _vm._e(),
                           _vm._v(" "),
-                          _vm.subsection === "info"
+                          _vm.subsection === "info" &&
+                          _vm.debugData.messages &&
+                          typeof _vm.debugData.messages.info !== "undefined"
                             ? _c(
                                 "div",
                                 { staticClass: "subsection" },
                                 [
                                   _c("messages", {
-                                    attrs: {
-                                      list: _vm.debugData.messages.info
-                                    },
-                                    on: {
-                                      "update:list": function($event) {
-                                        return _vm.$set(
-                                          _vm.debugData.messages,
-                                          "info",
-                                          $event
-                                        )
-                                      }
-                                    }
+                                    attrs: { list: _vm.debugData.messages.info }
                                   })
                                 ],
                                 1
                               )
                             : _vm._e(),
                           _vm._v(" "),
-                          _vm.subsection === "log"
+                          _vm.subsection === "log" &&
+                          _vm.debugData.messages &&
+                          typeof _vm.debugData.messages.log !== "undefined"
                             ? _c(
                                 "div",
                                 { staticClass: "subsection" },
                                 [
                                   _c("messages", {
-                                    attrs: { list: _vm.debugData.messages.log },
-                                    on: {
-                                      "update:list": function($event) {
-                                        return _vm.$set(
-                                          _vm.debugData.messages,
-                                          "log",
-                                          $event
-                                        )
-                                      }
-                                    }
+                                    attrs: { list: _vm.debugData.messages.log }
                                   })
                                 ],
                                 1
                               )
                             : _vm._e(),
                           _vm._v(" "),
-                          _vm.subsection === "warn"
+                          _vm.subsection === "warn" &&
+                          _vm.debugData.messages &&
+                          typeof _vm.debugData.messages.warn !== "undefined"
                             ? _c(
                                 "div",
                                 { staticClass: "subsection" },
                                 [
                                   _c("messages", {
-                                    attrs: {
-                                      list: _vm.debugData.messages.warn
-                                    },
-                                    on: {
-                                      "update:list": function($event) {
-                                        return _vm.$set(
-                                          _vm.debugData.messages,
-                                          "warn",
-                                          $event
-                                        )
-                                      }
-                                    }
+                                    attrs: { list: _vm.debugData.messages.warn }
                                   })
                                 ],
                                 1
@@ -28686,7 +28650,7 @@ var render = function() {
                   )
                 ]),
                 _vm._v(" "),
-                _vm.consoleURL
+                _vm.consoleURL && _vm.consoleURL !== ""
                   ? _c(
                       "a",
                       {
@@ -28788,305 +28752,331 @@ var render = function() {
           : _vm._e()
       ]),
       _vm._v(" "),
-      _c("svg", { attrs: { xmlns: "http://www.w3.org/2000/svg" } }, [
-        _c(
-          "symbol",
-          { attrs: { id: "devtool-basket", viewBox: "0 0 48.12 47.06" } },
-          [
-            _c(
-              "g",
-              {
-                attrs: {
-                  fill: "none",
-                  stroke: "#FFFFFF",
-                  "stroke-miterlimit": "10"
-                }
-              },
-              [
-                _c("ellipse", {
+      _c(
+        "svg",
+        {
+          attrs: {
+            xmlns: "http://www.w3.org/2000/svg",
+            id: "rvw-dev-tools-icons"
+          }
+        },
+        [
+          _c(
+            "symbol",
+            { attrs: { id: "devtool-basket", viewBox: "0 0 48.12 47.06" } },
+            [
+              _c(
+                "g",
+                {
                   attrs: {
-                    cx: "19.41",
-                    cy: "41.45",
-                    rx: "3.68",
-                    ry: "3.78",
-                    "stroke-width": "3.65"
+                    fill: "none",
+                    stroke: "#FFFFFF",
+                    "stroke-miterlimit": "10"
                   }
-                }),
-                _vm._v(" "),
-                _c("ellipse", {
+                },
+                [
+                  _c("ellipse", {
+                    attrs: {
+                      cx: "19.41",
+                      cy: "41.45",
+                      rx: "3.68",
+                      ry: "3.78",
+                      "stroke-width": "3.65"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("ellipse", {
+                    attrs: {
+                      cx: "35.07",
+                      cy: "41.45",
+                      rx: "3.68",
+                      ry: "3.78",
+                      "stroke-width": "3.65"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("path", {
+                    attrs: {
+                      d:
+                        "M10 8h35.41c.52 0 .82.07.67.55L40.68 26c-.15.47-.55 1.05-.91 1.05H15.63c-.36 0-.76-.72-.91-1.21L9.32 8.73C9.17 8.25 9.47 8 10 8z",
+                      "stroke-width": "4"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("path", {
+                    attrs: {
+                      "stroke-linecap": "round",
+                      "stroke-width": "3.65",
+                      d:
+                        "M9.28 7.86L7.44 3.23M15.73 26.78c-.34 0-.73.39-.88.88L12 35.3"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("path", {
+                    attrs: {
+                      "stroke-linecap": "round",
+                      "stroke-width": "4",
+                      d: "M2 2h5M12 36h29"
+                    }
+                  })
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "symbol",
+            { attrs: { id: "devtool-close", viewBox: "0 0 33.84 33.67" } },
+            [
+              _c(
+                "g",
+                {
                   attrs: {
-                    cx: "35.07",
-                    cy: "41.45",
-                    rx: "3.68",
-                    ry: "3.78",
-                    "stroke-width": "3.65"
-                  }
-                }),
-                _vm._v(" "),
-                _c("path", {
-                  attrs: {
-                    d:
-                      "M10 8h35.41c.52 0 .82.07.67.55L40.68 26c-.15.47-.55 1.05-.91 1.05H15.63c-.36 0-.76-.72-.91-1.21L9.32 8.73C9.17 8.25 9.47 8 10 8z",
+                    fill: "none",
+                    stroke: "#FFFFFF",
+                    "stroke-linecap": "round",
+                    "stroke-miterlimit": "10",
                     "stroke-width": "4"
                   }
-                }),
-                _vm._v(" "),
-                _c("path", {
-                  attrs: {
-                    "stroke-linecap": "round",
-                    "stroke-width": "3.65",
-                    d:
-                      "M9.28 7.86L7.44 3.23M15.73 26.78c-.34 0-.73.39-.88.88L12 35.3"
-                  }
-                }),
-                _vm._v(" "),
-                _c("path", {
-                  attrs: {
-                    "stroke-linecap": "round",
-                    "stroke-width": "4",
-                    d: "M2 2h5M12 36h29"
-                  }
-                })
-              ]
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "symbol",
-          { attrs: { id: "devtool-close", viewBox: "0 0 33.84 33.67" } },
-          [
-            _c(
-              "g",
-              {
-                attrs: {
-                  fill: "none",
-                  stroke: "#FFFFFF",
-                  "stroke-linecap": "round",
-                  "stroke-miterlimit": "10",
-                  "stroke-width": "4"
-                }
-              },
-              [_c("path", { attrs: { d: "M2 2l29.84 29.67M31.84 2L2 31.67" } })]
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "symbol",
-          { attrs: { id: "devtool-console", viewBox: "0 0 640 512" } },
-          [
-            _c("g", { attrs: { fill: "#FFFFFF", "stroke-linecap": "round" } }, [
-              _c("path", {
-                attrs: {
-                  d:
-                    "M257.981 272.971L63.638 467.314c-9.373 9.373-24.569 9.373-33.941 0L7.029 444.647c-9.357-9.357-9.375-24.522-.04-33.901L161.011 256 6.99 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L257.981 239.03c9.373 9.372 9.373 24.568 0 33.941zM640 456v-32c0-13.255-10.745-24-24-24H312c-13.255 0-24 10.745-24 24v32c0 13.255 10.745 24 24 24h304c13.255 0 24-10.745 24-24z"
-                }
-              })
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "symbol",
-          { attrs: { id: "devtool-customer", viewBox: "0 0 44 46.99" } },
-          [
-            _c(
-              "g",
-              {
-                attrs: {
-                  fill: "none",
-                  stroke: "#FFFFFF",
-                  "stroke-linecap": "round",
-                  "stroke-miterlimit": "10",
-                  "stroke-width": "4"
-                }
-              },
-              [
-                _c("circle", { attrs: { cx: "22", cy: "13", r: "11" } }),
-                _vm._v(" "),
-                _c("path", {
-                  attrs: {
-                    d:
-                      "M42 36.74v6.07c0 .58-.2 2.18-.78 2.18H3.28C2.71 45 2 43.39 2 42.81v-6.57c0-6.63 9-12 20-12s20 5.37 20 12z"
-                  }
-                })
-              ]
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "symbol",
-          { attrs: { id: "devtool-geolocation", viewBox: "0 0 36 46" } },
-          [
-            _c(
-              "g",
-              {
-                attrs: {
-                  fill: "none",
-                  stroke: "#FFFF",
-                  "stroke-linecap": "round",
-                  "stroke-linejoin": "round",
-                  "stroke-width": "4"
-                }
-              },
-              [
-                _c("path", {
-                  attrs: {
-                    d: "M18 2a15.82 15.82 0 0116 15.63A15.34 15.34 0 0130.83 27"
-                  }
-                }),
-                _vm._v(" "),
-                _c("circle", { attrs: { cx: "18", cy: "17.63", r: "5" } }),
-                _vm._v(" "),
-                _c("path", {
-                  attrs: {
-                    d:
-                      "M18 44l12.83-17.03M18 2A15.82 15.82 0 002 17.63 15.34 15.34 0 005.17 27M18 44L5.17 26.97"
-                  }
-                })
-              ]
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "symbol",
-          { attrs: { id: "devtool-messages", viewBox: "0 0 46 42.83" } },
-          [
-            _c(
-              "g",
-              {
-                attrs: {
-                  fill: "none",
-                  stroke: "#FFFFFF",
-                  "stroke-linecap": "round",
-                  "stroke-linejoin": "round",
-                  "stroke-width": "4"
-                }
-              },
-              [
-                _c("path", {
-                  attrs: {
-                    d:
-                      "M15 32.08H3c-.55 0-1-.81-1-1.37V2.34c0-.56.45-.26 1-.26h40c.55 0 1-.3 1 .26v28.37c0 .56-.45 1.37-1 1.37H29M22 40.83l6.63-8.11M22 40.83l-6.62-8.11"
-                  }
-                })
-              ]
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "symbol",
-          { attrs: { id: "devtool-preferences", viewBox: "0 0 46 44" } },
-          [
-            _c(
-              "g",
-              {
-                attrs: {
-                  fill: "none",
-                  stroke: "#FFFFFF",
-                  "stroke-linecap": "round",
-                  "stroke-linejoin": "round",
-                  "stroke-width": "4"
-                }
-              },
-              [
-                _c("path", {
-                  attrs: {
-                    d:
-                      "M2 6h8M10 2h12v8H10zM22 6h22M44 22h-8M36 26H24v-8h12zM24 22H2M2 38h8M10 34h12v8H10zM22 38h22"
-                  }
-                })
-              ]
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "symbol",
-          { attrs: { id: "devtool-salesforce", viewBox: "0 0 32 32" } },
-          [
-            _c("g", { attrs: { fill: "#FFFFFF", "stroke-linecap": "round" } }, [
-              _c("path", {
-                attrs: {
-                  d:
-                    "M10 6c-3.9 0-7 3.1-7 7 0 .4.1.8.1 1.2-.7 1-1.1 2.2-1.1 3.5 0 3.4 2.8 6.2 6.2 6.3 1.3 1.2 2.9 2 4.8 2s3.6-.9 4.9-2.1h.1c1.6 0 2.9-.9 3.8-2.1.4.1.8.2 1.2.2 3.9 0 7-3.1 7-7s-3.1-7-7-7c-.7 0-1.3.2-2 .4-1.1-.9-2.5-1.4-4-1.4-.9 0-1.8.3-2.6.7C13.2 6.7 11.7 6 10 6zm0 2c1.4 0 2.6.5 3.5 1.4l.5.5.6-.3c.8-.4 1.5-.6 2.4-.6 1.2 0 2.3.4 3.2 1.2l.5.4.6-.2c.6-.2 1.2-.3 1.8-.3 2.8 0 5 2.2 5 5s-2.2 5-5 5c-.4 0-.9-.1-1.3-.2l-.8-.2-.4.7c-.5.9-1.4 1.6-2.6 1.6h-.3l-.5-.1-.3.4c-1 1-2.4 1.7-3.9 1.7s-2.8-.7-3.7-1.7l-.4-.3h-.7C5.9 22 4 20.1 4 17.7c0-1 .4-1.9 1-2.7l.3-.4-.1-.5c-.1-.3-.2-.7-.2-1.1 0-2.8 2.2-5 5-5z"
-                }
-              })
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "symbol",
-          { attrs: { id: "devtool-session", viewBox: "0 0 41.92 41.92" } },
-          [
-            _c(
-              "g",
-              {
-                attrs: {
-                  fill: "none",
-                  stroke: "#FFFFFF",
-                  "stroke-linecap": "round"
-                }
-              },
-              [
-                _c("circle", {
-                  attrs: {
-                    cx: "20.96",
-                    cy: "20.96",
-                    r: "19",
-                    "stroke-miterlimit": "10",
-                    "stroke-width": "3.92"
-                  }
-                }),
-                _vm._v(" "),
-                _c("path", {
-                  attrs: {
-                    "stroke-linejoin": "round",
-                    "stroke-width": "4",
-                    d: "M19.96 12.46v9.22l5.34 3.72"
-                  }
-                })
-              ]
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _c("symbol", { attrs: { id: "devtool-site", viewBox: "0 0 40 46" } }, [
+                },
+                [
+                  _c("path", {
+                    attrs: { d: "M2 2l29.84 29.67M31.84 2L2 31.67" }
+                  })
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
           _c(
-            "g",
-            {
-              attrs: {
-                fill: "none",
-                stroke: "#FFFFFF",
-                "stroke-linejoin": "round",
-                "stroke-width": "4"
-              }
-            },
+            "symbol",
+            { attrs: { id: "devtool-console", viewBox: "0 0 640 512" } },
             [
-              _c("path", {
-                attrs: {
-                  d:
-                    "M13 44H2.88a.78.78 0 01-.88-.74V18M38 19v24.26a.78.78 0 01-.88.74H26"
-                }
-              }),
-              _vm._v(" "),
-              _c("path", {
-                attrs: {
-                  "stroke-linecap": "round",
-                  d: "M38 18.89L20 2 2 18.43"
-                }
-              }),
-              _vm._v(" "),
-              _c("path", { attrs: { d: "M14 46V31h12v15" } })
+              _c(
+                "g",
+                { attrs: { fill: "#FFFFFF", "stroke-linecap": "round" } },
+                [
+                  _c("path", {
+                    attrs: {
+                      d:
+                        "M257.981 272.971L63.638 467.314c-9.373 9.373-24.569 9.373-33.941 0L7.029 444.647c-9.357-9.357-9.375-24.522-.04-33.901L161.011 256 6.99 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L257.981 239.03c9.373 9.372 9.373 24.568 0 33.941zM640 456v-32c0-13.255-10.745-24-24-24H312c-13.255 0-24 10.745-24 24v32c0 13.255 10.745 24 24 24h304c13.255 0 24-10.745 24-24z"
+                    }
+                  })
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "symbol",
+            { attrs: { id: "devtool-customer", viewBox: "0 0 44 46.99" } },
+            [
+              _c(
+                "g",
+                {
+                  attrs: {
+                    fill: "none",
+                    stroke: "#FFFFFF",
+                    "stroke-linecap": "round",
+                    "stroke-miterlimit": "10",
+                    "stroke-width": "4"
+                  }
+                },
+                [
+                  _c("circle", { attrs: { cx: "22", cy: "13", r: "11" } }),
+                  _vm._v(" "),
+                  _c("path", {
+                    attrs: {
+                      d:
+                        "M42 36.74v6.07c0 .58-.2 2.18-.78 2.18H3.28C2.71 45 2 43.39 2 42.81v-6.57c0-6.63 9-12 20-12s20 5.37 20 12z"
+                    }
+                  })
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "symbol",
+            { attrs: { id: "devtool-geolocation", viewBox: "0 0 36 46" } },
+            [
+              _c(
+                "g",
+                {
+                  attrs: {
+                    fill: "none",
+                    stroke: "#FFFF",
+                    "stroke-linecap": "round",
+                    "stroke-linejoin": "round",
+                    "stroke-width": "4"
+                  }
+                },
+                [
+                  _c("path", {
+                    attrs: {
+                      d:
+                        "M18 2a15.82 15.82 0 0116 15.63A15.34 15.34 0 0130.83 27"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("circle", { attrs: { cx: "18", cy: "17.63", r: "5" } }),
+                  _vm._v(" "),
+                  _c("path", {
+                    attrs: {
+                      d:
+                        "M18 44l12.83-17.03M18 2A15.82 15.82 0 002 17.63 15.34 15.34 0 005.17 27M18 44L5.17 26.97"
+                    }
+                  })
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "symbol",
+            { attrs: { id: "devtool-messages", viewBox: "0 0 46 42.83" } },
+            [
+              _c(
+                "g",
+                {
+                  attrs: {
+                    fill: "none",
+                    stroke: "#FFFFFF",
+                    "stroke-linecap": "round",
+                    "stroke-linejoin": "round",
+                    "stroke-width": "4"
+                  }
+                },
+                [
+                  _c("path", {
+                    attrs: {
+                      d:
+                        "M15 32.08H3c-.55 0-1-.81-1-1.37V2.34c0-.56.45-.26 1-.26h40c.55 0 1-.3 1 .26v28.37c0 .56-.45 1.37-1 1.37H29M22 40.83l6.63-8.11M22 40.83l-6.62-8.11"
+                    }
+                  })
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "symbol",
+            { attrs: { id: "devtool-preferences", viewBox: "0 0 46 44" } },
+            [
+              _c(
+                "g",
+                {
+                  attrs: {
+                    fill: "none",
+                    stroke: "#FFFFFF",
+                    "stroke-linecap": "round",
+                    "stroke-linejoin": "round",
+                    "stroke-width": "4"
+                  }
+                },
+                [
+                  _c("path", {
+                    attrs: {
+                      d:
+                        "M2 6h8M10 2h12v8H10zM22 6h22M44 22h-8M36 26H24v-8h12zM24 22H2M2 38h8M10 34h12v8H10zM22 38h22"
+                    }
+                  })
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "symbol",
+            { attrs: { id: "devtool-salesforce", viewBox: "0 0 32 32" } },
+            [
+              _c(
+                "g",
+                { attrs: { fill: "#FFFFFF", "stroke-linecap": "round" } },
+                [
+                  _c("path", {
+                    attrs: {
+                      d:
+                        "M10 6c-3.9 0-7 3.1-7 7 0 .4.1.8.1 1.2-.7 1-1.1 2.2-1.1 3.5 0 3.4 2.8 6.2 6.2 6.3 1.3 1.2 2.9 2 4.8 2s3.6-.9 4.9-2.1h.1c1.6 0 2.9-.9 3.8-2.1.4.1.8.2 1.2.2 3.9 0 7-3.1 7-7s-3.1-7-7-7c-.7 0-1.3.2-2 .4-1.1-.9-2.5-1.4-4-1.4-.9 0-1.8.3-2.6.7C13.2 6.7 11.7 6 10 6zm0 2c1.4 0 2.6.5 3.5 1.4l.5.5.6-.3c.8-.4 1.5-.6 2.4-.6 1.2 0 2.3.4 3.2 1.2l.5.4.6-.2c.6-.2 1.2-.3 1.8-.3 2.8 0 5 2.2 5 5s-2.2 5-5 5c-.4 0-.9-.1-1.3-.2l-.8-.2-.4.7c-.5.9-1.4 1.6-2.6 1.6h-.3l-.5-.1-.3.4c-1 1-2.4 1.7-3.9 1.7s-2.8-.7-3.7-1.7l-.4-.3h-.7C5.9 22 4 20.1 4 17.7c0-1 .4-1.9 1-2.7l.3-.4-.1-.5c-.1-.3-.2-.7-.2-1.1 0-2.8 2.2-5 5-5z"
+                    }
+                  })
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "symbol",
+            { attrs: { id: "devtool-session", viewBox: "0 0 41.92 41.92" } },
+            [
+              _c(
+                "g",
+                {
+                  attrs: {
+                    fill: "none",
+                    stroke: "#FFFFFF",
+                    "stroke-linecap": "round"
+                  }
+                },
+                [
+                  _c("circle", {
+                    attrs: {
+                      cx: "20.96",
+                      cy: "20.96",
+                      r: "19",
+                      "stroke-miterlimit": "10",
+                      "stroke-width": "3.92"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("path", {
+                    attrs: {
+                      "stroke-linejoin": "round",
+                      "stroke-width": "4",
+                      d: "M19.96 12.46v9.22l5.34 3.72"
+                    }
+                  })
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "symbol",
+            { attrs: { id: "devtool-site", viewBox: "0 0 40 46" } },
+            [
+              _c(
+                "g",
+                {
+                  attrs: {
+                    fill: "none",
+                    stroke: "#FFFFFF",
+                    "stroke-linejoin": "round",
+                    "stroke-width": "4"
+                  }
+                },
+                [
+                  _c("path", {
+                    attrs: {
+                      d:
+                        "M13 44H2.88a.78.78 0 01-.88-.74V18M38 19v24.26a.78.78 0 01-.88.74H26"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("path", {
+                    attrs: {
+                      "stroke-linecap": "round",
+                      d: "M38 18.89L20 2 2 18.43"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("path", { attrs: { d: "M14 46V31h12v15" } })
+                ]
+              )
             ]
           )
-        ])
-      ])
+        ]
+      )
     ],
     1
   )

@@ -1,4 +1,6 @@
 #rvw_dev_tools {
+    overflow: hidden;
+
     .devtool-drawer {
         background: #222;
         border-top: 2px solid #666;
@@ -412,5 +414,9 @@
                 }
             }
         }
+    }
+
+    #rvw-dev-tools-icons {
+        display: none;
     }
 }

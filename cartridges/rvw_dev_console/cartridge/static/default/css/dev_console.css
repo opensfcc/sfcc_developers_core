@@ -821,8 +821,7 @@ html.vs-dark {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   display: table;
-  transition: opacity 0.3s ease;
-  backdrop-filter: blur(3px); }
+  transition: opacity 0.3s ease; }
 
 #modal .modal-wrapper {
   display: table-cell;

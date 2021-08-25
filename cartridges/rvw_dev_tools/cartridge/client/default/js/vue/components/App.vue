@@ -141,33 +141,33 @@
                         </div>
 
                         <!-- Debug Messages -->
-                        <div class="subsection" v-if="subsection === 'debug'">
-                            <messages :list.sync="debugData.messages.debug" />
+                        <div class="subsection" v-if="subsection === 'debug' && debugData.messages && typeof debugData.messages.debug !== 'undefined'">
+                            <messages :list="debugData.messages.debug" />
                         </div>
 
                         <!-- Error Messages -->
-                        <div class="subsection" v-if="subsection === 'error'">
-                            <messages :list.sync="debugData.messages.error" />
+                        <div class="subsection" v-if="subsection === 'error' && debugData.messages && typeof debugData.messages.error !== 'undefined'">
+                            <messages :list="debugData.messages.error" />
                         </div>
 
                         <!-- Fatal Messages -->
-                        <div class="subsection" v-if="subsection === 'fatal'">
-                            <messages :list.sync="debugData.messages.fatal" />
+                        <div class="subsection" v-if="subsection === 'fatal' && debugData.messages && typeof debugData.messages.fatal !== 'undefined'">
+                            <messages :list="debugData.messages.fatal" />
                         </div>
 
                         <!-- Info Messages -->
-                        <div class="subsection" v-if="subsection === 'info'">
-                            <messages :list.sync="debugData.messages.info" />
+                        <div class="subsection" v-if="subsection === 'info' && debugData.messages && typeof debugData.messages.info !== 'undefined'">
+                            <messages :list="debugData.messages.info" />
                         </div>
 
                         <!-- Log Messages -->
-                        <div class="subsection" v-if="subsection === 'log'">
-                            <messages :list.sync="debugData.messages.log" />
+                        <div class="subsection" v-if="subsection === 'log' && debugData.messages && typeof debugData.messages.log !== 'undefined'">
+                            <messages :list="debugData.messages.log" />
                         </div>
 
                         <!-- Warn Messages -->
-                        <div class="subsection" v-if="subsection === 'warn'">
-                            <messages :list.sync="debugData.messages.warn" />
+                        <div class="subsection" v-if="subsection === 'warn' && debugData.messages && typeof debugData.messages.warn !== 'undefined'">
+                            <messages :list="debugData.messages.warn" />
                         </div>
                     </div>
                 </transition>
@@ -476,7 +476,7 @@
         </transition>
 
         <!-- SVG Sprites -->
-        <svg xmlns="http://www.w3.org/2000/svg">
+        <svg xmlns="http://www.w3.org/2000/svg" id="rvw-dev-tools-icons">
             <symbol id="devtool-basket" viewBox="0 0 48.12 47.06">
                 <g fill="none" stroke="#FFFFFF" stroke-miterlimit="10">
                     <ellipse cx="19.41" cy="41.45" rx="3.68" ry="3.78" stroke-width="3.65"/>
@@ -675,19 +675,20 @@ export default {
         getTotals() {
             const msg = this.debugData.messages;
 
-            this.messageCount.debug = msg.debug.length;
-            this.messageCount.error = msg.error.length;
-            this.messageCount.fatal = msg.fatal.length;
-            this.messageCount.info = msg.info.length;
-            this.messageCount.log = msg.log.length;
-            this.messageCount.warn = msg.warn.length;
-            this.messageCount.total = (msg.debug.length + msg.error.length + msg.fatal.length + msg.info.length + msg.log.length + msg.warn.length);
+            this.messageCount.debug = (msg && typeof msg.debug !== 'undefined') ? msg.debug.length : 0;
+            this.messageCount.error = (msg && typeof msg.error !== 'undefined') ? msg.error.length : 0;
+            this.messageCount.fatal = (msg && typeof msg.fatal !== 'undefined') ? msg.fatal.length : 0;
+            this.messageCount.info = (msg && typeof msg.info !== 'undefined') ? msg.info.length : 0;
+            this.messageCount.log = (msg && typeof msg.log !== 'undefined') ? msg.log.length : 0;
+            this.messageCount.warn = (msg && typeof msg.warn !== 'undefined') ? msg.warn.length : 0;
+            this.messageCount.total = Object.keys(this.messageCount).reduce((sum, key) => sum + parseInt(this.messageCount[key] || 0), 0);
 
             if (this.debugData.basket && typeof this.debugData.basket.productQuantityTotal !== 'undefined') {
                 this.basketCount = this.debugData.basket.productQuantityTotal;
             }
         },
         async fetchData() {
+            // TODO: Pass over timestamp from last call to fetch new messages only
             const response = await this.axios.get(window.RVW_DevToolsURL);
 
             if (response && typeof response.data !== 'undefined') {
@@ -709,6 +710,17 @@ export default {
 
                 if (typeof response.data.site !== 'undefined') {
                     this.debugData.site = response.data.site;
+                }
+
+                if (typeof response.data.messages !== 'undefined') {
+                    this.debugData.messages = response.data.messages;
+
+                    // create and dispatch console event
+                    const event = new CustomEvent('devtools', {
+                        detail: response.data.messages
+                    });
+
+                    document.dispatchEvent(event);
                 }
 
                 this.cleanDrawerOutput();

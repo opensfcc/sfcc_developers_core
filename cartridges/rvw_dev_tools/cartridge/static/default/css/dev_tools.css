@@ -17,299 +17,303 @@
   to {
     transform: rotate(359deg); } }
 
-#rvw_dev_tools .devtool-drawer {
-  background: #222;
-  border-top: 2px solid #666;
-  bottom: 0;
-  color: #fff;
-  height: 50vh;
-  left: 0;
-  min-height: 330px;
-  position: fixed;
-  width: 100vw;
-  z-index: 99999; }
-  #rvw_dev_tools .devtool-drawer .devtool-menu {
-    background: #111;
-    color: #FFF;
-    height: 100%;
+#rvw_dev_tools {
+  overflow: hidden; }
+  #rvw_dev_tools .devtool-drawer {
+    background: #222;
+    border-top: 2px solid #666;
+    bottom: 0;
+    color: #fff;
+    height: 50vh;
     left: 0;
-    position: absolute;
-    text-align: left;
-    top: 0;
-    width: 160px; }
-    #rvw_dev_tools .devtool-drawer .devtool-menu ul {
-      display: block;
-      width: 100%;
-      margin: 0;
-      padding: 0;
-      margin-top: 10px; }
-      #rvw_dev_tools .devtool-drawer .devtool-menu ul li {
+    min-height: 330px;
+    position: fixed;
+    width: 100vw;
+    z-index: 99999; }
+    #rvw_dev_tools .devtool-drawer .devtool-menu {
+      background: #111;
+      color: #FFF;
+      height: 100%;
+      left: 0;
+      position: absolute;
+      text-align: left;
+      top: 0;
+      width: 160px; }
+      #rvw_dev_tools .devtool-drawer .devtool-menu ul {
         display: block;
         width: 100%;
-        text-align: left;
-        white-space: nowrap; }
-        #rvw_dev_tools .devtool-drawer .devtool-menu ul li button {
-          background: transparent;
-          border: none;
-          border-top: 1px solid #111111;
-          color: #999;
+        margin: 0;
+        padding: 0;
+        margin-top: 10px; }
+        #rvw_dev_tools .devtool-drawer .devtool-menu ul li {
           display: block;
-          font-size: 16px;
-          height: 44px;
-          line-height: 44px;
-          margin: 0;
-          padding: 0 16px;
-          position: relative;
+          width: 100%;
           text-align: left;
-          transition: all 0.25s;
-          width: 100%; }
-          #rvw_dev_tools .devtool-drawer .devtool-menu ul li button span.count {
-            color: #FFF;
-            display: inline-block;
-            font-size: 12px;
-            height: 20px;
-            line-height: 20px;
-            margin: 0;
-            padding: 0;
-            position: absolute;
-            right: 10px;
-            text-align: center;
-            top: 12px;
-            width: 20px;
-            background: #000;
+          white-space: nowrap; }
+          #rvw_dev_tools .devtool-drawer .devtool-menu ul li button {
+            background: transparent;
+            border: none;
+            border-top: 1px solid #111111;
             color: #999;
-            transition: all 0.25s; }
-          #rvw_dev_tools .devtool-drawer .devtool-menu ul li button svg {
-            height: 16px;
-            margin-right: 8px;
-            opacity: 0.25;
+            display: block;
+            font-size: 16px;
+            height: 44px;
+            line-height: 44px;
+            margin: 0;
+            padding: 0 16px;
             position: relative;
-            top: 2px;
+            text-align: left;
             transition: all 0.25s;
-            width: 16px; }
-          #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active {
-            background: #222;
-            color: white;
-            outline: none; }
-            #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover span.count, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus span.count, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active span.count, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active span.count {
-              color: white; }
-              #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover span.count.notice-debug, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus span.count.notice-debug, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active span.count.notice-debug, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active span.count.notice-debug {
-                background: #6d980a; }
-              #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover span.count.notice-error, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus span.count.notice-error, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active span.count.notice-error, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active span.count.notice-error {
-                background: #d70000; }
-              #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover span.count.notice-fatal, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus span.count.notice-fatal, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active span.count.notice-fatal, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active span.count.notice-fatal {
-                background: #990000; }
-              #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover span.count.notice-info, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus span.count.notice-info, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active span.count.notice-info, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active span.count.notice-info {
-                background: #286981; }
-              #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover span.count.notice-log, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus span.count.notice-log, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active span.count.notice-log, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active span.count.notice-log {
-                background: #444444; }
-              #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover span.count.notice-warn, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus span.count.notice-warn, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active span.count.notice-warn, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active span.count.notice-warn {
-                background: #d65507; }
-              #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover span.count.notice-disabled, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus span.count.notice-disabled, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active span.count.notice-disabled, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active span.count.notice-disabled {
-                background: #555;
-                color: #EEE; }
-            #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover svg, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus svg, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active svg, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active svg {
-              opacity: 1; }
-  #rvw_dev_tools .devtool-drawer .devtool-close-drawer {
-    background: #222222;
-    border: none;
-    height: 40px;
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    width: 40px;
-    z-index: 10000; }
-    #rvw_dev_tools .devtool-drawer .devtool-close-drawer svg {
-      width: 16px;
-      height: 16px;
-      opacity: 0.33;
-      transition: opacity 0.25s; }
-    #rvw_dev_tools .devtool-drawer .devtool-close-drawer:hover, #rvw_dev_tools .devtool-drawer .devtool-close-drawer:focus, #rvw_dev_tools .devtool-drawer .devtool-close-drawer:active {
-      opacity: 1; }
-      #rvw_dev_tools .devtool-drawer .devtool-close-drawer:hover svg, #rvw_dev_tools .devtool-drawer .devtool-close-drawer:focus svg, #rvw_dev_tools .devtool-drawer .devtool-close-drawer:active svg {
-        opacity: 0.33; }
-  #rvw_dev_tools .devtool-drawer .devtool-drawer-section {
-    color: #FFF;
-    font-size: 16px;
-    height: 100%;
-    left: 160px;
-    overflow: auto;
-    position: absolute;
-    top: 0;
-    width: calc(100% - 160px); }
-    #rvw_dev_tools .devtool-drawer .devtool-drawer-section.fade-enter-active:before, #rvw_dev_tools .devtool-drawer .devtool-drawer-section.fade-leave-active:before {
-      content: '';
+            width: 100%; }
+            #rvw_dev_tools .devtool-drawer .devtool-menu ul li button span.count {
+              color: #FFF;
+              display: inline-block;
+              font-size: 12px;
+              height: 20px;
+              line-height: 20px;
+              margin: 0;
+              padding: 0;
+              position: absolute;
+              right: 10px;
+              text-align: center;
+              top: 12px;
+              width: 20px;
+              background: #000;
+              color: #999;
+              transition: all 0.25s; }
+            #rvw_dev_tools .devtool-drawer .devtool-menu ul li button svg {
+              height: 16px;
+              margin-right: 8px;
+              opacity: 0.25;
+              position: relative;
+              top: 2px;
+              transition: all 0.25s;
+              width: 16px; }
+            #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active {
+              background: #222;
+              color: white;
+              outline: none; }
+              #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover span.count, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus span.count, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active span.count, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active span.count {
+                color: white; }
+                #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover span.count.notice-debug, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus span.count.notice-debug, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active span.count.notice-debug, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active span.count.notice-debug {
+                  background: #6d980a; }
+                #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover span.count.notice-error, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus span.count.notice-error, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active span.count.notice-error, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active span.count.notice-error {
+                  background: #d70000; }
+                #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover span.count.notice-fatal, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus span.count.notice-fatal, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active span.count.notice-fatal, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active span.count.notice-fatal {
+                  background: #990000; }
+                #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover span.count.notice-info, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus span.count.notice-info, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active span.count.notice-info, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active span.count.notice-info {
+                  background: #286981; }
+                #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover span.count.notice-log, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus span.count.notice-log, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active span.count.notice-log, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active span.count.notice-log {
+                  background: #444444; }
+                #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover span.count.notice-warn, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus span.count.notice-warn, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active span.count.notice-warn, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active span.count.notice-warn {
+                  background: #d65507; }
+                #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover span.count.notice-disabled, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus span.count.notice-disabled, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active span.count.notice-disabled, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active span.count.notice-disabled {
+                  background: #555;
+                  color: #EEE; }
+              #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:hover svg, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:focus svg, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button:active svg, #rvw_dev_tools .devtool-drawer .devtool-menu ul li button.active svg {
+                opacity: 1; }
+    #rvw_dev_tools .devtool-drawer .devtool-close-drawer {
+      background: #222222;
+      border: none;
+      height: 40px;
+      margin: 0;
+      padding: 0;
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      width: 40px;
+      z-index: 10000; }
+      #rvw_dev_tools .devtool-drawer .devtool-close-drawer svg {
+        width: 16px;
+        height: 16px;
+        opacity: 0.33;
+        transition: opacity 0.25s; }
+      #rvw_dev_tools .devtool-drawer .devtool-close-drawer:hover, #rvw_dev_tools .devtool-drawer .devtool-close-drawer:focus, #rvw_dev_tools .devtool-drawer .devtool-close-drawer:active {
+        opacity: 1; }
+        #rvw_dev_tools .devtool-drawer .devtool-close-drawer:hover svg, #rvw_dev_tools .devtool-drawer .devtool-close-drawer:focus svg, #rvw_dev_tools .devtool-drawer .devtool-close-drawer:active svg {
+          opacity: 0.33; }
+    #rvw_dev_tools .devtool-drawer .devtool-drawer-section {
+      color: #FFF;
+      font-size: 16px;
+      height: 100%;
+      left: 160px;
+      overflow: auto;
       position: absolute;
       top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(34, 34, 34, 0.85);
-      z-index: 9999; }
-    #rvw_dev_tools .devtool-drawer .devtool-drawer-section.fade-enter-active:after, #rvw_dev_tools .devtool-drawer .devtool-drawer-section.fade-leave-active:after {
-      content: '';
-      position: absolute;
-      width: 48px;
-      height: 48px;
-      border: 2px solid #fff;
-      border-left-color: transparent;
-      border-radius: 50%;
-      top: calc(50% - 24px);
-      left: calc(50% - 24px);
-      animation: devtools_loading 1s linear infinite;
-      z-index: 10000; }
-    #rvw_dev_tools .devtool-drawer .devtool-drawer-section.tree-view {
-      padding: 20px 0 20px 5px; }
-    #rvw_dev_tools .devtool-drawer .devtool-drawer-section .no-results {
-      color: #999;
-      display: block;
-      font-weight: 300;
-      padding: 6px 10px;
-      text-transform: uppercase; }
-    #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper {
-      white-space: nowrap;
-      margin-top: 18px;
-      margin-left: 18px; }
-      #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button {
-        background: #000;
-        color: #FFF;
-        text-transform: uppercase;
-        font-size: 12px;
-        padding: 8px 12px;
-        margin-right: 4px;
-        transition: opacity 0.25s;
-        width: 80px;
-        text-align: center; }
-        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button span.count {
-          display: inline-block;
-          margin-left: 4px;
-          opacity: 0.33; }
-        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button span.label {
-          opacity: 0.5; }
-        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.active {
-          background: #CCC;
-          color: #000;
-          opacity: 1;
-          font-weight: 600; }
-          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.active span.count, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.active span.label {
-            opacity: 1; }
-        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.notice-debug.active:not(.empty) {
-          background: #6d980a;
-          color: #FFF; }
-        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.notice-error.active:not(.empty) {
-          background: #d70000;
-          color: #FFF; }
-        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.notice-fatal.active:not(.empty) {
-          background: #990000;
-          color: #FFF; }
-        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.notice-info.active:not(.empty) {
-          background: #286981;
-          color: #FFF; }
-        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.notice-log.active:not(.empty) {
-          background: #444444;
-          color: #FFF; }
-        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.notice-warn.active:not(.empty) {
-          background: #d65507;
-          color: #FFF; }
-    #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection {
-      -webkit-overflow-scrolling: touch;
-      height: calc(100% - 62px);
-      overflow: auto;
-      position: relative;
-      top: 16px;
-      width: 100%;
-      padding-bottom: 20px; }
-      #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection span.no-results {
+      width: calc(100% - 160px); }
+      #rvw_dev_tools .devtool-drawer .devtool-drawer-section.fade-enter-active:before, #rvw_dev_tools .devtool-drawer .devtool-drawer-section.fade-leave-active:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(34, 34, 34, 0.85);
+        z-index: 9999; }
+      #rvw_dev_tools .devtool-drawer .devtool-drawer-section.fade-enter-active:after, #rvw_dev_tools .devtool-drawer .devtool-drawer-section.fade-leave-active:after {
+        content: '';
+        position: absolute;
+        width: 48px;
+        height: 48px;
+        border: 2px solid #fff;
+        border-left-color: transparent;
+        border-radius: 50%;
+        top: calc(50% - 24px);
+        left: calc(50% - 24px);
+        animation: devtools_loading 1s linear infinite;
+        z-index: 10000; }
+      #rvw_dev_tools .devtool-drawer .devtool-drawer-section.tree-view {
+        padding: 20px 0 20px 5px; }
+      #rvw_dev_tools .devtool-drawer .devtool-drawer-section .no-results {
+        color: #999;
         display: block;
-        margin-left: 18px;
-        padding: 0; }
-      #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul {
-        margin: 0;
-        padding: 0; }
-        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li {
-          list-style: none;
+        font-weight: 300;
+        padding: 6px 10px;
+        text-transform: uppercase; }
+      #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper {
+        white-space: nowrap;
+        margin-top: 18px;
+        margin-left: 18px; }
+        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button {
+          background: #000;
+          color: #FFF;
+          text-transform: uppercase;
+          font-size: 12px;
+          padding: 8px 12px;
+          margin-right: 4px;
+          transition: opacity 0.25s;
+          width: 80px;
+          text-align: center; }
+          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button span.count {
+            display: inline-block;
+            margin-left: 4px;
+            opacity: 0.33; }
+          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button span.label {
+            opacity: 0.5; }
+          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.active {
+            background: #CCC;
+            color: #000;
+            opacity: 1;
+            font-weight: 600; }
+            #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.active span.count, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.active span.label {
+              opacity: 1; }
+          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.notice-debug.active:not(.empty) {
+            background: #6d980a;
+            color: #FFF; }
+          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.notice-error.active:not(.empty) {
+            background: #d70000;
+            color: #FFF; }
+          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.notice-fatal.active:not(.empty) {
+            background: #990000;
+            color: #FFF; }
+          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.notice-info.active:not(.empty) {
+            background: #286981;
+            color: #FFF; }
+          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.notice-log.active:not(.empty) {
+            background: #444444;
+            color: #FFF; }
+          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .button-wrapper button.notice-warn.active:not(.empty) {
+            background: #d65507;
+            color: #FFF; }
+      #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection {
+        -webkit-overflow-scrolling: touch;
+        height: calc(100% - 62px);
+        overflow: auto;
+        position: relative;
+        top: 16px;
+        width: 100%;
+        padding-bottom: 20px; }
+        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection span.no-results {
+          display: block;
+          margin-left: 18px;
+          padding: 0; }
+        #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul {
           margin: 0;
           padding: 0; }
-          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file {
-            margin-left: 18px; }
-            #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a {
-              color: #999;
-              text-decoration: none;
-              font-size: 12px;
-              transition: opacity 0.25s;
-              position: relative; }
-              #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a span, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a strong {
-                transition: opacity 0.25s;
-                opacity: 0.75; }
-              #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a:hover, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a:focus {
-                color: #FFF; }
-                #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a:hover span, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a:hover strong, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a:focus span, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a:focus strong {
-                  opacity: 1; }
-              #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a.loading::after {
-                content: '';
-                border: 1px solid rgba(125, 125, 125, 0.5);
-                border-top-color: #FFF;
-                border-radius: 50%;
-                box-sizing: border-box;
-                height: 14px;
-                position: absolute;
-                right: -20px;
-                top: 0;
-                width: 14px;
-                animation: devtools_loading .6s linear infinite; }
-              #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a.success::after {
-                content: '';
-                border-bottom: 1px solid #FFF;
-                border-right: 1px solid #FFF;
-                box-sizing: border-box;
-                height: 14px;
-                position: absolute;
-                right: -17px;
-                top: 0;
-                transform: rotate(45deg);
-                width: 7px; }
-          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .message {
-            margin-top: 12px;
-            font-family: 'Roboto Mono', monospace;
-            font-weight: normal;
-            font-size: 14px;
-            line-height: 22px; }
-            #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .message.string {
+          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li {
+            list-style: none;
+            margin: 0;
+            padding: 0; }
+            #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file {
               margin-left: 18px; }
-          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .divider-line {
-            width: calc(100% - 40px);
-            height: 1px;
-            margin: 30px 0 30px 20px;
-            background: rgba(255, 255, 255, 0.1); }
-          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace {
-            margin-left: 18px; }
-            #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace button {
-              color: #999;
-              text-transform: uppercase;
-              font-size: 10px;
-              background: #000;
-              padding: 8px 10px;
-              font-weight: 600;
+              #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a {
+                color: #999;
+                text-decoration: none;
+                font-size: 12px;
+                transition: opacity 0.25s;
+                position: relative; }
+                #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a span, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a strong {
+                  transition: opacity 0.25s;
+                  opacity: 0.75; }
+                #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a:hover, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a:focus {
+                  color: #FFF; }
+                  #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a:hover span, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a:hover strong, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a:focus span, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a:focus strong {
+                    opacity: 1; }
+                #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a.loading::after {
+                  content: '';
+                  border: 1px solid rgba(125, 125, 125, 0.5);
+                  border-top-color: #FFF;
+                  border-radius: 50%;
+                  box-sizing: border-box;
+                  height: 14px;
+                  position: absolute;
+                  right: -20px;
+                  top: 0;
+                  width: 14px;
+                  animation: devtools_loading .6s linear infinite; }
+                #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .file a.success::after {
+                  content: '';
+                  border-bottom: 1px solid #FFF;
+                  border-right: 1px solid #FFF;
+                  box-sizing: border-box;
+                  height: 14px;
+                  position: absolute;
+                  right: -17px;
+                  top: 0;
+                  transform: rotate(45deg);
+                  width: 7px; }
+            #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .message {
               margin-top: 12px;
-              transition: color 0.25s; }
-              #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace button:hover, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace button:focus {
-                color: #FFF; }
-            #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace ul {
-              font-size: 12px;
-              line-height: 18px;
-              margin-top: 12px; }
-              #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace ul.hidden-trace {
-                display: none; }
-              #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace ul span {
-                display: inline-block;
-                text-align: right;
-                width: 20px;
-                margin-right: 4px;
-                opacity: 0.5; }
-          #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li:last-child .divider-line {
-            display: none; }
+              font-family: 'Roboto Mono', monospace;
+              font-weight: normal;
+              font-size: 14px;
+              line-height: 22px; }
+              #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .message.string {
+                margin-left: 18px; }
+            #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .divider-line {
+              width: calc(100% - 40px);
+              height: 1px;
+              margin: 30px 0 30px 20px;
+              background: rgba(255, 255, 255, 0.1); }
+            #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace {
+              margin-left: 18px; }
+              #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace button {
+                color: #999;
+                text-transform: uppercase;
+                font-size: 10px;
+                background: #000;
+                padding: 8px 10px;
+                font-weight: 600;
+                margin-top: 12px;
+                transition: color 0.25s; }
+                #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace button:hover, #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace button:focus {
+                  color: #FFF; }
+              #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace ul {
+                font-size: 12px;
+                line-height: 18px;
+                margin-top: 12px; }
+                #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace ul.hidden-trace {
+                  display: none; }
+                #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li .stack-trace ul span {
+                  display: inline-block;
+                  text-align: right;
+                  width: 20px;
+                  margin-right: 4px;
+                  opacity: 0.5; }
+            #rvw_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li:last-child .divider-line {
+              display: none; }
+  #rvw_dev_tools #rvw-dev-tools-icons {
+    display: none; }
 
 @media only screen and (max-width: 768px) {
   #rvw_dev_tools .devtool-drawer .devtool-menu {

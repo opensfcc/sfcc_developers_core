@@ -1,5 +1,6 @@
 'use strict';
 
+var logger = require('dw/system/Logger').getLogger('DevTools');
 var serialize = require('../util/serialize');
 
 /**
@@ -63,7 +64,7 @@ var stackTrace = function() {
  * @param {Object} trace
  */
 var addMessages = function (method, messages, trace) {
-    for (i in messages) {
+    for (var i in messages) {
         trace.message = serialize(messages[i]);
         Debugger[method].push(trace);
     }
@@ -77,8 +78,10 @@ function debug() {
     try {
         var messages = Array.prototype.slice.call(arguments, 0) || [];
         addMessages('debug', messages, stackTrace());
+        logger.debug(messages);
     } catch (err) {
         Debugger.fatal.push(err);
+        logger.fatal(err);
     }
 }
 
@@ -90,8 +93,10 @@ function error() {
     try {
         var messages = Array.prototype.slice.call(arguments, 0) || [];
         addMessages('error', messages, stackTrace());
+        logger.error(messages);
     } catch (err) {
         Debugger.fatal.push(err);
+        logger.fatal(err);
     }
 }
 
@@ -103,8 +108,10 @@ function info() {
     try {
         var messages = Array.prototype.slice.call(arguments, 0) || [];
         addMessages('info', messages, stackTrace());
+        logger.info(messages);
     } catch (err) {
         Debugger.fatal.push(err);
+        logger.fatal(err);
     }
 }
 
@@ -116,8 +123,10 @@ function log() {
     try {
         var messages = Array.prototype.slice.call(arguments, 0) || [];
         addMessages('log', messages, stackTrace());
+        logger.debug(messages);
     } catch (err) {
         Debugger.fatal.push(err);
+        logger.fatal(err);
     }
 }
 
@@ -129,8 +138,10 @@ function warn() {
     try {
         var messages = Array.prototype.slice.call(arguments, 0) || [];
         addMessages('warn', messages, stackTrace());
+        logger.warn(messages);
     } catch (err) {
         Debugger.fatal.push(err);
+        logger.fatal(err);
     }
 }
 
