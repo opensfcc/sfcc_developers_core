@@ -21,25 +21,10 @@ Installation
 2. Add `rvw_dev_console` to Business Manager Storefront `Cartridges` Path
 3. Once installed, you can access the Dev Console on your sandbox at `/on/demandware.store/YOUR_SITE_ID/default/Console-Show` ( change `YOUR_SITE_ID` to your Site ID, e.g. `Sites-Site` ).
 
-Storefront
----
-
-To make use of the Dev Console in the context of a storefront site (SiteGenesis / SFRA) do the following:
-
-1. Add `rvw_developers_core` to project or global `.gitignore`
-2. Add `rvw_dev_console` to the storefront `Cartridges` Path, do the following:
-    * `Administration`
-    * `Manage Sites`
-    *  On this page click the site you want to add the Dev console to
-    *  Go to the tab `Settings`
-    *  Add `rvw_dev_console` to the cartridges path
-
-Once installed, you can access the Dev Console on your sandbox at `/on/demandware.store/YOUR_SITE_ID/default/Console-Show` ( change `YOUR_SITE_ID` to your Site ID, e.g. `Sites-Frontend-Webshop` ).
-
 Business Manager
 ---
 
-To make use of the Dev Console in the context of the business manager (jobs, business manager modules) do the following:
+To make use of the Dev Console in the context of the Business Manager (jobs, business manager modules) do the following:
 
 1. Add `rvw_developers_core` to project or global `.gitignore`
 2. Add `rvw_dev_console` to the Business Manager `Cartridges` Path, do the following actions to accomplish this:
@@ -55,11 +40,11 @@ To make use of the Dev Console in the context of the business manager (jobs, bus
     * `Business Manager Modules`
     *  Assign rights here (Both on `Organization` level & the `Sites` you want to use this on)
 4. To get the link `Console (Storefront)` to work, you need to assign the `rvw_dev_console` cartridge to your Storefront site by following the steps in the Storefront installation guide.
-![business-manager-modules.png](documentation/business-manager-modules.png)
+    ![business-manager-modules.png](documentation/business-manager-modules.png)
 
-After configuration in the Business Manager you should see a new menu item in the `Administrator` & `Merchant Tools` menu.
+    After configuration in the Business Manager you should see a new menu item in the `Administrator` & `Merchant Tools` menu.
 
-![merchant-tools-menu.png](documentation/merchant-tools-menu.png)
+    ![merchant-tools-menu.png](documentation/merchant-tools-menu.png)
 
 Use cases
 ---
