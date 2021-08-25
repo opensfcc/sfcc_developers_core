@@ -8,6 +8,15 @@
                 <span>SFCC Dev Console</span>
             </a>
 
+            <!-- Autosave Button -->
+            <button class="autosave" :class="{ 'active': autosave === true }" @click="autoSaveInit(!autosave)" v-tooltip="{ content: 'Toggle Autosave', delay: { show: tooltipDelay } }">
+                <svg enable-background="new 0 0 100 100" version="1.1" viewBox="0 0 100 100" xml:space="preserve"
+                xmlns="http://www.w3.org/2000/svg">
+                    <path d="m10.6 93.7h22.5c2.5 0 4.8-1.6 5.6-4l12.4-33.7c1.8-5.9 7.2-10 13.4-10h24.5c3.3 0 6-2.7 6-6v-15.2c0-3.1-2.5-5.6-5.6-5.6h-22.4l-10.7-10.6c-1.5-1.5-3.5-2.3-5.6-2.3h-40c-3.2 0-5.7 2.5-5.7 5.6v76.1c0 3.2 2.5 5.7 5.6 5.7z"/>
+                    <path class="autosave-check" d="m88.4 56.8c-0.8-0.8-2-0.8-2.8 0l-17.1 18.1-6.1-6.1c-0.8-0.8-2-0.8-2.8 0l-6.1 6.1c-0.8 0.8-0.8 2 0 2.8l13.7 13.7c0.8 0.8 2 0.8 2.8 0l24.7-25.7c0.8-0.8 0.8-2 0-2.8l-6.3-6.1z"/>
+                </svg>
+            </button>
+
             <!-- Layout Selector -->
             <div class="layout-selector">
                 <!-- Left Panel Button -->
@@ -75,7 +84,7 @@
         </template>
 
         <!-- Split Pane -->
-        <split-pane :min-percent="30" :default-percent="resizer" @resize="onResize" split="vertical" class="flex-grow-1">
+        <split-pane :min-percent="30" :default-percent="parseInt(resizer)" @resize="onResize" split="vertical" class="flex-grow-1">
             <!-- Left Panel -->
             <div slot="paneL" class="d-flex flex-column flex-grow-1">
                 <!-- Action Buttons -->
@@ -241,6 +250,8 @@ export default {
             fileModified: false,
             executionTime: null,
             layout: 'split',
+            autosave: false,
+            autosaveListener: false,
             maxDepth: 3,
             plainJSON: false,
             processing: false,
@@ -272,6 +283,7 @@ export default {
         const currentFile = localStorage.getItem('currentFile');
         const lastUpdateCheck = localStorage.getItem('lastUpdateCheck');
         const layout = localStorage.getItem('layout');
+        const autosave = localStorage.getItem('autosave');
         const maxDepth = localStorage.getItem('maxDepth');
         const plainJSON = localStorage.getItem('plainJSON');
         const resizer = localStorage.getItem('resizer');
@@ -308,6 +320,13 @@ export default {
         if (layout) {
             this.layout = layout;
             this.switchLayout(layout);
+        }
+
+        // Update Autosave if Changed
+        if (autosave === 'true') {
+            this.autosave = true;
+        } else {
+            this.autosave = false;
         }
 
         // Update Max Depth if Changed
@@ -385,6 +404,10 @@ export default {
                 this.currentFile = null;
                 this.fileModified = false;
                 this.result = null;
+                
+                if (this.autosaveListener) {
+                    this.autosaveListener.dispose();
+                }
 
                 localStorage.removeItem('lastRun');
                 localStorage.removeItem('currentFile');
@@ -534,6 +557,9 @@ export default {
                 }
             });
 
+            // Autosave
+            this.autoSaveInit(this.autosave);
+
             // Add Run Code Command to Editor
             editor.addAction({
                 id: 'dev-console-run',
@@ -658,6 +684,7 @@ export default {
                 }
             }
 
+            this.autoSaveInit(this.autosave);
             localStorage.setItem('lastRun', JSON.stringify(this.code));
             localStorage.setItem('currentFile', file);
         },
@@ -731,6 +758,34 @@ export default {
             } else {
                 this.promptFile();
             }
+        },
+        autoSaveInit(autosave) {
+            this.autosave = autosave;
+
+            if (this.autosaveListener) {
+                this.autosaveListener.dispose();
+            }
+
+            if (autosave) {
+                if (this.currentFile) {
+                    this.saveFile();
+                }
+
+                var timeout;
+                var editor = this.editor;
+                var methods = this;
+
+                this.autosaveListener = editor.onDidChangeModelContent(function() {
+                    if (timeout) clearTimeout(timeout);
+                    timeout = setTimeout(function () {
+                        if (methods.currentFile) {
+                            methods.saveFile();
+                         }
+                    }, 1000);
+                });
+            }
+
+            localStorage.setItem('autosave', autosave);
         },
         showMessage(type, message, callback) {
             let icon = '';

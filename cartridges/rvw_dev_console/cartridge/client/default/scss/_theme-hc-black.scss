@@ -60,6 +60,30 @@ html.hc-black {
         }
     }
 
+    .autosave {
+        svg {
+            path {
+                stroke: #444;
+            }
+    
+            .autosave-check {
+                fill: #444;
+            }
+        }
+
+        &.active {
+            svg {
+                path {
+                    stroke: #ddd;
+                }
+        
+                .autosave-check {
+                    fill: #ddd;
+                }
+            }
+        }
+    }
+
     .layout-selector {
         .layout-switch {
             svg path {
