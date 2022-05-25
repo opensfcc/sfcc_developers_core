@@ -1,0 +1,69 @@
+#sfcc_dev_tools {
+    .tree-view-wrapper {
+        min-height: 100%;
+    }
+
+    .tree-view-item-key {
+        color: #fff;
+        font-weight: 300;
+    }
+
+    .tree-view-item-hint {
+        color: #a2a2a3;
+        font-weight: 300 !important;
+    }
+
+    .tree-view-item, .tree-view-item *, pre {
+        font-family: 'Roboto Mono', monospace;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 22px;
+    }
+
+    .tree-view-item-key-with-chevron {
+        left: -14px;
+        position: relative;
+    }
+
+    .tree-view-item-key-with-chevron::before,
+    .tree-view-item-key-with-chevron.opened::before {
+        color: #fff;
+        top: 0 !important;
+        opacity: 0.25;
+    }
+
+    .tree-view-item-value {
+        font-weight: 500;
+
+        &.tree-view-item-value-string, &.tree-view-item-value-string a {
+            color: #ea7e52;
+            white-space: pre-wrap;
+        }
+        &.tree-view-item-value-boolean {
+            color: #3495e6;
+        }
+        &.tree-view-item-value-number {
+            color: #abde91;
+        }
+        &.tree-view-item-value-null {
+            color: #3495e6;
+        }
+        &.tree-view-item-value-string a {
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .tree-view-wrapper > .tree-view-item > .tree-view-item-leaf > .tree-view-item-node:first-of-type {
+        display: none;
+    }
+
+    .subsection {
+        .tree-view-wrapper {
+            min-height: unset;
+        }
+    }
+}

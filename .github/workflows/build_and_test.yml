@@ -1,4 +1,4 @@
-name: RVW Developer Core CI
+name: SFCC Developer Core CI
 on:
   push:
     branches:

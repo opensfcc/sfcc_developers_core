@@ -1,7 +1,7 @@
 {
-  "name": "rvw_developers_core",
+  "name": "sfcc_developers_core",
   "version": "1.2.0",
-  "description": "Red Van Workshop - Developers Core SFCC Cartridge",
+  "description": "SFCC Developers Core Cartridge",
   "scripts": {
     "test": "eslint \"**/client/**/*.{js,vue}\" --fix",
     "test:unit": "mocha",

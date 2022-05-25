@@ -1,0 +1,20 @@
+#sfcc_dev_tools {
+    line-height: 1;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+
+    *, *:before, *:after {
+        box-sizing: inherit;
+        letter-spacing: initial;
+    }
+
+    svg {
+        vertical-align: unset;
+    }
+
+    a:active, a:focus, button:active, button:focus {
+        outline: 2px auto #FFF;
+        outline-offset: 3px;
+    }
+}

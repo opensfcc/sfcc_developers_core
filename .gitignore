@@ -2,5 +2,5 @@ dw.json
 .idea/
 node_modules/
 cartridges/modules/
-!cartridges/rvw_dev_console/**/static/**/js
-!cartridges/rvw_dev_console/**/static/**/css
+!cartridges/sfcc_dev_console/**/static/**/js
+!cartridges/sfcc_dev_console/**/static/**/css

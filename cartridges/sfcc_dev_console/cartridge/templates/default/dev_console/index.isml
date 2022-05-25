@@ -1,0 +1,98 @@
+<iscontent type="text/html" charset="UTF-8" compact="false"/>
+<isset name="httpHostName" value="${dw.system.Site.getCurrent().httpHostName}" scope="page">
+<isset name="devSideId" value="${dw.system.Site.getCurrent().httpHostName.split('.')[0]}" scope="page">
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Required Meta Tags -->
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="x-dns-prefetch-control" content="on">
+
+        <!-- Mobile Specific Meta Tags -->
+        <meta name="viewport" content="initial-scale=1, viewport-fit=cover">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-title" content="${devSideId}">
+        <meta name="application-name" content="${devSideId}">
+
+        <title>Console: ${devSideId}</title>
+
+        <meta name="description" content="SFCC Developer Console for ${devSideId}">
+        <meta name="cache-control" content="public">
+        <meta name="company" content="Console: ${devSideId}">
+        <meta name="googlebot" content="index,follow">
+        <meta name="robots" content="noodp,noydir">
+        <meta name="robots" content="index,follow">
+
+        <!-- Twitter META Info -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:site" content="@sfccdevops">
+        <meta property="twitter:title" content="Console: ${devSideId}">
+        <meta property="twitter:description" content="SFCC Developer Console for ${devSideId}">
+        <meta property="twitter:creator" content="@sfccdevops">
+        <meta property="twitter:image" content="https://${httpHostName}${URLUtils.staticURL('/img/social-card.png')}">
+        <meta property="twitter:image:alt" content="Console: ${devSideId}">
+        <meta property="twitter:domain" content="${URLUtils.https('Console-Show')}">
+
+        <!-- Open Graph protocol -->
+        <meta property="og:locale" content="en_US">
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Console: ${devSideId}">
+        <meta property="og:url" content="${URLUtils.https('Console-Show')}">
+        <meta property="og:image" content="https://${httpHostName}${URLUtils.staticURL('/img/social-card.png')}">
+        <meta property="og:site_name" content="Console: ${devSideId}">
+        <meta property="og:description" content="SFCC Developer Console for ${devSideId}">
+
+        <!-- Icons -->
+        <link rel="shortcut icon" id="favicon" href="${URLUtils.staticURL('/img/favicon.ico')}" type="image/x-icon">
+        <link rel="apple-touch-icon" sizes="192x192" href="${URLUtils.staticURL('/img/apple/icon.png')}">
+
+        <!-- Splash Screens -->
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/portrait-640x1136.png')}" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/portrait-750x1334.png')}" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/portrait-828x1792.png')}" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/portrait-1125x2436.png')}" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/portrait-1242x2208.png')}" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/portrait-1242x2688.png')}" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/portrait-1536x2048.png')}" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/portrait-1668x2224.png')}" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/portrait-1668x2388.png')}" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/portrait-2048x2732.png')}" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/landscape-1136x640.png')}" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/landscape-1334x750.png')}" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/landscape-1792x828.png')}" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/landscape-2436x1125.png')}" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/landscape-2208x1242.png')}" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/landscape-2688x1242.png')}" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/landscape-2048x1536.png')}" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/landscape-2224x1668.png')}" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/landscape-2388x1668.png')}" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+        <link rel="apple-touch-startup-image" href="${URLUtils.staticURL('/img/apple/landscape-2732x2048.png')}" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+
+
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+        <!-- Styles -->
+        <link href="${URLUtils.staticURL('/css/dev_console.css')}" rel="stylesheet">
+
+        <!-- DNS Pre-Connects -->
+        <link rel="preconnect" href="https://fonts.googleapis.com/" crossorigin />
+        <link rel="preconnect" href="https://maxcdn.bootstrapcdn.com/" crossorigin />
+        <link rel="preconnect" href="https://unpkg.com/" crossorigin />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script>
+        window.staticPath = '${pdict.staticPath}';
+        window.urlPath = '${pdict.urlPath}';
+        </script>
+
+        <script src="${URLUtils.staticURL('/js/dev_console.js')}"></script>
+    </body>
+</html>

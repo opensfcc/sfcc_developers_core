@@ -1,0 +1,66 @@
+<isif condition="${dw.system.System.getInstanceType() !== dw.system.System.PRODUCTION_SYSTEM}">
+
+<!-- SFCC Dev Tools: Drawer Element -->
+<div id="sfcc_dev_tools"></div>
+
+<!-- SFCC Dev Tools: Custom Script -->
+<script type="text/javascript">
+(function() {
+    window.SFCC_DevToolsURL = '${dw.web.URLUtils.url("DevTools-GetData").toString()}';
+    window.SFCC_DevConsoleURL = '${dw.web.URLUtils.url("Console-Show").toString()}';
+    window.SFCC_DevToolsDebugger = <isprint value="${JSON.stringify(pdict.Debugger.messages).replace(/</g, '&lt;')}" encoding="off" />;
+
+    // Generate Messages to Console
+    var generateLogs = function(type) {
+        var allowedTypes = ['debug', 'error', 'fatal', 'info', 'log', 'warn'];
+
+        if (allowedTypes.indexOf(type) > -1 && window.SFCC_DevToolsDebugger && window.SFCC_DevToolsDebugger.hasOwnProperty(type) && window.SFCC_DevToolsDebugger[type].length > 0) {
+            var label = type.charAt(0).toUpperCase() + type.slice(1);
+            var colors = {
+                debug: ['color: #98C379; font-weight: bold;', 'color: #999; font-weight: lighter;'],
+                error: ['color: #F44747; font-weight: bold;', 'color: #999; font-weight: lighter;'],
+                fatal: ['color: #F44747; font-weight: bold;', 'color: #999; font-weight: lighter;'],
+                info: ['color: #528BFF; font-weight: bold;', 'color: #999; font-weight: lighter;'],
+                log: ['font-weight: bold;', 'color: #999; font-weight: lighter;'],
+                warn: ['color: orange; font-weight: bold;', 'color: #999; font-weight: lighter;'],
+            };
+
+            console.groupCollapsed('SFCC: %c' + label + ' %c(' + window.SFCC_DevToolsDebugger[type].length + ')', colors[type][0], colors[type][1]);
+
+            for (msg of window.SFCC_DevToolsDebugger[type]) {
+                console[type](msg.message);
+                console.groupCollapsed('%cSTACK TRACE', 'color: #999; font-weight: lighter;');
+                console.table(msg.stack);
+                console.groupEnd();
+            }
+
+            console.groupEnd();
+        }
+    };
+
+    var runDevTools = function() {
+        // Check if we have Debug Messages
+        if (typeof window.SFCC_DevToolsDebugger !== 'undefined' && window.SFCC_DevToolsDebugger !== '') {
+            // Get Log Types
+            var types = Object.keys(window.SFCC_DevToolsDebugger);
+
+            // Output Log Messages by Type
+            types.forEach(function(type){
+                generateLogs(type);
+            });
+        }
+    };
+
+    // Listen for Updates from DevTools Drawer
+    document.addEventListener('devtools', function(evt) {
+        window.SFCC_DevToolsDebugger = evt.detail;
+        runDevTools();
+    });
+})();
+</script>
+
+<!-- SFCC Dev Tools: Static Assets -->
+<link href="${URLUtils.staticURL('/css/dev_tools.css')}" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="${URLUtils.staticURL('/js/dev_tools.js')}"></script>
+
+</isif>
