@@ -1,0 +1,166 @@
+#sfcc_dev_tools {
+    .devtool-toolbar {
+        background: #222;
+        border-top: 2px solid #666;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: $toolbar-height;
+        z-index: 99999;
+        color: #fff;
+
+        .toolbar-button-wrapper {
+            position: relative;
+            display: inline-block;
+            float: left;
+
+            & > button {
+                border: none;
+                color: #FFF;
+                display: inline-block;
+                font-size: 14px;
+                font-weight: 500;
+                height: $toolbar-height;
+                line-height: $toolbar-height;
+                margin: 0;
+                padding: 0 12px;
+
+                &.toolbar-button {
+                    background: transparent;
+
+                    svg {
+                        width: 16px;
+                        height: 16px;
+                        margin: 0;
+                        padding: 0;
+                        margin-left: 4px;
+                        position: relative;
+                        top: 4px;
+                    }
+
+                    &:hover, &:focus, &:active, &.active {
+                        background: #000;
+                        outline: none;
+                    }
+
+                    &.no-count {
+                        padding: 0 14px;
+
+                        svg {
+                            margin-left: 0;
+                            top: 2px;
+                        }
+                    }
+
+                    &.notice-debug, &.notice-good {
+                        background: $toolbar-color-debug;
+
+                        &:hover, &:focus, &:active, &.active {
+                            background: #000;
+                        }
+                    }
+
+                    &.notice-error, &.notice-bad {
+                        background: $toolbar-color-error;
+
+                        &:hover, &:focus, &:active, &.active {
+                            background: #000;
+                        }
+                    }
+
+                    &.notice-fatal {
+                        background: $toolbar-color-fatal;
+
+                        &:hover, &:focus, &:active, &.active {
+                            background: #000;
+                        }
+                    }
+
+                    &.notice-info {
+                        background: $toolbar-color-info;
+
+                        &:hover, &:focus, &:active, &.active {
+                            background: #000;
+                        }
+                    }
+
+                    &.notice-log, &.notice-default {
+                        background: $toolbar-color-log;
+
+                        &:hover, &:focus, &:active, &.active {
+                            background: #000;
+                        }
+                    }
+
+                    &.notice-warn {
+                        background: $toolbar-color-warn;
+
+                        &:hover, &:focus, &:active, &.active {
+                            background: #000;
+                        }
+                    }
+                }
+            }
+        }
+
+        .hide-toolbar {
+            background: #333;
+            border: none;
+            color: #FFF;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 500;
+            height: $toolbar-height;
+            line-height: $toolbar-height;
+            margin: 0;
+            padding: 0 14px;
+            position: absolute;
+            right: 0;
+            top: 0;
+
+            svg {
+                width: 12px;
+                height: 12px;
+                margin: 0;
+                padding: 0;
+                position: relative;
+                top: 2px;
+            }
+
+            &:hover {
+                background: #000;
+            }
+        }
+
+        .open-console {
+            background: transparent;
+            border: none;
+            color: #FFF;
+            display: inline-block;
+            float: right;
+            font-size: 14px;
+            font-weight: 500;
+            height: $toolbar-height;
+            line-height: $toolbar-height;
+            margin: 0;
+            padding: 0 14px;
+            position: absolute;
+            right: 40px;
+            top: 0;
+
+            svg {
+                width: 14px;
+                height: 14px;
+                margin: 0;
+                padding: 0;
+                position: relative;
+                top: 2px;
+            }
+
+            &:hover {
+                background: #000;
+            }
+        }
+    }
+}

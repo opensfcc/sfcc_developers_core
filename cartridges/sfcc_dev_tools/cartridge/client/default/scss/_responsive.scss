@@ -1,0 +1,73 @@
+@media only screen and (max-width: 768px) {
+    #sfcc_dev_tools {
+        .devtool-drawer {
+            .devtool-menu {
+                width: $drawer-sidebar-width-mobile;
+
+                button {
+                    span {
+                        display: none !important;
+                    }
+
+                    svg {
+                        margin-right: 0;
+                    }
+                }
+            }
+
+            .devtool-drawer-section {
+                width: calc(100% - #{$drawer-sidebar-width-mobile});
+                left: $drawer-sidebar-width-mobile;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    #sfcc_dev_tools {
+        .devtool-toolbar {
+            .toolbar-button-wrapper {
+                & > button {
+                    &.toolbar-button {
+                        padding: 0 10px;
+
+                        svg {
+                            margin-left: 4px;
+                        }
+
+                        &.no-count {
+                            padding: 0 10px;
+
+                            svg {
+                                margin-left: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .devtool-drawer {
+            .devtool-close-drawer {
+                top: 3px;
+                right: 0;
+            }
+
+            .devtool-drawer-section {
+                padding: 10px;
+
+                .button-wrapper {
+                    button {
+                        font-size: 10px;
+                        padding: 6px 4px;
+                        margin-right: 0px;
+
+                        span.count {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
