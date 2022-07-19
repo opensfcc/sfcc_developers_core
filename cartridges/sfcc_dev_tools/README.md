@@ -15,6 +15,8 @@ SFCC Dev Tools Cartridge
 - [X] Safety Measures to prevent running in Production Environments
 - [X] No Site Preferences or Misc Imports Required
 
+**NOTE:** The Debugging Console is not built for Native SFCC Messages, but specific to custom debuggers you add in your own code as outlined below.
+
 Installation
 ---
 

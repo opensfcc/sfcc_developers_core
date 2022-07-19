@@ -1,1 +1,13 @@
 * text=auto eol=lf
+.babelrc export-ignore
+.editorconfig export-ignore
+.eslintrc.js export-ignore
+.github export-ignore
+.gitattributes export-ignore
+.mocharc.js export-ignore
+cartridges/sfcc_dev_console/webpack.config.js export-ignore
+cartridges/sfcc_dev_tools/webpack.config.js export-ignore
+package-lock.json export-ignore
+package.json export-ignore
+test export-ignore
+webpack.config.json export-ignore

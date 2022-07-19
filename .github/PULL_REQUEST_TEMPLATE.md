@@ -18,7 +18,6 @@ Checklist:
 - [ ] Meets [Contributing Guide](https://github.com/sfccdevops/sfcc_developers_core/blob/develop/.github/CONTRIBUTING.md) Requirements
 - [ ] Pulled in the Latest Code from the `develop` branch
 - [ ] Works on a Desktop / Laptop Device
-- [ ] Works on a Mobile Device
 - [ ] `npm test` Does Not Generate Errors
 
 Documentation:
