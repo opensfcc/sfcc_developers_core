@@ -1,22 +1,16 @@
-![Logo](https://sfccdevops.s3.amazonaws.com/logo-128.png "Logo")
-
 Contributing Guide
 ===
-
-<img src="https://octodex.github.com/images/inspectocat.jpg" width="320" style="display: block; margin: 0 auto;">
-
-> We are excited that you are interested in contributing to our project. Before submitting your contribution though, please make sure to take a moment and read through the following guidelines.
 
 Issues & Feature Requests
 ---
 
-### Bug Fix
+[![Create Issue](https://img.shields.io/badge/Github-Create_Issue-red.svg?style=for-the-badge&logo=github&logoColor=ffffff&logoWidth=16)](https://github.com/sfccdevops/sfcc_developers_core/issues/new/choose)
 
-[![Staging Environment](https://img.shields.io/badge/Create-Bug_Report-fbca04.svg?style=for-the-badge&logo=github&logoColor=ffffff&logoWidth=16)](https://github.com/sfccdevops/sfcc_developers_core/issues/new?labels=Bug%20Report)
+### Bug Fix
 
 > We're sorry things are not working as expected, and want to get things fixed ASAP. In order to help us do that, we need a few things from you.
 
-1. Create a [New Bug Report](https://github.com/sfccdevops/sfcc_developers_core/issues/new?labels=Bug%20Report)
+1. Create a [New Issue](https://github.com/sfccdevops/sfcc_developers_core/issues/new/choose)
 2. Enter a Short but Descriptive Title for the Issue
 3. Use the Template Provided and fill in as much as you can, if something does not apply, enter `N/A`
 4. Look for the `Labels` section, and select `Bug Report` from the drop down menu
@@ -24,11 +18,9 @@ Issues & Feature Requests
 
 ### Feature Request
 
-[![Staging Environment](https://img.shields.io/badge/Create-Feature_Request-9933cc.svg?style=for-the-badge&logo=github&logoColor=ffffff&logoWidth=16)](https://github.com/sfccdevops/sfcc_developers_core/issues/new?labels=Feature%20Request)
-
 > Got an idea for a new feature? We'd love to hear it! In order to get this knocked out, we will need a few things from you.
 
-1. Create a [New Feature Request](https://github.com/sfccdevops/sfcc_developers_core/issues/new?labels=Feature%20Request)
+1. Create a [New Issue](https://github.com/sfccdevops/sfcc_developers_core/issues/new/choose)
 2. Enter a Short but Descriptive Title for the Feature Request
 3. Use the Template Provided and fill in as much as you can, if something does not apply, enter `N/A` ( you can delete the `Steps to Duplicate:` section as that does not apply )
 4. Look for the `Labels` section, and select `Feature Request` from the drop down menu
@@ -37,7 +29,7 @@ Issues & Feature Requests
 Pull Requests
 ---
 
-[![Staging Environment](https://img.shields.io/badge/Create-Pull_Request-006b75.svg?style=for-the-badge&logo=github&logoColor=ffffff&logoWidth=16)](https://github.com/sfccdevops/sfcc_developers_core/compare?labels=Ready%20For%20Code%20Review)
+[![Create Pull Request](https://img.shields.io/badge/Github-Create_Pull_Request-blue.svg?style=for-the-badge&logo=github&logoColor=ffffff&logoWidth=16)](https://github.com/sfccdevops/sfcc_developers_core/compare)
 
 ### Bug Fix
 

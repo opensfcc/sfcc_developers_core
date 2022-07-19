@@ -169,6 +169,11 @@
                         <div class="subsection" v-if="subsection === 'warn' && debugData.messages && typeof debugData.messages.warn !== 'undefined'">
                             <messages :list="debugData.messages.warn" />
                         </div>
+
+                        <!-- No Messages -->
+                        <div class="subsection" v-if="!subsection">
+                            <messages />
+                        </div>
                     </div>
                 </transition>
 

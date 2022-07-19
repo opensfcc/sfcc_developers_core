@@ -35,7 +35,12 @@
             <div class="divider-line"></div>
         </li>
     </ul>
-    <span v-else class="no-results">No Messages</span>
+    <div v-else class="no-results">
+        <span>No Messages</span>
+        <a data-devtool href="https://github.com/sfccdevops/sfcc_developers_core/tree/develop/cartridges/sfcc_dev_tools#usage" target="_blank">
+            Need Help?
+        </a>
+    </div>
 </template>
 
 <script>

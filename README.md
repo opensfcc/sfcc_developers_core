@@ -43,6 +43,11 @@ Once you have something you would like to share, check out our Contribution Guid
 
 [![Contribution Guide](https://img.shields.io/badge/Contribution_Guide-EEEEEE.svg?logo=github&logoColor=black&style=for-the-badge)](https://github.com/sfccdevops/sfcc_developers_core/blob/develop/.github/CONTRIBUTING.md)
 
+About the Author
+---
+
+> [Peter Schmalfeldt](https://peterschmalfeldt.com/) is a Certified Senior Salesforce Commerce Cloud Developer with over 20 years of experience building eCommerce websites, providing everything you need to design, develop & deploy eCommerce applications for Web, Mobile & Desktop platforms.
+
 Disclaimer
 ---
 
