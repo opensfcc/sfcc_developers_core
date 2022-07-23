@@ -82,3 +82,13 @@ dw.system.HookMgr.callHook('sfcc.util.devtools', 'info', someObject);
 dw.system.HookMgr.callHook('sfcc.util.devtools', 'log', someObject);
 dw.system.HookMgr.callHook('sfcc.util.devtools', 'warn', someObject);
 ```
+
+About the Author
+---
+
+> [Peter Schmalfeldt](https://peterschmalfeldt.com/) is a Certified Senior Salesforce Commerce Cloud Developer with over 20 years of experience building eCommerce websites, providing everything you need to design, develop & deploy eCommerce applications for Web, Mobile & Desktop platforms.
+
+Disclaimer
+---
+
+> The trademarks and product names of Salesforce®, including the mark Salesforce®, are the property of Salesforce.com. SFCC DevOps is not affiliated with Salesforce.com, nor does Salesforce.com sponsor or endorse the SFCC DevOps products or website. The use of the Salesforce® trademark on this project does not indicate an endorsement, recommendation, or business relationship between Salesforce.com and SFCC DevOps.
