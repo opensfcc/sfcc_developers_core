@@ -1,6 +1,7 @@
-dw.json
-.idea/
-node_modules/
-cartridges/modules/
-!cartridges/sfcc_dev_console/**/static/**/js
 !cartridges/sfcc_dev_console/**/static/**/css
+!cartridges/sfcc_dev_console/**/static/**/js
+!sfcc_developers_core.code-workspace
+.idea/
+cartridges/modules/
+dw.json
+node_modules/
