@@ -17,6 +17,12 @@
                             </button>
                         </li>
                         <li>
+                            <button data-devtool @click.prevent="openDrawer('benchmarks')" :class="{ 'active': section === 'benchmarks' }">
+                                <svg role="img"><use href="#devtool-benchmarks"/></svg>
+                                <span>Benchmarks</span>
+                            </button>
+                        </li>
+                        <li>
                             <button data-devtool @click.prevent="openDrawer('customer')" :class="{ 'active': section === 'customer' }">
                                 <svg role="img"><use href="#devtool-customer"/></svg>
                                 <span>Customer</span>
@@ -65,6 +71,39 @@
                             :options="{ rootObjectKey: 'basket', link: true, maxDepth: 1 }"
                         />
                         <span class="no-results" v-if="!debugData.basket">Basket is Empty</span>
+                    </div>
+                </transition>
+
+                <!-- Benchmarks Section -->
+                <transition name="fade">
+                    <div :class="{ 'devtool-drawer-section section-benchmarks': debugData.benchmarks, 'devtool-drawer-section section-benchmarks tree-view': !debugData.benchmarks }" v-if="section === 'benchmarks'">
+                        <!-- Table -->
+                        <table v-if="debugData.benchmarks" class="benchmarks">
+                            <thead>
+                                <tr>
+                                    <th>Label</th>
+                                    <th>Type</th>
+                                    <th>Duration</th>
+                                    <th>Parent</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(benchmark, key) in debugData.benchmarks" :key="key">
+                                    <td>{{ key.replace(/\|/g, ' | ').replace(/ \| $/, '') }}</td>
+                                    <td>{{ benchmark.type }}</td>
+                                    <td>{{ msToTime(benchmark.duration) }}</td>
+                                    <td>{{ benchmark.parent ? benchmark.parent : 'N/A' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- No Results -->
+                        <div v-if="!debugData.benchmarks" class="no-results">
+                            <span>No Benchmarks</span>
+                            <a data-devtool href="https://github.com/sfccdevops/sfcc_developers_core/tree/develop/cartridges/sfcc_dev_tools#benchmarks" target="_blank">
+                                Need Help?
+                            </a>
+                        </div>
                     </div>
                 </transition>
 
@@ -252,6 +291,18 @@
                     >
                         <span v-if="basketCount > 0">{{ basketCount }}</span>
                         <svg role="img"><use href="#devtool-basket"/></svg>
+                    </button>
+                </div>
+
+                <!-- Benchmarks -->
+                <div class="toolbar-button-wrapper">
+                    <!-- Benchmarks Button -->
+                    <button class="toolbar-button benchmarks no-count" id="popoverButtonSite" ref="popoverButtonSite" aria-describedby="popoverSite" data-devtool
+                        @click.prevent="openDrawer('benchmarks')"
+                        v-tooltip="{ content: 'Benchmarks', classes: popovers.benchmarks ? 'devtool-tooltip-disabled' : 'devtool-tooltip', delay: { show: tooltipDelay } }"
+                        :class="{ 'active': popovers.benchmarks }"
+                    >
+                        <svg role="img"><use href="#devtool-benchmarks"/></svg>
                     </button>
                 </div>
 
@@ -457,9 +508,9 @@
                     </button>
                 </div>
 
-                <!-- Open Console -->
-                <a :href="consoleURL" v-if="consoleURL && consoleURL !== ''" target="devtool-console" class="open-console" v-tooltip="{ content: 'Open SFCC Console', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }" data-devtool>
-                    <svg role="img"><use href="#devtool-console"/></svg>
+                <!-- Open Info -->
+                <a href="https://github.com/sfccdevops/sfcc_developers_core#readme" target="devtool-info" class="open-info" v-tooltip="{ content: 'SFCC Developer Core Info', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }" data-devtool>
+                    &#9432;
                 </a>
 
                 <!-- Close Toolbar -->
@@ -491,14 +542,15 @@
                     <path stroke-linecap="round" stroke-width="4" d="M2 2h5M12 36h29"/>
                 </g>
             </symbol>
+            <symbol id="devtool-benchmarks" viewBox="0 0 64 64">
+                <g fill="#FFFFFF" stroke="#FFFFFF" stroke-linejoin="round" stroke-width="1">
+                    <path d="M33.8,11.9V4.8h6.2c1,0,1.8-0.8,1.8-1.8s-0.8-1.8-1.8-1.8H24.1c-1,0-1.8,0.8-1.8,1.8s0.8,1.8,1.8,1.8h6.2v7.1C17,12.8,6.5,23.8,6.5,37.3c0,14,11.4,25.5,25.5,25.5c14.1,0,25.5-11.4,25.5-25.5C57.5,23.8,47,12.8,33.8,11.9z M32,59.3c-12.1,0-22-9.9-22-22s9.9-22,22-22c12.1,0,22,9.9,22,22S44.1,59.3,32,59.3z"/>
+                    <path d="M45.2,35.5H33.8V24.1c0-1-0.8-1.8-1.8-1.8c-1,0-1.8,0.8-1.8,1.8v11.4h-3.5c-1,0-1.8,0.8-1.8,1.8s0.8,1.8,1.8,1.8h3.5v3.5c0,1,0.8,1.8,1.8,1.8c1,0,1.8-0.8,1.8-1.8V39h11.4c1,0,1.8-0.8,1.8-1.8S46.2,35.5,45.2,35.5z"/>
+                </g>
+            </symbol>
             <symbol id="devtool-close" viewBox="0 0 33.84 33.67">
                 <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-miterlimit="10" stroke-width="4">
                     <path d="M2 2l29.84 29.67M31.84 2L2 31.67"/>
-                </g>
-            </symbol>
-            <symbol id="devtool-console" viewBox="0 0 640 512">
-                <g fill="#FFFFFF" stroke-linecap="round">
-                    <path d="M257.981 272.971L63.638 467.314c-9.373 9.373-24.569 9.373-33.941 0L7.029 444.647c-9.357-9.357-9.375-24.522-.04-33.901L161.011 256 6.99 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L257.981 239.03c9.373 9.372 9.373 24.568 0 33.941zM640 456v-32c0-13.255-10.745-24-24-24H312c-13.255 0-24 10.745-24 24v32c0 13.255 10.745 24 24 24h304c13.255 0 24-10.745 24-24z"/>
                 </g>
             </symbol>
             <symbol id="devtool-customer" viewBox="0 0 44 46.99">
@@ -557,8 +609,7 @@ export default {
     data() {
         return {
             basketCount: 0,
-            consoleURL: window.SFCC_DevConsoleURL,
-            debugData: window.SFCC_DevToolsDebugger,
+            debugData: {},
             drawerOpen: false,
             listeningForClicks: false,
             mounted: false,
@@ -615,6 +666,8 @@ export default {
         if (this.drawerOpen || this.toolbarShown) {
             this.eventListener();
         }
+
+        this.reloadDrawer();
     },
     computed: {
         messageClass() {
@@ -633,7 +686,7 @@ export default {
             }
 
             return '';
-        },
+        }
     },
     methods: {
         cleanDrawerOutput() {
@@ -678,8 +731,13 @@ export default {
             }
         },
         getTotals() {
+            if (!this.debugData) {
+                return;
+            }
+
             const msg = this.debugData.messages;
 
+            this.messageCount.benchmarks = (msg && typeof msg.benchmarks !== 'undefined') ? msg.benchmarks.length : 0;
             this.messageCount.debug = (msg && typeof msg.debug !== 'undefined') ? msg.debug.length : 0;
             this.messageCount.error = (msg && typeof msg.error !== 'undefined') ? msg.error.length : 0;
             this.messageCount.fatal = (msg && typeof msg.fatal !== 'undefined') ? msg.fatal.length : 0;
@@ -699,6 +757,10 @@ export default {
             if (response && typeof response.data !== 'undefined') {
                 if (typeof response.data.basket !== 'undefined') {
                     this.debugData.basket = response.data.basket;
+                }
+
+                if (typeof response.data.benchmarks !== 'undefined') {
+                    this.debugData.benchmarks = response.data.benchmarks;
                 }
 
                 if (typeof response.data.geolocation !== 'undefined') {
@@ -730,7 +792,19 @@ export default {
 
                 this.cleanDrawerOutput();
                 this.getTotals();
+                this.reloadDrawer();
             }
+        },
+        msToTime(ms) {
+            let seconds = (ms / 1000).toFixed(6);
+            let minutes = (ms / (1000 * 60)).toFixed(6);
+            let hours = (ms / (1000 * 60 * 60)).toFixed(6);
+
+            if (!ms || ms === 0) return 'N/A';
+            else if (seconds < 1) return ms + ' ms';
+            else if (seconds < 60) return seconds + 'sec';
+            else if (minutes < 60) return minutes + ' min';
+            else return hours + ' hrs';
         },
         openDrawer(section, subsection) {
             this.resetToolbar();
@@ -743,6 +817,19 @@ export default {
         },
         openToolbar() {
             this.toolbarShown = true;
+        },
+        reloadDrawer() {
+            // Fix weird issue with drawer not rendering data on first load
+            if (this.drawerOpen && this.section) {
+                var currentSection = this.section;
+                var currentSubSection = this.subsection;
+
+                this.openDrawer(null, null);
+
+                setTimeout(() => {
+                    this.openDrawer(currentSection, currentSubSection);
+                }, 500);
+            }
         },
         resetToolbar(ignore) {
             Object.keys(this.popovers).forEach((id) => {

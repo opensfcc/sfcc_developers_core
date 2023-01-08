@@ -3,6 +3,10 @@
         {
             "id": "DevToolsCache",
             "expireAfterSeconds": 300
+        },
+        {
+            "id": "DevToolsBenchmarkCache",
+            "expireAfterSeconds": 300
         }
     ]
 }

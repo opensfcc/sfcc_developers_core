@@ -21,8 +21,8 @@ Installation
 ---
 
 1. [Install Cartridge](../../README.md#installation)
-2. Add `sfcc_dev_tools` to Business Manager Storefront `Cartridges` Path
-3. Add the [Dev Tools Drawer](#dev-tools-drawer) and/or [Dev Tools Console](#dev-tools-console) to your Storefront
+2. Add `sfcc_dev_tools` to Storefront `Cartridges` Path
+3. Add the Dev Tools to your Storefront using either SFRA or Site Genesis instructions below
 
 #### SFRA
 
@@ -83,12 +83,57 @@ dw.system.HookMgr.callHook('sfcc.util.devtools', 'log', someObject);
 dw.system.HookMgr.callHook('sfcc.util.devtools', 'warn', someObject);
 ```
 
-About the Author
+Benchmarks
 ---
 
-> [Peter Schmalfeldt](https://peterschmalfeldt.com/) is a Certified Senior Salesforce Commerce Cloud Developer with over 20 years of experience building eCommerce websites, providing everything you need to design, develop & deploy eCommerce applications for Web, Mobile & Desktop platforms.
+> Benchmarks help calculate the Server-Side timing of custom events. By default, this cartridge adds timing for route and remote includes. You can easily add your own custom benchmarks using the following hooks:
 
-Disclaimer
----
+#### Start Custom Benchmark
 
-> The trademarks and product names of Salesforce®, including the mark Salesforce®, are the property of Salesforce.com. SFCC DevOps is not affiliated with Salesforce.com, nor does Salesforce.com sponsor or endorse the SFCC DevOps products or website. The use of the Salesforce® trademark on this project does not indicate an endorsement, recommendation, or business relationship between Salesforce.com and SFCC DevOps.
+To start timing a benchmark, place the following code at the very beginning of your custom server-side script ( change `My Benchmark` to whatever you want to call the benchmark ).
+
+```javascript
+dw.system.HookMgr.callHook('sfcc.util.devtools', 'benchmark', 'start', 'My Benchmark');
+```
+
+#### Stop Custom Benchmark
+
+The stop timing a benchmark, just use the `stop` parameter and the same benchmark name.
+
+```javascript
+dw.system.HookMgr.callHook('sfcc.util.devtools', 'benchmark', 'stop', 'My Benchmark');
+```
+
+#### Advanced Benchmarks
+
+Alternatively, you can pass over an object instead of a String that contains the following properties:
+
+- [X] `name`: Name used to Start & Stop Benchmark _( required )_
+- [X] `parent`: If you are nesting benchmarks, provide the Parent Benchmark name _[ default: `null` ]_
+- [X] `type`: Optional property to define the type of benchmark, which can be any value _[ default: `'custom'` ]_
+
+```javascript
+dw.system.HookMgr.callHook('sfcc.util.devtools', 'benchmark', 'start', {
+    name: 'Nested Benchmark',
+    parent: 'My Benchmark',
+    type: 'custom-type'
+});
+```
+
+Then you can stop the benchmark by referencing its `name`:
+
+```javascript
+dw.system.HookMgr.callHook('sfcc.util.devtools', 'benchmark', 'stop', 'Nested Benchmark');
+```
+
+**IMPORTANT**: The benchmark `name` should be unique in order to prevent starting & stopping existing benchmarks.
+
+#### Screenshots
+
+Access the Benchmark from the new Toolbar Menu Option.
+
+![toolbar](https://sfcc-devtools.s3.amazonaws.com/benchmark-toolbar.png "toolbar")
+
+Then your benchmarks will be listed in the new Benchmark Panel.
+
+![drawer](https://sfcc-devtools.s3.amazonaws.com/benchmark-drawer.png "drawer")

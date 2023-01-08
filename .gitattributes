@@ -5,7 +5,8 @@
 .gitattributes export-ignore
 .github export-ignore
 .mocharc.js export-ignore
-cartridges/sfcc_dev_console/webpack.config.js export-ignore
+.npmrc export-ignore
+.nvmrc export-ignore
 cartridges/sfcc_dev_tools/webpack.config.js export-ignore
 package-lock.json export-ignore
 package.json export-ignore

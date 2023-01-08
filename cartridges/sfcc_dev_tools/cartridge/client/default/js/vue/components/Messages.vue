@@ -2,11 +2,16 @@
     <ul v-if="list && list.length > 0">
         <li v-for="msg in list" :key="msg.uid">
             <div class="file">
-                <a target="_blank" data-devtool class="ide-file-link"
+                <a
+                    target="_blank"
+                    data-devtool
+                    class="ide-file-link"
                     :href="msg.ide"
                     :ref="'ide-link-' + msg.uid"
-                    @click.prevent="openIDE(msg.ide, 'ide-link-' + msg.uid)">
-                    <strong>FILE:</strong>&nbsp; {{ msg.fileName }}<span>:{{ msg.lineNumber }}</span>
+                    @click.prevent="openIDE(msg.ide, 'ide-link-' + msg.uid)"
+                >
+                    <strong>FILE:</strong>&nbsp; {{ msg.fileName
+                    }}<span>:{{ msg.lineNumber }}</span>
                 </a>
             </div>
 
@@ -14,7 +19,8 @@
                 {{ msg.message }}
             </div>
             <div class="message tree" v-else>
-                <tree-view class="outputTree"
+                <tree-view
+                    class="outputTree"
                     :data="msg.message"
                     :options="{ rootObjectKey: 'message', link: true, maxDepth: 1 }"
                 />
@@ -27,7 +33,7 @@
 
                 <ul class="hidden-trace" :ref="'trace-list-' + msg.uid">
                     <li v-for="(trace, index) in msg.stack" :key="index">
-                        <span>{{ (index + 1) }}.</span> {{ trace }}
+                        <span>{{ index + 1 }}.</span> {{ trace }}
                     </li>
                 </ul>
             </div>
@@ -49,7 +55,7 @@ export default {
     props: {
         list: {
             type: Array,
-            default: function () {
+            default: function() {
                 return [];
             }
         }
@@ -71,5 +77,5 @@ export default {
             this.$refs[ref][0].classList.toggle('hidden-trace');
         }
     }
-}
+};
 </script>

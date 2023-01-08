@@ -2,11 +2,15 @@
     "hooks": [
         {
             "name": "sfcc.util.devtools",
-            "script": "./hooks/devtools.js"
+            "script": "./hooks/devtools"
         },
         {
             "name": "app.template.afterFooter",
-            "script": "./hooks/devtools.js"
+            "script": "./hooks/devtools"
+        },
+        {
+            "name": "app.server.registerRoute",
+            "script": "./hooks/benchmark"
         }
     ]
 }

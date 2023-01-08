@@ -7,8 +7,7 @@
 <script type="text/javascript">
 (function() {
     window.SFCC_DevToolsURL = '${dw.web.URLUtils.url("DevTools-GetData").toString()}';
-    window.SFCC_DevConsoleURL = '${dw.web.URLUtils.url("Console-Show").toString()}';
-    window.SFCC_DevToolsDebugger = <isprint value="${JSON.stringify(pdict.Debugger.messages).replace(/</g, '&lt;')}" encoding="off" />;
+    window.SFCC_DevToolsDebugger = {};
 
     // Generate Messages to Console
     var generateLogs = function(type) {

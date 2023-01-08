@@ -1,5 +1,9 @@
 .devtool-tooltip {
     z-index: 99999;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    font-weight: normal;
 
     .tooltip-inner,
     .tooltip-inner:not([class*='background--']),
@@ -83,6 +87,7 @@
 
     &.popover {
         $color: #f9f9f9;
+        font-size: 12px;
 
         .popover-inner {
             background: $color;
