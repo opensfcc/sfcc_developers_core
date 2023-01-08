@@ -1,28 +1,21 @@
 {
   "name": "sfcc_developers_core",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "SFCC Developers Core Cartridge",
   "scripts": {
-    "test": "eslint \"**/client/**/*.{js,vue}\" --fix",
-    "test:unit": "mocha",
     "watch": "webpack --mode development --watch",
     "dev": "webpack --mode development",
     "build": "webpack --mode production"
   },
   "engines": {
-    "node": ">= 8.12.0",
-    "npm": ">= 6.4.0"
+    "node": ">= 16.17.0",
+    "npm": ">= 7.24.0"
   },
   "contributors": [
     {
       "name": "Peter Schmalfeldt",
       "email": "me@peterschmalfeldt.com",
       "url": "https://peterschmalfeldt.com"
-    },
-    {
-      "name": "Stephen Hendricks",
-      "email": "stephen.hendricks87@gmail.com",
-      "url": "https://stephenhendricks.me/"
     }
   ],
   "browserslist": [
@@ -34,10 +27,10 @@
   "license": "ISC",
   "dependencies": {
     "app-module-path": "^2.2.0",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "chai": "^4.3.4",
     "core-js": "^3.16.3",
-    "mocha": "^9.1.0",
+    "mocha": "^9.2.2",
     "regenerator-runtime": "^0.13.9",
     "v-tooltip": "^2.1.3",
     "vue": "^2.6.14",
@@ -60,8 +53,7 @@
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^7.16.0",
     "mini-css-extract-plugin": "^2.2.0",
-    "node-sass": "^6.0.1",
-    "pre-commit": "^1.2.2",
+    "node-sass": "^7.0.0",
     "sass-loader": "^12.1.0",
     "style-loader": "^3.2.1",
     "vue-loader": "^15.9.8",
@@ -69,9 +61,5 @@
     "vue-template-compiler": "^2.6.14",
     "webpack": "^5.51.1",
     "webpack-cli": "^4.8.0"
-  },
-  "pre-commit": [
-    "test",
-    "test:unit"
-  ]
+  }
 }

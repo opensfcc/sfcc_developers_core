@@ -13,7 +13,8 @@ module.exports = {
         'dw': true,
         'XML': true,
         'request': true,
-        'response': true
+        'response': true,
+        'session': true
     },
     // Ignore Lint Rules that are Overkill
     rules: {

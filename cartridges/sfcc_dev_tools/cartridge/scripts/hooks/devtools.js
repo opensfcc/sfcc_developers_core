@@ -71,6 +71,61 @@ var addMessages = function (method, messages, trace) {
 };
 
 /**
+ * Run Benchmark
+ * @param {*} action start|stop
+ * @param {*} data { name: 'myBenchmark', parent: 'myParentBenchmark', type: 'myBenchmarkType' }
+ */
+var runBenchmark = function (action, data) {
+    var cache = dw.system.CacheMgr.getCache('DevToolsBenchmarkCache');
+    var frozenCache = cache.get('benchmarks') || {};
+    var benchmarks = JSON.parse(JSON.stringify(frozenCache));
+
+    if (action === 'start') {
+        benchmarks[data.name] = {
+            duration: null,
+            parent: data.parent || null,
+            start: data.start || new Date().getTime(),
+            type: data.type || 'custom',
+        };
+    } else if (action === 'stop') {
+        benchmarks[data.name].duration = new Date().getTime() - benchmarks[data.name].start;
+    }
+
+    cache.put('benchmarks', benchmarks);
+};
+
+/**
+ * Add Benchmark Metrics
+ * @example: dw.system.HookMgr.callHook('sfcc.util.devtools', 'benchmark', 'start', 'myBenchmark');
+ * @example: dw.system.HookMgr.callHook('sfcc.util.devtools', 'benchmark', 'start', { name: 'myBenchmark', parent: 'myParentBenchmark', type: 'myBenchmarkType' });
+ * @example: dw.system.HookMgr.callHook('sfcc.util.devtools', 'benchmark', 'stop', 'myBenchmark');
+ */
+ function benchmark() {
+    try {
+        var params = Array.prototype.slice.call(arguments, 0) || [];
+        var action = params[0] || null;
+        var data = params[1] || null;
+
+        // Set Default `action` if not defined
+        if (!action) {
+            action = 'start';
+        }
+
+        // Convert `data` to Object if String
+        if (typeof data === 'string') {
+            data = {
+                name: params[1]
+            };
+        }
+
+        // Run Benchmark
+        runBenchmark(action, data);
+    } catch (err) {
+        logger.fatal(err);
+    }
+}
+
+/**
  * Add Debug Messages to Debugger Queue
  * @example: dw.system.HookMgr.callHook('sfcc.util.devtools', 'debug', myObject);
  */
@@ -186,9 +241,14 @@ function render() {
     // GeoLocation Data
     var location = request.getGeolocation() || {};
 
+    // Benchmark Data
+    var cache = dw.system.CacheMgr.getCache('DevToolsBenchmarkCache');
+    var benchmarks = cache.get('benchmarks') || {};
+
     ISML.renderTemplate('sfcc/devtools', {
         Debugger: {
             basket: serialize(basket),
+            benchmarks: serialize(benchmarks),
             geolocation: serialize(location),
             messages: Debugger,
             preferences: serialize(preferences),
@@ -199,6 +259,7 @@ function render() {
 }
 
 // Export Functions
+exports.benchmark = benchmark;
 exports.debug = debug;
 exports.error = error;
 exports.info = info;

@@ -1,5 +1,5 @@
-!cartridges/sfcc_dev_console/**/static/**/css
-!cartridges/sfcc_dev_console/**/static/**/js
+!.npmrc
+!.nvmrc
 !sfcc_developers_core.code-workspace
 .idea/
 cartridges/modules/

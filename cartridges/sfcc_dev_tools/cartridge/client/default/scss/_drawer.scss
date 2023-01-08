@@ -15,7 +15,7 @@
 
         .devtool-menu {
             background: #111;
-            color: #FFF;
+            color: #fff;
             height: 100%;
             left: 0;
             position: absolute;
@@ -53,7 +53,7 @@
                         width: 100%;
 
                         span.count {
-                            color: #FFF;
+                            color: #fff;
                             display: inline-block;
                             font-size: 12px;
                             height: 20px;
@@ -80,7 +80,10 @@
                             width: 16px;
                         }
 
-                        &:hover, &:focus, &:active, &.active {
+                        &:hover,
+                        &:focus,
+                        &:active,
+                        &.active {
                             background: #222;
                             color: white;
                             outline: none;
@@ -114,7 +117,7 @@
 
                                 &.notice-disabled {
                                     background: #555;
-                                    color: #EEE;
+                                    color: #eee;
                                 }
                             }
 
@@ -146,7 +149,9 @@
                 transition: opacity 0.25s;
             }
 
-            &:hover, &:focus, &:active {
+            &:hover,
+            &:focus,
+            &:active {
                 opacity: 1;
 
                 svg {
@@ -156,7 +161,7 @@
         }
 
         .devtool-drawer-section {
-            color: #FFF;
+            color: #fff;
             font-size: 16px;
             height: 100%;
             left: $drawer-sidebar-width;
@@ -224,7 +229,7 @@
 
                 button {
                     background: #000;
-                    color: #FFF;
+                    color: #fff;
                     text-transform: uppercase;
                     font-size: 12px;
                     padding: 8px 12px;
@@ -244,44 +249,45 @@
                     }
 
                     &.active {
-                        background: #CCC;
+                        background: #ccc;
                         color: #000;
                         opacity: 1;
                         font-weight: 600;
 
-                        span.count, span.label {
+                        span.count,
+                        span.label {
                             opacity: 1;
                         }
                     }
 
                     &.notice-debug.active:not(.empty) {
                         background: $toolbar-color-debug;
-                        color: #FFF;
+                        color: #fff;
                     }
 
                     &.notice-error.active:not(.empty) {
                         background: $toolbar-color-error;
-                        color: #FFF;
+                        color: #fff;
                     }
 
                     &.notice-fatal.active:not(.empty) {
                         background: $toolbar-color-fatal;
-                        color: #FFF;
+                        color: #fff;
                     }
 
                     &.notice-info.active:not(.empty) {
                         background: $toolbar-color-info;
-                        color: #FFF;
+                        color: #fff;
                     }
 
                     &.notice-log.active:not(.empty) {
                         background: $toolbar-color-log;
-                        color: #FFF;
+                        color: #fff;
                     }
 
                     &.notice-warn.active:not(.empty) {
                         background: $toolbar-color-warn;
-                        color: #FFF;
+                        color: #fff;
                     }
                 }
             }
@@ -320,15 +326,18 @@
                                 transition: opacity 0.25s;
                                 position: relative;
 
-                                span, strong {
+                                span,
+                                strong {
                                     transition: opacity 0.25s;
                                     opacity: 0.75;
                                 }
 
-                                &:hover, &:focus {
-                                    color: #FFF;
+                                &:hover,
+                                &:focus {
+                                    color: #fff;
 
-                                    span, strong {
+                                    span,
+                                    strong {
                                         opacity: 1;
                                     }
                                 }
@@ -336,7 +345,7 @@
                                 &.loading::after {
                                     content: '';
                                     border: 1px solid rgba(125, 125, 125, 0.5);
-                                    border-top-color: #FFF;
+                                    border-top-color: #fff;
                                     border-radius: 50%;
                                     box-sizing: border-box;
                                     height: 14px;
@@ -344,13 +353,13 @@
                                     right: -20px;
                                     top: 0;
                                     width: 14px;
-                                    animation: devtools_loading .6s linear infinite;
+                                    animation: devtools_loading 0.6s linear infinite;
                                 }
 
                                 &.success::after {
                                     content: '';
-                                    border-bottom: 1px solid #FFF;
-                                    border-right: 1px solid #FFF;
+                                    border-bottom: 1px solid #fff;
+                                    border-right: 1px solid #fff;
                                     box-sizing: border-box;
                                     height: 14px;
                                     position: absolute;
@@ -394,8 +403,9 @@
                                 margin-top: 12px;
                                 transition: color 0.25s;
 
-                                &:hover, &:focus {
-                                    color: #FFF;
+                                &:hover,
+                                &:focus {
+                                    color: #fff;
                                 }
                             }
 
@@ -426,6 +436,27 @@
                     }
                 }
             }
+        }
+    }
+
+    table.benchmarks {
+        width: 100%;
+        margin-top: 46px;
+
+        th {
+            padding: 6px 12px;
+            font-size: 12px;
+            color: #FFF;
+            border-bottom: 1px solid #333;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 6px 12px;
+            font-size: 12px;
+            color: #999;
+            border-bottom: 1px solid #333;
+            white-space: nowrap;
         }
     }
 
