@@ -7,9 +7,9 @@
 .gitignore export-ignore
 .npmrc export-ignore
 .nvmrc export-ignore
-/cartridges/sfcc_dev_tools/cartridge/client export-ignore
-/cartridges/sfcc_dev_tools/webpack.config.js export-ignore
 /package-lock.json export-ignore
 /package.json export-ignore
-/sfcc_developers_core.code-workspace export-ignore
-/webpack.config.js export-ignore
+cartridges/sfcc_dev_tools/cartridge/client export-ignore
+README.md export-ignore
+sfcc_developers_core.code-workspace export-ignore
+webpack.config.js export-ignore
