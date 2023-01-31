@@ -64,6 +64,10 @@ var stackTrace = function() {
  * @param {Object} trace
  */
 var addMessages = function (method, messages, trace) {
+    if (!method || !Array.isArray(messages) || !trace) {
+        return;
+    }
+
     for (var i in messages) {
         trace.message = serialize(messages[i]);
         Debugger[method].push(trace);
@@ -80,14 +84,24 @@ var runBenchmark = function (action, data) {
     var frozenCache = cache.get('benchmarks') || {};
     var benchmarks = JSON.parse(JSON.stringify(frozenCache));
 
+    // Exit if No Data or Name
+    if (!data || !data.name || !benchmarks) {
+        return;
+    }
+
+    // Get Count of Benchmarks
+    var count = Object.keys(benchmarks).length;
+
     if (action === 'start') {
         benchmarks[data.name] = {
+            id: count,
             duration: null,
+            label: data.name.replace(/\|/g, ' | ').replace(/ \| $/, ''),
             parent: data.parent || null,
             start: data.start || new Date().getTime(),
             type: data.type || 'custom',
         };
-    } else if (action === 'stop') {
+    } else if (action === 'stop' && typeof benchmarks[data.name] !== 'undefined') {
         benchmarks[data.name].duration = new Date().getTime() - benchmarks[data.name].start;
     }
 

@@ -118,3 +118,9 @@
 .devtool-tooltip-disabled {
     display: none !important;
 }
+
+.devtool-tooltip-wide {
+    .tooltip-inner {
+        max-width: 50rem;
+    }
+}

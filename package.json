@@ -1,6 +1,6 @@
 {
   "name": "sfcc_developers_core",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "SFCC Developers Core Cartridge",
   "scripts": {
     "watch": "webpack --mode development --watch",
@@ -24,7 +24,7 @@
     "not ie <= 8"
   ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "app-module-path": "^2.2.0",
     "axios": "^0.21.2",

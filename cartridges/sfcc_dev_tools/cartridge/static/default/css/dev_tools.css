@@ -5,6 +5,7 @@
 /*!*********************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-3.use[1]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-3.use[2]!./cartridges/sfcc_dev_tools/cartridge/client/default/scss/dev_tools.scss (1) ***!
   \*********************************************************************************************************************************************************************************************************************/
+@charset "UTF-8";
 #sfcc_dev_tools {
   line-height: 1;
   box-sizing: border-box;
@@ -120,7 +121,7 @@
               #sfcc_dev_tools .devtool-drawer .devtool-menu ul li button:hover svg, #sfcc_dev_tools .devtool-drawer .devtool-menu ul li button:focus svg, #sfcc_dev_tools .devtool-drawer .devtool-menu ul li button:active svg, #sfcc_dev_tools .devtool-drawer .devtool-menu ul li button.active svg {
                 opacity: 1; }
     #sfcc_dev_tools .devtool-drawer .devtool-close-drawer {
-      background: #222222;
+      background: transparent;
       border: none;
       height: 40px;
       margin: 0;
@@ -331,21 +332,86 @@
                   opacity: 0.5; }
             #sfcc_dev_tools .devtool-drawer .devtool-drawer-section .subsection ul li:last-child .divider-line {
               display: none; }
+  #sfcc_dev_tools .search-input {
+    background: #111111;
+    width: calc(100% - 70px);
+    position: sticky;
+    top: 10px;
+    left: 10px;
+    padding: 4px 8px;
+    font-size: 12px;
+    color: #fff; }
   #sfcc_dev_tools table.benchmarks {
-    width: 100%;
-    margin-top: 46px; }
+    margin-top: 20px;
+    display: flex;
+    flex-flow: column;
+    height: calc(100% - 50px);
+    width: 100%; }
+    #sfcc_dev_tools table.benchmarks thead {
+      flex: 0 0 auto;
+      width: 100%; }
+    #sfcc_dev_tools table.benchmarks tbody {
+      flex: 1 1 auto;
+      display: block;
+      overflow-y: scroll; }
+      #sfcc_dev_tools table.benchmarks tbody tr {
+        width: 100%; }
+    #sfcc_dev_tools table.benchmarks thead, #sfcc_dev_tools table.benchmarks tbody tr {
+      display: table;
+      table-layout: fixed; }
+    #sfcc_dev_tools table.benchmarks td, #sfcc_dev_tools table.benchmarks th {
+      padding: 6px 24px 6px 12px; }
+    #sfcc_dev_tools table.benchmarks td:nth-child(1), #sfcc_dev_tools table.benchmarks th:nth-child(1) {
+      width: 70px; }
+    #sfcc_dev_tools table.benchmarks td:nth-child(2), #sfcc_dev_tools table.benchmarks th:nth-child(2) {
+      width: auto; }
+    #sfcc_dev_tools table.benchmarks td:nth-child(3), #sfcc_dev_tools table.benchmarks th:nth-child(3) {
+      width: 150px; }
+    #sfcc_dev_tools table.benchmarks td:nth-child(4), #sfcc_dev_tools table.benchmarks th:nth-child(4) {
+      width: 100px; }
+    #sfcc_dev_tools table.benchmarks td:nth-child(5), #sfcc_dev_tools table.benchmarks th:nth-child(5) {
+      width: 100px; }
     #sfcc_dev_tools table.benchmarks th {
-      padding: 6px 12px;
       font-size: 12px;
       color: #FFF;
-      border-bottom: 1px solid #333;
-      white-space: nowrap; }
+      border: 1px solid #333;
+      border-left: none;
+      white-space: nowrap;
+      cursor: pointer;
+      position: relative; }
+      #sfcc_dev_tools table.benchmarks th:last-child {
+        border-right: none; }
+      #sfcc_dev_tools table.benchmarks th.sorting.sort-asc::after {
+        content: '▼';
+        position: absolute;
+        right: 8px;
+        display: block;
+        top: 6px;
+        opacity: 0.5; }
+      #sfcc_dev_tools table.benchmarks th.sorting.sort-desc::after {
+        content: '▲';
+        position: absolute;
+        right: 8px;
+        display: block;
+        top: 6px;
+        opacity: 0.5; }
     #sfcc_dev_tools table.benchmarks td {
-      padding: 6px 12px;
       font-size: 12px;
       color: #999;
       border-bottom: 1px solid #333;
       white-space: nowrap; }
+      #sfcc_dev_tools table.benchmarks td.label {
+        white-space: nowrap;
+        line-height: 16px;
+        text-overflow: ellipsis;
+        width: 100%;
+        overflow: hidden; }
+      #sfcc_dev_tools table.benchmarks td.warning {
+        color: yellow; }
+      #sfcc_dev_tools table.benchmarks td.danger {
+        color: orange; }
+      #sfcc_dev_tools table.benchmarks td.alert {
+        color: orangered; }
   #sfcc_dev_tools #sfcc-dev-tools-icons {
     display: none; }
 
@@ -624,7 +690,8 @@
     padding: 0 14px;
     position: absolute;
     right: 40px;
-    top: 0; }
+    top: 0;
+    text-decoration: none; }
     #sfcc_dev_tools .devtool-toolbar .open-info svg {
       width: 14px;
       height: 14px;
@@ -722,6 +789,9 @@
 
 .devtool-tooltip-disabled {
   display: none !important; }
+
+.devtool-tooltip-wide .tooltip-inner {
+  max-width: 50rem; }
 
 #sfcc_dev_tools .fade-enter-active, #sfcc_dev_tools .fade-leave-active {
   transition: opacity .25s; }

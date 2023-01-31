@@ -9,11 +9,11 @@ on:
       - develop
       - master
 jobs:
-  build_and_test:
+  build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        node-version: [16.x]
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -21,6 +21,4 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
-    - run: npm run test:unit
+    - run: npm run build

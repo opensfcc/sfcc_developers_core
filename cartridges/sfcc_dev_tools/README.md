@@ -136,4 +136,4 @@ Access the Benchmark from the new Toolbar Menu Option.
 
 Then your benchmarks will be listed in the new Benchmark Panel.
 
-![drawer](https://sfcc-devtools.s3.amazonaws.com/benchmark-drawer.png "drawer")
+![drawer](https://sfccdevops.s3.amazonaws.com/sfcc_developers_core-v1.4.0.gif "drawer")

@@ -2096,7 +2096,10 @@ __webpack_require__.r(__webpack_exports__);
       section: null,
       subsection: null,
       toolbarShown: false,
-      tooltipDelay: 300
+      tooltipDelay: 300,
+      sortBenchmarksDirection: 1,
+      sortBenchmarksBy: 'duration',
+      searchBenchmarks: ''
     };
   },
   mounted() {
@@ -2139,6 +2142,22 @@ __webpack_require__.r(__webpack_exports__);
         return 'notice-log';
       }
       return '';
+    },
+    sortedBenchmarks() {
+      const type = this.sortBenchmarksBy === 'id' || this.sortBenchmarksBy === 'duration' ? 'number' : 'string';
+      const direction = this.sortBenchmarksDirection;
+      const key = this.sortBenchmarksBy;
+      const sorted = Object.values(this.debugData.benchmarks).sort(this.sortMethods(type, key, direction));
+      if (this.searchBenchmarks) {
+        return sorted.filter(benchmark => {
+          const query = this.searchBenchmarks.toLowerCase();
+          const hasLabel = benchmark.label.toLowerCase().includes(query);
+          const hasType = benchmark.type.toLowerCase().includes(query);
+          const hasParent = benchmark.parent && benchmark.parent.toLowerCase().includes(query);
+          return hasLabel || hasType || hasParent;
+        });
+      }
+      return sorted;
     }
   },
   methods: {
@@ -2245,10 +2264,10 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     msToTime(ms) {
-      let seconds = (ms / 1000).toFixed(6);
-      let minutes = (ms / (1000 * 60)).toFixed(6);
-      let hours = (ms / (1000 * 60 * 60)).toFixed(6);
-      if (!ms || ms === 0) return 'N/A';else if (seconds < 1) return ms + ' ms';else if (seconds < 60) return seconds + 'sec';else if (minutes < 60) return minutes + ' min';else return hours + ' hrs';
+      let seconds = (ms / 1000).toFixed(6).replace(/\.?0+$/, '');
+      let minutes = (ms / (1000 * 60)).toFixed(6).replace(/\.?0+$/, '');
+      let hours = (ms / (1000 * 60 * 60)).toFixed(6).replace(/\.?0+$/, '');
+      if (!ms || ms === 0) return 'N/A';else if (seconds < 1) return ms + ' ms';else if (seconds < 60) return seconds + ' sec';else if (minutes < 60) return minutes + ' min';else return hours + ' hrs';
     },
     openDrawer(section, subsection) {
       this.resetToolbar();
@@ -2278,6 +2297,24 @@ __webpack_require__.r(__webpack_exports__);
           this.popovers[id] = false;
         }
       });
+    },
+    sortBenchmarks(key) {
+      if (this.sortBenchmarksBy === key) {
+        this.sortBenchmarksDirection *= -1;
+      }
+      this.sortBenchmarksBy = key;
+    },
+    sortMethods(type, key, direction) {
+      switch (type) {
+        case 'string':
+          {
+            return direction === 1 ? (a, b) => b[key] > a[key] ? -1 : a[key] > b[key] ? 1 : 0 : (a, b) => a[key] > b[key] ? -1 : b[key] > a[key] ? 1 : 0;
+          }
+        case 'number':
+          {
+            return direction === 1 ? (a, b) => Number(b[key]) - Number(a[key]) : (a, b) => Number(a[key]) - Number(b[key]);
+          }
+      }
     },
     sortObjectByKeys(obj) {
       if (!obj) {
@@ -2408,6 +2445,21 @@ var render = function render() {
   }, [_vm.drawerOpen && _vm.mounted && _vm.debugData ? _c("div", {
     staticClass: "devtool-drawer"
   }, [_c("button", {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip.left",
+      value: {
+        content: "Close Drawer",
+        classes: "devtool-tooltip",
+        delay: {
+          show: _vm.tooltipDelay
+        }
+      },
+      expression: "{ content: 'Close Drawer', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }",
+      modifiers: {
+        left: true
+      }
+    }],
     staticClass: "devtool-close-drawer",
     attrs: {
       "data-devtool": ""
@@ -2606,7 +2658,7 @@ var render = function render() {
       name: "fade"
     }
   }, [_vm.section === "basket" ? _c("div", {
-    staticClass: "devtool-drawer-section section-basket"
+    staticClass: "devtool-drawer-section section-basket tree-view"
   }, [_vm.debugData.basket ? _c("tree-view", {
     staticClass: "outputTree",
     attrs: {
@@ -2628,13 +2680,206 @@ var render = function render() {
       "devtool-drawer-section section-benchmarks": _vm.debugData.benchmarks,
       "devtool-drawer-section section-benchmarks tree-view": !_vm.debugData.benchmarks
     }
-  }, [_vm.debugData.benchmarks ? _c("table", {
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.searchBenchmarks,
+      expression: "searchBenchmarks"
+    }, {
+      name: "tooltip",
+      rawName: "v-tooltip.bottom",
+      value: {
+        content: "Filter Benchmarks by Label, Type & Parent",
+        classes: "devtool-tooltip devtool-tooltip-wide",
+        delay: {
+          show: _vm.tooltipDelay
+        }
+      },
+      expression: "{ content: 'Filter Benchmarks by Label, Type & Parent', classes: 'devtool-tooltip devtool-tooltip-wide', delay: { show: tooltipDelay } }",
+      modifiers: {
+        bottom: true
+      }
+    }],
+    staticClass: "search-input",
+    attrs: {
+      type: "search",
+      placeholder: "Filter Benchmarks",
+      "data-devtool": ""
+    },
+    domProps: {
+      value: _vm.searchBenchmarks
+    },
+    on: {
+      input: function ($event) {
+        if ($event.target.composing) return;
+        _vm.searchBenchmarks = $event.target.value;
+      }
+    }
+  }), _vm._v(" "), _vm.debugData.benchmarks ? _c("table", {
     staticClass: "benchmarks"
-  }, [_c("thead", [_c("tr", [_c("th", [_vm._v("Label")]), _vm._v(" "), _c("th", [_vm._v("Type")]), _vm._v(" "), _c("th", [_vm._v("Duration")]), _vm._v(" "), _c("th", [_vm._v("Parent")])])]), _vm._v(" "), _c("tbody", _vm._l(_vm.debugData.benchmarks, function (benchmark, key) {
+  }, [_c("thead", [_c("tr", [_c("th", {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip.top",
+      value: {
+        content: "Sort By Order Created",
+        classes: "devtool-tooltip",
+        delay: {
+          show: _vm.tooltipDelay
+        }
+      },
+      expression: "{ content: 'Sort By Order Created', classes: 'devtool-tooltip', delay: { show: tooltipDelay }}",
+      modifiers: {
+        top: true
+      }
+    }],
+    class: {
+      sorting: _vm.sortBenchmarksBy === "id",
+      "sort-asc": _vm.sortBenchmarksBy === "id" && _vm.sortBenchmarksDirection === -1,
+      "sort-desc": _vm.sortBenchmarksBy === "id" && _vm.sortBenchmarksDirection === 1
+    },
+    on: {
+      click: function ($event) {
+        return _vm.sortBenchmarks("id");
+      }
+    }
+  }, [_vm._v("\n                                    Order\n                                ")]), _vm._v(" "), _c("th", {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip.top",
+      value: {
+        content: "Sort By Label",
+        classes: "devtool-tooltip",
+        delay: {
+          show: _vm.tooltipDelay
+        }
+      },
+      expression: "{ content: 'Sort By Label', classes: 'devtool-tooltip', delay: { show: tooltipDelay }}",
+      modifiers: {
+        top: true
+      }
+    }],
+    class: {
+      sorting: _vm.sortBenchmarksBy === "label",
+      "sort-asc": _vm.sortBenchmarksBy === "label" && _vm.sortBenchmarksDirection === -1,
+      "sort-desc": _vm.sortBenchmarksBy === "label" && _vm.sortBenchmarksDirection === 1
+    },
+    on: {
+      click: function ($event) {
+        return _vm.sortBenchmarks("label");
+      }
+    }
+  }, [_vm._v("\n                                    Label\n                                ")]), _vm._v(" "), _c("th", {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip.top",
+      value: {
+        content: "Sort By Type",
+        classes: "devtool-tooltip",
+        delay: {
+          show: _vm.tooltipDelay
+        }
+      },
+      expression: "{ content: 'Sort By Type', classes: 'devtool-tooltip', delay: { show: tooltipDelay }}",
+      modifiers: {
+        top: true
+      }
+    }],
+    class: {
+      sorting: _vm.sortBenchmarksBy === "type",
+      "sort-asc": _vm.sortBenchmarksBy === "type" && _vm.sortBenchmarksDirection === -1,
+      "sort-desc": _vm.sortBenchmarksBy === "type" && _vm.sortBenchmarksDirection === 1
+    },
+    on: {
+      click: function ($event) {
+        return _vm.sortBenchmarks("type");
+      }
+    }
+  }, [_vm._v("\n                                    Type\n                                ")]), _vm._v(" "), _c("th", {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip.top",
+      value: {
+        content: "Sort By Duration",
+        classes: "devtool-tooltip",
+        delay: {
+          show: _vm.tooltipDelay
+        }
+      },
+      expression: "{ content: 'Sort By Duration', classes: 'devtool-tooltip', delay: { show: tooltipDelay }}",
+      modifiers: {
+        top: true
+      }
+    }],
+    class: {
+      sorting: _vm.sortBenchmarksBy === "duration",
+      "sort-asc": _vm.sortBenchmarksBy === "duration" && _vm.sortBenchmarksDirection === -1,
+      "sort-desc": _vm.sortBenchmarksBy === "duration" && _vm.sortBenchmarksDirection === 1
+    },
+    on: {
+      click: function ($event) {
+        return _vm.sortBenchmarks("duration");
+      }
+    }
+  }, [_vm._v("\n                                    Duration\n                                ")]), _vm._v(" "), _c("th", {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip.top",
+      value: {
+        content: "Sort By Parent",
+        classes: "devtool-tooltip",
+        delay: {
+          show: _vm.tooltipDelay
+        }
+      },
+      expression: "{ content: 'Sort By Parent', classes: 'devtool-tooltip', delay: { show: tooltipDelay }}",
+      modifiers: {
+        top: true
+      }
+    }],
+    class: {
+      sorting: _vm.sortBenchmarksBy === "parent",
+      "sort-asc": _vm.sortBenchmarksBy === "parent" && _vm.sortBenchmarksDirection === -1,
+      "sort-desc": _vm.sortBenchmarksBy === "parent" && _vm.sortBenchmarksDirection === 1
+    },
+    on: {
+      click: function ($event) {
+        return _vm.sortBenchmarks("parent");
+      }
+    }
+  }, [_vm._v("\n                                    Parent\n                                ")])])]), _vm._v(" "), _vm.sortedBenchmarks && _vm.sortedBenchmarks.length > 0 ? _c("tbody", _vm._l(_vm.sortedBenchmarks, function (benchmark, key) {
     return _c("tr", {
       key: key
-    }, [_c("td", [_vm._v(_vm._s(key.replace(/\|/g, " | ").replace(/ \| $/, "")))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(benchmark.type))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(_vm.msToTime(benchmark.duration)))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(benchmark.parent ? benchmark.parent : "N/A"))])]);
-  }), 0)]) : _vm._e(), _vm._v(" "), !_vm.debugData.benchmarks ? _c("div", {
+    }, [_c("td", [_vm._v(_vm._s(benchmark.id + 1))]), _vm._v(" "), _c("td", {
+      directives: [{
+        name: "tooltip",
+        rawName: "v-tooltip.top",
+        value: {
+          content: benchmark.label,
+          classes: "devtool-tooltip devtool-tooltip-wide",
+          delay: {
+            show: _vm.tooltipDelay * 5
+          }
+        },
+        expression: "{ content: benchmark.label, classes: 'devtool-tooltip devtool-tooltip-wide', delay: { show: tooltipDelay * 5 } }",
+        modifiers: {
+          top: true
+        }
+      }],
+      staticClass: "label"
+    }, [_vm._v(_vm._s(benchmark.label))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(benchmark.type))]), _vm._v(" "), _c("td", {
+      class: {
+        warning: benchmark.duration >= 200 && benchmark.duration < 500,
+        danger: benchmark.duration >= 500 && benchmark.duration < 1000,
+        alert: benchmark.duration >= 1000
+      }
+    }, [_vm._v(_vm._s(_vm.msToTime(benchmark.duration)))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(benchmark.parent ? benchmark.parent : "N/A"))])]);
+  }), 0) : _vm._e(), _vm._v(" "), !_vm.sortedBenchmarks || _vm.sortedBenchmarks.length === 0 ? _c("tbody", [_c("tr", [_c("td", {
+    attrs: {
+      colspan: "5"
+    }
+  }, [_vm._v("\n                                    No Search Results\n                                ")])])]) : _vm._e()]) : _vm._e(), _vm._v(" "), !_vm.debugData.benchmarks ? _c("div", {
     staticClass: "no-results"
   }, [_c("span", [_vm._v("No Benchmarks")]), _vm._v(" "), _c("a", {
     attrs: {

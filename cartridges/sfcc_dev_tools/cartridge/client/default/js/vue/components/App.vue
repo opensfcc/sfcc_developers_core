@@ -3,7 +3,7 @@
         <!-- Drawer -->
         <transition name="fade">
             <div class="devtool-drawer" v-if="drawerOpen && mounted && debugData">
-                <button class="devtool-close-drawer" @click.prevent="closeDrawer()" data-devtool>
+                <button class="devtool-close-drawer" @click.prevent="closeDrawer()" data-devtool v-tooltip.left="{ content: 'Close Drawer', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }">
                     <svg role="img"><use href="#devtool-close"/></svg>
                 </button>
 
@@ -77,22 +77,44 @@
                 <!-- Benchmarks Section -->
                 <transition name="fade">
                     <div :class="{ 'devtool-drawer-section section-benchmarks': debugData.benchmarks, 'devtool-drawer-section section-benchmarks tree-view': !debugData.benchmarks }" v-if="section === 'benchmarks'">
+                        <!-- Search Filter -->
+                        <input type="search" v-model="searchBenchmarks" class="search-input" placeholder="Filter Benchmarks" data-devtool v-tooltip.bottom="{ content: 'Filter Benchmarks by Label, Type & Parent', classes: 'devtool-tooltip devtool-tooltip-wide', delay: { show: tooltipDelay } }" />
+
                         <!-- Table -->
                         <table v-if="debugData.benchmarks" class="benchmarks">
                             <thead>
                                 <tr>
-                                    <th>Label</th>
-                                    <th>Type</th>
-                                    <th>Duration</th>
-                                    <th>Parent</th>
+                                    <th @click="sortBenchmarks('id')" :class="{ 'sorting': sortBenchmarksBy === 'id', 'sort-asc': sortBenchmarksBy === 'id' && sortBenchmarksDirection === -1, 'sort-desc': sortBenchmarksBy === 'id' && sortBenchmarksDirection === 1 }" v-tooltip.top="{ content: 'Sort By Order Created', classes: 'devtool-tooltip', delay: { show: tooltipDelay }}">
+                                        Order
+                                    </th>
+                                    <th @click="sortBenchmarks('label')" :class="{ 'sorting': sortBenchmarksBy === 'label', 'sort-asc': sortBenchmarksBy === 'label' && sortBenchmarksDirection === -1, 'sort-desc': sortBenchmarksBy === 'label' && sortBenchmarksDirection === 1 }" v-tooltip.top="{ content: 'Sort By Label', classes: 'devtool-tooltip', delay: { show: tooltipDelay }}">
+                                        Label
+                                    </th>
+                                    <th @click="sortBenchmarks('type')" :class="{ 'sorting': sortBenchmarksBy === 'type', 'sort-asc': sortBenchmarksBy === 'type' && sortBenchmarksDirection === -1, 'sort-desc': sortBenchmarksBy === 'type' && sortBenchmarksDirection === 1 }" v-tooltip.top="{ content: 'Sort By Type', classes: 'devtool-tooltip', delay: { show: tooltipDelay }}">
+                                        Type
+                                    </th>
+                                    <th @click="sortBenchmarks('duration')" :class="{ 'sorting': sortBenchmarksBy === 'duration', 'sort-asc': sortBenchmarksBy === 'duration' && sortBenchmarksDirection === -1, 'sort-desc': sortBenchmarksBy === 'duration' && sortBenchmarksDirection === 1 }" v-tooltip.top="{ content: 'Sort By Duration', classes: 'devtool-tooltip', delay: { show: tooltipDelay }}">
+                                        Duration
+                                    </th>
+                                    <th @click="sortBenchmarks('parent')" :class="{ 'sorting': sortBenchmarksBy === 'parent', 'sort-asc': sortBenchmarksBy === 'parent' && sortBenchmarksDirection === -1, 'sort-desc': sortBenchmarksBy === 'parent' && sortBenchmarksDirection === 1 }" v-tooltip.top="{ content: 'Sort By Parent', classes: 'devtool-tooltip', delay: { show: tooltipDelay }}">
+                                        Parent
+                                    </th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr v-for="(benchmark, key) in debugData.benchmarks" :key="key">
-                                    <td>{{ key.replace(/\|/g, ' | ').replace(/ \| $/, '') }}</td>
+                            <tbody v-if="sortedBenchmarks && sortedBenchmarks.length > 0">
+                                <tr v-for="(benchmark, key) in sortedBenchmarks" :key="key">
+                                    <td>{{ benchmark.id + 1 }}</td>
+                                    <td class="label" v-tooltip.top="{ content: benchmark.label, classes: 'devtool-tooltip devtool-tooltip-wide', delay: { show: tooltipDelay * 5 } }">{{ benchmark.label }}</td>
                                     <td>{{ benchmark.type }}</td>
-                                    <td>{{ msToTime(benchmark.duration) }}</td>
+                                    <td :class="{ 'warning': benchmark.duration >= 200 && benchmark.duration < 500, 'danger': benchmark.duration >= 500 && benchmark.duration < 1000, 'alert': benchmark.duration >= 1000 }">{{ msToTime(benchmark.duration) }}</td>
                                     <td>{{ benchmark.parent ? benchmark.parent : 'N/A' }}</td>
+                                </tr>
+                            </tbody>
+                            <tbody v-if="!sortedBenchmarks || sortedBenchmarks.length === 0">
+                                <tr>
+                                    <td colspan="5">
+                                        No Search Results
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -634,7 +656,10 @@ export default {
             section: null,
             subsection: null,
             toolbarShown: false,
-            tooltipDelay: 300
+            tooltipDelay: 300,
+            sortBenchmarksDirection: 1,
+            sortBenchmarksBy: 'duration',
+            searchBenchmarks: '',
         };
     },
     mounted() {
@@ -686,6 +711,26 @@ export default {
             }
 
             return '';
+        },
+        sortedBenchmarks() {
+            const type = this.sortBenchmarksBy === 'id' || this.sortBenchmarksBy === 'duration' ? 'number' : 'string'
+            const direction = this.sortBenchmarksDirection
+            const key = this.sortBenchmarksBy
+
+            const sorted = Object.values(this.debugData.benchmarks).sort(this.sortMethods(type, key, direction))
+
+            if (this.searchBenchmarks) {
+                return sorted.filter(benchmark => {
+                    const query = this.searchBenchmarks.toLowerCase()
+                    const hasLabel = benchmark.label.toLowerCase().includes(query)
+                    const hasType = benchmark.type.toLowerCase().includes(query)
+                    const hasParent = benchmark.parent && benchmark.parent.toLowerCase().includes(query)
+
+                    return hasLabel || hasType || hasParent
+                })
+            }
+
+            return sorted
         }
     },
     methods: {
@@ -796,13 +841,13 @@ export default {
             }
         },
         msToTime(ms) {
-            let seconds = (ms / 1000).toFixed(6);
-            let minutes = (ms / (1000 * 60)).toFixed(6);
-            let hours = (ms / (1000 * 60 * 60)).toFixed(6);
+            let seconds = (ms / 1000).toFixed(6).replace(/\.?0+$/, '');
+            let minutes = (ms / (1000 * 60)).toFixed(6).replace(/\.?0+$/, '');
+            let hours = (ms / (1000 * 60 * 60)).toFixed(6).replace(/\.?0+$/, '');
 
             if (!ms || ms === 0) return 'N/A';
             else if (seconds < 1) return ms + ' ms';
-            else if (seconds < 60) return seconds + 'sec';
+            else if (seconds < 60) return seconds + ' sec';
             else if (minutes < 60) return minutes + ' min';
             else return hours + ' hrs';
         },
@@ -837,6 +882,27 @@ export default {
                     this.popovers[id] = false;
                 }
             });
+        },
+        sortBenchmarks(key) {
+            if (this.sortBenchmarksBy === key) {
+                this.sortBenchmarksDirection *= -1
+            }
+
+            this.sortBenchmarksBy = key
+        },
+        sortMethods(type, key, direction) {
+            switch (type) {
+                case 'string': {
+                    return direction === 1 ?
+                    (a, b) => b[key] > a[key] ? -1 : a[key] > b[key] ? 1 : 0 :
+                    (a, b) => a[key] > b[key] ? -1 : b[key] > a[key] ? 1 : 0
+                }
+                case 'number': {
+                    return direction === 1 ?
+                    (a, b) => Number(b[key]) - Number(a[key]) :
+                    (a, b) => Number(a[key]) - Number(b[key])
+                }
+            }
         },
         sortObjectByKeys(obj) {
             if (!obj) {
