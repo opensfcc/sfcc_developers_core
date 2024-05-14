@@ -122,7 +122,7 @@
                         <!-- No Results -->
                         <div v-if="!debugData.benchmarks" class="no-results">
                             <span>No Benchmarks</span>
-                            <a data-devtool href="https://github.com/sfccdevops/sfcc_developers_core/tree/develop/cartridges/sfcc_dev_tools#benchmarks" target="_blank">
+                            <a data-devtool href="https://github.com/opensfcc/sfcc_developers_core/tree/develop/cartridges/sfcc_dev_tools#benchmarks" target="_blank">
                                 Need Help?
                             </a>
                         </div>
@@ -531,7 +531,7 @@
                 </div>
 
                 <!-- Open Info -->
-                <a href="https://github.com/sfccdevops/sfcc_developers_core#readme" target="devtool-info" class="open-info" v-tooltip="{ content: 'SFCC Developer Core Info', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }" data-devtool>
+                <a href="https://github.com/opensfcc/sfcc_developers_core#readme" target="devtool-info" class="open-info" v-tooltip="{ content: 'SFCC Developer Core Info', classes: 'devtool-tooltip', delay: { show: tooltipDelay } }" data-devtool>
                     &#9432;
                 </a>
 
