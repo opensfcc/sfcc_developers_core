@@ -1,4 +1,4 @@
-![Logo](https://sfccdevops.s3.amazonaws.com/logo-128.png "Logo")
+![Logo](https://avatars.githubusercontent.com/u/151680118?s=200&v=4 "Logo")
 
 SFCC Dev Tools Cartridge
 ===

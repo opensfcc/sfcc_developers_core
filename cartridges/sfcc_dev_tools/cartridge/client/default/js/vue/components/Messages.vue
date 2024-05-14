@@ -43,7 +43,7 @@
     </ul>
     <div v-else class="no-results">
         <span>No Messages</span>
-        <a data-devtool href="https://github.com/sfccdevops/sfcc_developers_core/tree/develop/cartridges/sfcc_dev_tools#usage" target="_blank">
+        <a data-devtool href="https://github.com/opensfcc/sfcc_developers_core/tree/develop/cartridges/sfcc_dev_tools#usage" target="_blank">
             Need Help?
         </a>
     </div>
